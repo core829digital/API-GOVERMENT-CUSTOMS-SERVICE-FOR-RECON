@@ -1,3 +1,4 @@
+import "@/lib/zod-config";
 import { z } from "zod";
 
 // Wire shapes are taken from DatabaseInfo.md (`proj.finding_view`, `ingest.source_batch`).
@@ -38,3 +39,11 @@ export type Batch = z.infer<typeof batchSchema>;
 
 /** Batch ids are UUIDv7 (DatabaseInfo.md); anything that is not a UUID is rejected before a request is made. */
 export const batchIdSchema = z.uuid();
+
+/**
+ * Parses an ISO-8601 instant from the API. The API emits PostgreSQL microseconds (six fractional digits) and
+ * `Date` accepts at most three, so the extra digits are dropped rather than producing an Invalid Date.
+ */
+export function instant(value: string): Date {
+  return new Date(value.replace(/(\.\d{3})\d+/, "$1"));
+}

@@ -4,10 +4,11 @@
 //! Every command: requires `Idempotency-Key` (R-API-1), appends a ledger event in the same transaction and
 //! returns `X-Commit-Seq` (R-API-2). Every read returns `X-Data-Watermark` (R-API-3) and honours `X-Min-Seq`.
 
-use crate::{AppState, auth::Principal, error::ApiError};
+use crate::http::{BodySchema, JsonBody};
+use crate::{AppState, auth::Principal, error::ApiError, validate};
 use axum::Json;
-use axum::body::Bytes;
-use axum::extract::{Path, Query, State};
+use axum::extract::{FromRequestParts, Path, Query, State};
+use axum::http::request::Parts;
 use axum::http::{HeaderMap, HeaderName, HeaderValue, StatusCode};
 use axum::response::{IntoResponse, Response};
 use recon_store::{Actor, WriteTx, bridge};
@@ -36,46 +37,21 @@ pub async fn readyz(State(s): State<AppState>) -> Response {
     (status, Json(json!({"w": up(w), "r": up(r)}))).into_response()
 }
 
-// ---------------------------------------------------------------- validation (no external crates)
+// ---------------------------------------------------------------- request parts that must not echo input
 
-fn valid_source_type(s: &str) -> bool {
-    !s.is_empty()
-        && s.len() <= 64
-        && s.bytes()
-            .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'_')
-}
+/// A `{id}` path segment that must be a UUID. Axum's own `Path<Uuid>` rejection would quote the offending
+/// segment in its message; this one answers with a fixed 400.
+pub struct IdPath(Uuid);
 
-fn valid_object_uri(s: &str) -> bool {
-    (s.starts_with("s3://") || s.starts_with("https://"))
-        && s.len() <= 2048
-        && !s
-            .bytes()
-            .any(|b| b.is_ascii_whitespace() || b.is_ascii_control())
-}
+impl FromRequestParts<AppState> for IdPath {
+    type Rejection = ApiError;
 
-fn valid_date(s: &str) -> bool {
-    let b = s.as_bytes();
-    if b.len() != 10 || b[4] != b'-' || b[7] != b'-' {
-        return false;
+    async fn from_request_parts(parts: &mut Parts, state: &AppState) -> Result<Self, ApiError> {
+        let Path(raw) = Path::<String>::from_request_parts(parts, state)
+            .await
+            .map_err(|_| ApiError::bad_request("invalid_id", "identifier must be a UUID"))?;
+        Ok(Self(validate::uuid(&raw, "invalid_id")?))
     }
-    let num = |r: std::ops::Range<usize>| s.get(r).and_then(|x| x.parse::<u32>().ok());
-    let (Some(y), Some(m), Some(d)) = (num(0..4), num(5..7), num(8..10)) else {
-        return false;
-    };
-    let leap = (y % 4 == 0 && y % 100 != 0) || y % 400 == 0;
-    let dim = match m {
-        1 | 3 | 5 | 7 | 8 | 10 | 12 => 31,
-        4 | 6 | 9 | 11 => 30,
-        2 => {
-            if leap {
-                29
-            } else {
-                28
-            }
-        }
-        _ => return false,
-    };
-    y >= 1900 && (1..=dim).contains(&d)
 }
 
 // ---------------------------------------------------------------- POST /v1/batches (command, W)
@@ -90,23 +66,25 @@ struct NewBatch {
     period_end: Option<String>,
 }
 
+impl BodySchema for NewBatch {
+    const HINT: &'static str = "body must be an object with source_type, object_uri, sha256 and optional period_start, period_end, and no other fields";
+}
+
 fn idempotency_key(h: &HeaderMap) -> Result<String, ApiError> {
-    let v = h
-        .get(H_IDEMPOTENCY)
-        .and_then(|v| v.to_str().ok())
-        .ok_or_else(|| {
-            ApiError::bad_request(
-                "idempotency_key_required",
-                "the Idempotency-Key header is required",
-            )
-        })?;
-    if v.is_empty() || v.len() > 200 || !v.bytes().all(|b| b.is_ascii_graphic()) {
+    let mut values = h.get_all(H_IDEMPOTENCY).iter();
+    let (Some(v), None) = (values.next(), values.next()) else {
         return Err(ApiError::bad_request(
-            "idempotency_key_invalid",
-            "Idempotency-Key must be 1-200 visible ASCII characters",
+            "idempotency_key_required",
+            "exactly one Idempotency-Key header is required",
         ));
-    }
-    Ok(v.to_string())
+    };
+    let v = v.to_str().map_err(|_| {
+        ApiError::bad_request(
+            "idempotency_key_invalid",
+            "Idempotency-Key must be 1-128 characters of A-Z a-z 0-9 . _ : ~ -",
+        )
+    })?;
+    validate::idempotency_key(v).map(str::to_string)
 }
 
 fn with_commit_seq(status: StatusCode, seq: i64, body: Value, replayed: bool) -> Response {
@@ -188,45 +166,20 @@ pub async fn create_batch(
     State(s): State<AppState>,
     principal: Principal,
     headers: HeaderMap,
-    body: Bytes,
+    body: JsonBody,
 ) -> Result<Response, ApiError> {
     principal.require("batches:write")?;
     let key = idempotency_key(&headers)?;
 
-    let raw: Value = serde_json::from_slice(&body)
-        .map_err(|_| ApiError::bad_request("invalid_json", "request body must be a JSON object"))?;
+    let (req, raw): (NewBatch, Value) = body.parse()?;
     let request_sha = recon_evidence::payload_sha256(&raw).map_err(|_| {
         ApiError::bad_request("invalid_json", "request body cannot be canonicalised")
     })?;
-    let req: NewBatch = serde_json::from_value(raw)
-        .map_err(|_| ApiError::bad_request("invalid_body", "body must contain source_type, object_uri, sha256 and optional period_start, period_end"))?;
 
-    if !valid_source_type(&req.source_type) {
-        return Err(ApiError::bad_request(
-            "invalid_source_type",
-            "source_type must match [a-z0-9_]{1,64}",
-        ));
-    }
-    if !valid_object_uri(&req.object_uri) {
-        return Err(ApiError::bad_request(
-            "invalid_object_uri",
-            "object_uri must be an s3:// or https:// URI",
-        ));
-    }
-    let sha = hex::decode(&req.sha256)
-        .ok()
-        .filter(|b| b.len() == 32)
-        .ok_or_else(|| {
-            ApiError::bad_request("invalid_sha256", "sha256 must be 64 hex characters")
-        })?;
-    for d in [&req.period_start, &req.period_end].into_iter().flatten() {
-        if !valid_date(d) {
-            return Err(ApiError::bad_request(
-                "invalid_period",
-                "period dates must be valid YYYY-MM-DD dates",
-            ));
-        }
-    }
+    validate::source_type(&req.source_type)?;
+    validate::object_uri(&req.object_uri)?;
+    let sha = validate::sha256_hex(&req.sha256)?;
+    validate::period(req.period_start.as_deref(), req.period_end.as_deref())?;
 
     let tenant = principal.tenant;
     let mut tx = s.w.begin_tenant(tenant).await?;
@@ -296,6 +249,17 @@ pub async fn create_batch(
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
+struct RawRun {
+    rule_pack_id: String,
+    batch_ids: Vec<String>,
+}
+
+impl BodySchema for RawRun {
+    const HINT: &'static str = "body must be an object with rule_pack_id (uuid) and batch_ids (array of uuid), and no other fields";
+}
+
+/// [`RawRun`] after validation. The ids are parsed from their canonical text (serde's own `Uuid` parsing would
+/// also accept the braced, `urn:` and unhyphenated spellings).
 struct NewRun {
     rule_pack_id: Uuid,
     batch_ids: Vec<Uuid>,
@@ -310,25 +274,32 @@ pub async fn create_run(
     State(s): State<AppState>,
     principal: Principal,
     headers: HeaderMap,
-    body: Bytes,
+    body: JsonBody,
 ) -> Result<Response, ApiError> {
     principal.require("runs:write")?;
     let key = idempotency_key(&headers)?;
-    let raw: Value = serde_json::from_slice(&body)
-        .map_err(|_| ApiError::bad_request("invalid_json", "request body must be a JSON object"))?;
+    let (raw_req, raw): (RawRun, Value) = body.parse()?;
     let request_sha = recon_evidence::payload_sha256(&raw).map_err(|_| {
         ApiError::bad_request("invalid_json", "request body cannot be canonicalised")
     })?;
-    let req: NewRun = serde_json::from_value(raw).map_err(|_| {
-        ApiError::bad_request(
-            "invalid_body",
-            "body must contain rule_pack_id (uuid) and batch_ids (array of uuid)",
-        )
-    })?;
+    if raw_req.batch_ids.len() > MAX_RUN_BATCHES {
+        return Err(ApiError::bad_request(
+            "invalid_batch_ids",
+            format!("batch_ids must hold 1 to {MAX_RUN_BATCHES} distinct ids"),
+        ));
+    }
+    let req = NewRun {
+        rule_pack_id: validate::uuid(&raw_req.rule_pack_id, "invalid_rule_pack_id")?,
+        batch_ids: raw_req
+            .batch_ids
+            .iter()
+            .map(|b| validate::uuid(b, "invalid_batch_ids"))
+            .collect::<Result<_, _>>()?,
+    };
     let mut distinct = req.batch_ids.clone();
     distinct.sort_unstable();
     distinct.dedup();
-    if distinct.is_empty() || distinct.len() != req.batch_ids.len() || distinct.len() > MAX_RUN_BATCHES {
+    if distinct.is_empty() || distinct.len() != req.batch_ids.len() {
         return Err(ApiError::bad_request(
             "invalid_batch_ids",
             format!("batch_ids must hold 1 to {MAX_RUN_BATCHES} distinct ids"),
@@ -407,20 +378,20 @@ pub async fn create_run(
 
 /// Apply `X-Min-Seq` (if present) via the bridge; then the caller queries R.
 async fn honour_min_seq(s: &AppState, tenant: Uuid, headers: &HeaderMap) -> Result<(), ApiError> {
-    let Some(v) = headers.get(H_MIN_SEQ) else {
+    let mut values = headers.get_all(H_MIN_SEQ).iter();
+    let Some(v) = values.next() else {
         return Ok(());
     };
-    let min_seq: i64 = v
+    if values.next().is_some() {
+        return Err(ApiError::bad_request(
+            "invalid_min_seq",
+            "X-Min-Seq must be given at most once",
+        ));
+    }
+    let min_seq = v
         .to_str()
-        .ok()
-        .and_then(|t| t.parse().ok())
-        .filter(|n| *n >= 0)
-        .ok_or_else(|| {
-            ApiError::bad_request(
-                "invalid_min_seq",
-                "X-Min-Seq must be a non-negative integer",
-            )
-        })?;
+        .map_err(|_| ApiError::bad_request("invalid_min_seq", "X-Min-Seq must be a non-negative integer"))
+        .and_then(validate::min_seq)?;
     bridge::wait_for_seq(&s.r, tenant, min_seq, s.bridge_wait).await?;
     Ok(())
 }
@@ -439,7 +410,7 @@ pub async fn get_batch(
     State(s): State<AppState>,
     principal: Principal,
     headers: HeaderMap,
-    Path(id): Path<Uuid>,
+    IdPath(id): IdPath,
 ) -> Result<Response, ApiError> {
     principal.require("batches:read")?;
     honour_min_seq(&s, principal.tenant, &headers).await?;
@@ -467,7 +438,7 @@ pub async fn get_run(
     State(s): State<AppState>,
     principal: Principal,
     headers: HeaderMap,
-    Path(id): Path<Uuid>,
+    IdPath(id): IdPath,
 ) -> Result<Response, ApiError> {
     principal.require("runs:read")?;
     honour_min_seq(&s, principal.tenant, &headers).await?;
@@ -498,23 +469,52 @@ pub async fn get_run(
 /// `(id, check_code, severity, rule_id, detail, created_at, jurisdiction, summary, rule_citation)`.
 type FindingRow = (Uuid, String, String, Uuid, Value, String, String, String, String);
 
+/// Raw `GET /v1/findings` query string: unknown and repeated parameters are refused.
 #[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct RawFindingsQuery {
+    limit: Option<String>,
+    after: Option<String>,
+    check_code: Option<String>,
+    run_id: Option<String>,
+}
+
+/// [`RawFindingsQuery`] after validation (axum's own `Query` rejection would quote the offending input).
 pub struct FindingsQuery {
-    limit: Option<i64>,
+    limit: i64,
     after: Option<Uuid>,
     check_code: Option<String>,
     run_id: Option<Uuid>,
+}
+
+impl FromRequestParts<AppState> for FindingsQuery {
+    type Rejection = ApiError;
+
+    async fn from_request_parts(parts: &mut Parts, state: &AppState) -> Result<Self, ApiError> {
+        let Query(raw) = Query::<RawFindingsQuery>::from_request_parts(parts, state).await.map_err(|_| {
+            ApiError::bad_request(
+                "invalid_query",
+                "query may contain limit, after, check_code and run_id, each at most once",
+            )
+        })?;
+        Ok(Self {
+            limit: i64::from(raw.limit.as_deref().map_or(Ok(validate::DEFAULT_LIMIT), validate::limit)?),
+            after: raw.after.as_deref().map(|v| validate::uuid(v, "invalid_after")).transpose()?,
+            check_code: raw.check_code.as_deref().map(validate::check_code).transpose()?.map(str::to_string),
+            run_id: raw.run_id.as_deref().map(|v| validate::uuid(v, "invalid_run_id")).transpose()?,
+        })
+    }
 }
 
 pub async fn list_findings(
     State(s): State<AppState>,
     principal: Principal,
     headers: HeaderMap,
-    Query(q): Query<FindingsQuery>,
+    q: FindingsQuery,
 ) -> Result<Response, ApiError> {
     principal.require("findings:read")?;
     honour_min_seq(&s, principal.tenant, &headers).await?;
-    let limit = q.limit.unwrap_or(50).clamp(1, 200);
+    let limit = q.limit;
     let mut tx = s.r.begin_tenant(principal.tenant).await?;
     // Wire shape follows `proj.finding_view` (DatabaseInfo.md): the citation comes from the rule the finding
     // cites, the summary is the engine's neutral statement of disagreement (R-ENG-3). `rule_id` and `detail`
@@ -550,37 +550,4 @@ pub async fn list_findings(
     let mut res = Json(json!({"items": items, "next_after": next_after})).into_response();
     watermark_header(&s, principal.tenant, &mut res).await;
     Ok(res)
-}
-
-#[cfg(test)]
-#[allow(clippy::unwrap_used, clippy::expect_used, clippy::panic)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn dates_are_validated_including_leap_years() {
-        assert!(valid_date("2024-02-29"));
-        assert!(!valid_date("2023-02-29"));
-        assert!(!valid_date("1900-02-29"));
-        assert!(valid_date("2000-02-29"));
-        assert!(!valid_date("2026-13-01"));
-        assert!(!valid_date("2026-04-31"));
-        assert!(!valid_date("2026-4-1"));
-        assert!(!valid_date("26-04-01"));
-        assert!(!valid_date("2026/04/01"));
-        assert!(!valid_date("１２３４-01-01"));
-    }
-
-    #[test]
-    fn source_type_and_uri_rules() {
-        assert!(valid_source_type("erp_ledger"));
-        assert!(!valid_source_type("ERP"));
-        assert!(!valid_source_type(""));
-        assert!(!valid_source_type(&"a".repeat(65)));
-        assert!(valid_object_uri("s3://bucket/key"));
-        assert!(valid_object_uri("https://eu.example/x"));
-        assert!(!valid_object_uri("http://insecure/x"));
-        assert!(!valid_object_uri("s3://a b"));
-        assert!(!valid_object_uri("file:///etc/passwd"));
-    }
 }

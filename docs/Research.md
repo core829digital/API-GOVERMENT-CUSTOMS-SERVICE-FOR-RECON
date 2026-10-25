@@ -131,3 +131,45 @@ Country calendars (go-live dates, schema versions, retention periods) live in **
 | Logical replication does **not** replicate DDL or sequence data; TRUNCATE needs care. | [PG18 docs §29.8](https://www.postgresql.org/docs/current/logical-replication-restrictions.html) | Migrations applied to both DBs by one tool (expand/contract); UUIDv7 keys, no sequences cross the bridge. |
 | After publisher failover, logical subscribers break unless replication slots are synchronized. | [pgEdge/CNPG docs](https://docs.pgedge.com/cloudnativepg/development/logical_replication) | `failover = true` subscription + `sync_replication_slots` on standbys; tested in CI/game-day. |
 | Lenis honors `prefers-reduced-motion` by default (smoothing disabled); 1.3.x current. | [lenis README](https://github.com/darkroomengineering/lenis) | Accessible by default; still scope it (see Architecture §Frontend). |
+
+---
+
+## 7. Pricing evidence (accessed 2026-10-25)
+
+Purpose: anchor launch plan prices to published market prices. Scout pass: `MarketScout`. Verification pass: parent re-read each first-party page on 2026-10-25. **V** = verified on the first-party page by the second pass; **S** = scout-reported only. Prices exclude VAT unless stated. Nothing here is willingness-to-pay evidence (K-2 stays open).
+
+| Fact | Tag | Source |
+|---|---|---|
+| Sovos pricing is "Custom", driven by transaction volume, jurisdictions, modules and integration scope; Sovos lists self-service, credit-card, same-day deployment buyers as a poor fit | V | [sovos.com/taxapedia/solutions](https://sovos.com/taxapedia/solutions/) |
+| Sovos Intelligence matches e-invoicing data, VAT filing submissions and SAF-T datasets and classifies matched/unmatched/exception (press release 2026-07-07) | S | [sovos.com press release](https://sovos.com/press-releases/the-expansion-of-sovos-intelligence-closes-the-global-compliance-reconciliation-gap/) |
+| Avalara VAT Reporting (48 countries) "provides reconciliation reports to match VAT returns with your general ledger (GL)"; Managed VAT Reporting 53 countries | V | [avalara.com VAT returns and reporting](https://www.avalara.com/us/en/products/vat-returns-and-reporting.html) |
+| Avalara VAT price is quote-only ("short scoping call") | S (quote not found on the fetched page) | same |
+| Thomson Reuters ONESOURCE Reconciliations: e-invoice data against VAT/GST returns at line level, launched Jan 2026 | S | [thomsonreuters.com post](https://www.thomsonreuters.com/en-us/posts/innovation/real-time-tax-reporting-is-here-manual-reconciliation-isnt-going-to-keep-up/) |
+| Recommand (Peppol API): free 25 docs; €29/month 200 docs (€0.20 extra); €99/month 1,000 (€0.10); €199/month 2,500 (€0.08); €349/month 5,000 (€0.07); volume pooled across companies; no hard cap, extras billed | V | [recommand.eu/en/pricing](https://recommand.eu/en/pricing) |
+| Invopop: Dev €0 (200 Pops, 1 country); Pro from €500/month plus Pops bundle (1,000 = €40 … 200,000 = €1,000) plus €300/month per extra government app; yearly billing 15% cheaper | V | [invopop.com/pricing.md](https://invopop.com/pricing.md) |
+| Quaderno (transactions/month): 25 / 250 / 1,000 / 2,500 at 24 / 41 / 83 / 124 on the page's monthly-yearly toggle (toggle state not shown in the fetch; support page lists 29 / 49 / 99 / 149); exceeding the limit auto-upgrades to the next tier instead of overage fees; 7-day trial | V (figures), toggle ambiguity open | [quaderno.io/pricing](https://quaderno.io/pricing/) |
+| Stripe Tax Complete: USD 90 / 430 / 1,000 / 1,500 per month (200 / 1,000 / 2,500 / 5,000 transactions), 1-year contract, overage USD 0.50 → 0.35 per transaction | V | [support.stripe.com](https://support.stripe.com/questions/understanding-stripe-tax-pricing) |
+| Viesvat.com VIES API: Free 100 queries; Pro €49/month 10,000; Business €199/month; Enterprise from €999/month; annual billing −15%; overage €0.005/query | V (one vendor's list price, not a norm) | [viesvat.com/en/api](https://viesvat.com/en/api) |
+| Stripe card processing, Ireland page: 1.5% + €0.25 standard EEA cards; 2.8% + €0.25 premium EEA cards; SEPA Direct Debit €0.35; dispute €20 | V | [stripe.com/ie/pricing](https://stripe.com/ie/pricing) |
+| Taxdoo ended VAT compliance services on 30 Apr 2026 | S (third-party reports) | see scout output |
+| Willingness to pay for ledger-vs-authority reconciliation | none found. Only demand signal: TR Institute survey (230 IDT professionals, 2026-10-05), 10% fully automated reconciliation, vendor-sponsored | S | [thomsonreuters.com report](https://www.thomsonreuters.com/en/institute/reports/indirect-tax-europe-report-2026) |
+
+### 7.1 What the evidence supports (and does not)
+
+- Published-price products in the neighbourhood (e-invoicing APIs, tax calculation, VIES) cluster at **€0 free tier, ~€25–50 entry, ~€100–200 mid, ~€350–500 upper self-serve**, usually metered by documents or transactions, with 15% off for annual billing (Invopop, Viesvat; Avalara states 15% annual savings for US sales tax per scout).
+- Reconciliation products that match e-invoice data to returns or ledgers (Sovos, Thomson Reuters, Vertex, Avalara VAT) are sold on **custom quotes to multinationals**. This is a bounded search, not proof that no self-serve reconciliation product exists.
+- Avalara VAT Reporting already ships VAT-return-to-GL reconciliation reports; Sovos Intelligence and ONESOURCE cover e-invoice-to-return matching. Any check-C3 claim must not be written as unique.
+
+### 7.2 Launch plan ladder (decision recorded 2026-10-25; to be validated, K-2)
+
+Prices are launch hypotheses placed inside the verified bands above, not a measured optimum. Billing is gated on Progress.md "commercial gates" (the site must not sell capabilities marked planned).
+
+| Plan | Monthly (EUR, excl. VAT) | Yearly (per month, −15%) | Anchor |
+|---|---|---|---|
+| Sandbox | 0 | — | Recommand free 25 docs; Invopop Dev; Viesvat Free |
+| Starter | 49 | 41.65 | Quaderno Startup 41–49; Viesvat Pro 49; Recommand 29–99 |
+| Growth | 149 | 126.65 | Quaderno Growth 124–149; Recommand 1,000–2,500 docs 99–199 |
+| Scale | 399 | 339.15 | Recommand 5,000 docs 349; below Invopop Pro 500+ and Stripe Tax 1,000+ |
+| Enterprise | quote | — | every reconciliation-class competitor is quote-only |
+
+Metering unit: **records processed per month** (one invoice, clearance, return line or customs line record). Overage policy: auto-upgrade prompt, no surprise bills (Quaderno model) — a hard stop at the plan limit with an explicit upgrade path.

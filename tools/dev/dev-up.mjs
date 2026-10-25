@@ -12,7 +12,7 @@
 //   4. unless --no-demo: a SYNTHETIC rule pack, synthetic batches and one queued run, so the console shows findings
 //
 // Environment (all optional): PG_BIN (directory with pg_ctl/psql; auto-detected), DEV_DIR (default .dev),
-// DEV_PORT_W 5440, DEV_PORT_R 5441, DEV_PORT_API 8080, DEV_PORT_IDP 9443, DEV_PORT_WEB 3000.
+// DEV_PORT_W 5440, DEV_PORT_R 5441, DEV_PORT_API 8080, DEV_PORT_API_INTERNAL 8081, DEV_PORT_IDP 9443, DEV_PORT_WEB 3000.
 // DEV TOOL ONLY: trust authentication, a mock identity provider that signs anyone in, a self-signed certificate.
 import { spawn, spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
@@ -35,6 +35,7 @@ const P = {
   w: port('DEV_PORT_W', 5440),
   r: port('DEV_PORT_R', 5441),
   api: port('DEV_PORT_API', 8080),
+  apiInt: port('DEV_PORT_API_INTERNAL', 8081),
   idp: port('DEV_PORT_IDP', 9443),
   web: port('DEV_PORT_WEB', 3000),
 };
@@ -265,13 +266,22 @@ async function up() {
     const out = run(bin('recon-admin'), ['create-tenant', '--name', 'Dev Tenant'], { env: { ...process.env, RECON_ADMIN_W_URL: `postgres://dev_w_admin@localhost:${P.w}/recon_w` } });
     const id = out.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/)?.[0];
     if (!id) throw new Error('recon-admin did not print a tenant id');
-    state = { tenantId: id, sessionSecret: state.sessionSecret };
+    state = { tenantId: id, sessionSecret: state.sessionSecret, serviceKey: state.serviceKey };
   }
   state.sessionSecret ??= randomBytes(32).toString('base64url');
+  // Signing key of the internal listener (RECON-SVC-V1): the API verifies with it, the frontend BFF signs with it.
+  state.serviceKey ??= { id: 'dev-bff', secret: randomBytes(32).toString('base64url') };
   writeState(state);
 
   step(`starting the API on :${P.api}`);
-  const apiEnv = { RECON_W_URL: `postgres://dev_w_cmd@localhost:${P.w}/recon_w`, RECON_R_URL: `postgres://dev_r_api@localhost:${P.r}/recon_r`, RECON_BIND: `127.0.0.1:${P.api}` };
+  const apiEnv = {
+    RECON_W_URL: `postgres://dev_w_cmd@localhost:${P.w}/recon_w`,
+    RECON_R_URL: `postgres://dev_r_api@localhost:${P.r}/recon_r`,
+    RECON_BIND: `127.0.0.1:${P.api}`,
+    RECON_INTERNAL_BIND: `127.0.0.1:${P.apiInt}`,
+    RECON_INTERNAL_ALLOWED_CIDRS: '127.0.0.1/32,::1/128',
+    RECON_SERVICE_KEYS: `${state.serviceKey.id}:${state.serviceKey.secret}`,
+  };
   launch('api', bin('recon-api'), [], apiEnv);
   await waitFor('the API', async () => (await fetch(`http://127.0.0.1:${P.api}/readyz`).then((r) => r.ok, () => false)));
 
@@ -308,6 +318,9 @@ async function up() {
         OIDC_CLIENT_ID: 'recon-web',
         APP_BASE_URL: appBase,
         RECON_API_BASE_URL: `http://127.0.0.1:${P.api}`,
+        RECON_API_INTERNAL_URL: `http://127.0.0.1:${P.apiInt}`,
+        RECON_SERVICE_KEY_ID: state.serviceKey.id,
+        RECON_SERVICE_KEY_SECRET: state.serviceKey.secret,
         SESSION_SECRET: state.sessionSecret,
         NEXT_TELEMETRY_DISABLED: '1',
       },
@@ -323,7 +336,7 @@ async function up() {
 
   console.log(`
 \x1b[1m==================== dev stack is up ====================\x1b[0m
-  ${flag('no-web') ? `API         http://127.0.0.1:${P.api}   (readyz: /readyz)` : `Website     http://localhost:${P.web}\n  Console     http://localhost:${P.web}/overview   (sign in: the dev identity provider lets anyone in)\n  API         http://127.0.0.1:${P.api}`}
+  ${flag('no-web') ? `API         http://127.0.0.1:${P.api}   (readyz: /readyz)` : `Website     http://localhost:${P.web}\n  Console     http://localhost:${P.web}/overview   (sign in: the dev identity provider lets anyone in)\n  API         http://127.0.0.1:${P.api}   (public; the frontend uses the signed internal listener http://127.0.0.1:${P.apiInt})`}
   Databases   W postgres://postgres@localhost:${P.w}/recon_w   R postgres://postgres@localhost:${P.r}/recon_r
   Tenant      ${state.tenantId}
   API key     in ${STATE} (gitignored)

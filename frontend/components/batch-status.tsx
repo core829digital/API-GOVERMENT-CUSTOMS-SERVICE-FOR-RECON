@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ApiError } from "@/lib/api/errors";
 import { useBatch } from "@/lib/api/hooks";
-import { batchIdSchema, type Batch } from "@/lib/api/schemas";
+import { batchIdSchema, instant, type Batch } from "@/lib/api/schemas";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -56,9 +56,13 @@ function BatchDetails({ batch }: { batch: Batch }) {
       </Field>
       <Field label={t("batch.fields.created")}>
         <time dateTime={batch.created_at}>
-          {format.dateTime(new Date(batch.created_at), {
-            dateStyle: "medium",
-            timeStyle: "short",
+          {/* `dateStyle`/`timeStyle` cannot be combined with `timeZoneName`; spell the fields out. */}
+          {format.dateTime(instant(batch.created_at), {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
             timeZone: "UTC",
             timeZoneName: "short",
           })}

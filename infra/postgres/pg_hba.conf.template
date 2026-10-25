@@ -1,0 +1,70 @@
+# pg_hba.conf TEMPLATE for the recon PostgreSQL clusters (W and R). See README.md in this directory.
+#
+# This file is a template, not something Postgres can read as is: replace every {{PLACEHOLDER}} and delete the
+# lines of the cluster you are NOT configuring (the W block belongs on cluster W, the R block on cluster R).
+# Keep one line per CIDR: pg_hba.conf accepts exactly one address or network per line.
+#
+# Placeholders
+#   {{API_CIDR}}      networks of the machines that run recon-api (query role on R, command role on W)
+#   {{WORKER_CIDR}}   networks of the machines that run recon-engine / anchoring / verification jobs
+#   {{OPS_CIDR}}      network of the migration job and of the operators' bastion (owner role, admin tool)
+#   {{R_CIDR}}        address of cluster R ONLY (a /32 or /128): the subscription on R connects to W from here
+#   {{REPL_ROLE}}     the replication login role the subscription on R uses (`repl_r`, DatabaseInfo.md §5-6)
+#
+# Fixed role names from DatabaseInfo.md §6: `w_migrator` (W) and `r_migrator` (R) run recon-migrate and need LOGIN; they
+# are not application roles. The names in this file must match what the deployment creates.
+#
+# The `+name` entries match every member of the NOLOGIN group role `name` created by migrations/{w,r}/0005_roles.sql;
+# deployments create LOGIN roles that are members of those groups. Application roles are never superusers.
+#
+# Rules of this file
+#   * Every network line is `hostssl`: a connection without TLS never matches (and, by the final line, is refused).
+#   * Password login is `scram-sha-256` only (no md5, no trust, no password). `clientcert=verify-full` additionally
+#     requires a client certificate signed by the CA in `ssl_ca_file` whose CN equals the database user name.
+#   * First match wins, so the final `reject` lines are what makes this an allowlist.
+#   * Clients must connect with `sslmode=verify-full` (+ `sslrootcert`), see README.md and Rules.md R-SEC-1.
+
+# TYPE    DATABASE    USER             ADDRESS            METHOD
+
+# ------------------------------------------------------------------------------------------------ both clusters
+# Local administration over the Unix socket, by the OS user that runs Postgres only (no TCP superuser access at all).
+local     all         postgres                            peer
+# Nobody connects as a superuser over the network. Stated explicitly so a later, broader line cannot admit it.
+hostssl   all         postgres         0.0.0.0/0          reject
+hostssl   all         postgres         ::/0               reject
+
+# ------------------------------------------------------------------------------------------------ cluster W (db recon_w)
+# Command handlers (recon-api): w_cmd. Duplicate the line for each additional API network.
+hostssl   recon_w     +w_cmd           {{API_CIDR}}       scram-sha-256 clientcert=verify-full
+# Tenant creation (recon-admin, run by operators from the bastion): w_admin.
+hostssl   recon_w     +w_admin         {{OPS_CIDR}}       scram-sha-256 clientcert=verify-full
+# Engine worker and its derivatives: w_worker (includes w_cmd's privileges), anchoring, offline verification.
+hostssl   recon_w     +w_worker        {{WORKER_CIDR}}    scram-sha-256 clientcert=verify-full
+hostssl   recon_w     +w_anchor        {{WORKER_CIDR}}    scram-sha-256 clientcert=verify-full
+hostssl   recon_w     +w_verifier      {{WORKER_CIDR}}    scram-sha-256 clientcert=verify-full
+# Migrations (recon-migrate) run as w_migrator from the ops network.
+hostssl   recon_w     w_migrator       {{OPS_CIDR}}       scram-sha-256 clientcert=verify-full
+# Logical replication W -> R. The subscription's apply worker on R opens an ordinary connection to the database
+# `recon_w` (a logical walsender), so the DATABASE column is the database name, not the keyword `replication`.
+# The ONLY source allowed for this role is cluster R.
+hostssl   recon_w     {{REPL_ROLE}}    {{R_CIDR}}         scram-sha-256 clientcert=verify-full
+# Physical streaming replication (standbys of W, only if the operator uses them): list each standby address as
+# `hostssl replication {{STANDBY_ROLE}} <standby /32> scram-sha-256 clientcert=verify-full`. None by default.
+
+# ------------------------------------------------------------------------------------------------ cluster R (db recon_r)
+# Queries (recon-api): r_api. Never writes (SELECT only, see DatabaseInfo.md §6).
+hostssl   recon_r     +r_api           {{API_CIDR}}       scram-sha-256 clientcert=verify-full
+# Projection, vectors and fidelity jobs.
+hostssl   recon_r     +r_projector     {{WORKER_CIDR}}    scram-sha-256 clientcert=verify-full
+hostssl   recon_r     +r_verifier      {{WORKER_CIDR}}    scram-sha-256 clientcert=verify-full
+# Migrations run as r_migrator from the ops network. R is never the target of replication connections:
+# the subscription on R is outbound, so no `replication` line exists in the R block.
+hostssl   recon_r     r_migrator       {{OPS_CIDR}}       scram-sha-256 clientcert=verify-full
+
+# ------------------------------------------------------------------------------------------------ everything else
+# Anything that matched nothing above is refused explicitly (an unmatched connection is refused anyway; this line
+# makes the intent visible and is what a reviewer should check is still last). Plain-text connections as well.
+host      all         all              0.0.0.0/0          reject
+host      all         all              ::/0               reject
+hostssl   all         all              0.0.0.0/0          reject
+hostssl   all         all              ::/0               reject

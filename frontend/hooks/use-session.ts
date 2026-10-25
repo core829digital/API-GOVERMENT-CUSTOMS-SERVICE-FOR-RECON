@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import "@/lib/zod-config";
 import { z } from "zod";
 
 const sessionSchema = z.object({ authenticated: z.boolean() });

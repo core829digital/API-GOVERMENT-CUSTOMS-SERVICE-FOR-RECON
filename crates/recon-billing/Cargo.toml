@@ -1,0 +1,44 @@
+[package]
+name = "recon-billing"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lib]
+name = "recon_billing"
+path = "src/lib.rs"
+
+[[bin]]
+name = "recon-billing-seed"
+path = "src/bin/recon-billing-seed.rs"
+
+[lints]
+workspace = true
+
+[dependencies]
+axum = "0.8.9"
+hex = "0.4.3"
+hmac = "0.13.0"
+# TLS for the Stripe HTTP client: reqwest 0.13 without a bundled crypto provider; `rustls` below supplies `ring`,
+# which is already the provider used by sqlx in this workspace (no aws-lc / OpenSSL / cmake in the build).
+reqwest = { version = "0.13.5", default-features = false, features = ["rustls-no-provider", "form", "json"] }
+recon-store = { path = "../recon-store" }
+rustls = { version = "0.23.46", default-features = false, features = ["ring", "std", "tls12"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+sha2 = "0.11.1"
+sqlx = { version = "0.9.0", default-features = false, features = ["runtime-tokio", "tls-rustls", "postgres", "uuid", "json", "time", "derive"] }
+subtle = "2.6.1"
+thiserror = "2.0.21"
+time = { version = "0.3.55", features = ["formatting", "parsing", "serde", "serde-well-known"] }
+tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros", "time"] }
+url = "2.5.8"
+uuid = { version = "1.29.0", features = ["serde"] }
+
+[dev-dependencies]
+recon-migrate = { path = "../recon-migrate" }
+http-body-util = "0.1.5"
+tower = { version = "0.5.3", features = ["util"] }
+tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros", "time", "net", "sync"] }
+uuid = { version = "1.29.0", features = ["serde", "v7"] }

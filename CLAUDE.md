@@ -91,8 +91,11 @@ RECON_W_CONNINFO="host=localhost port=5440 dbname=recon_w user=postgres" \
 # 3. Non-superuser login roles (superusers bypass RLS). Create once with psql as `postgres`:
 #    W: dev_w_admin IN ROLE w_admin, dev_w_cmd IN ROLE w_cmd, dev_w_worker IN ROLE w_worker;  R: dev_r_api IN ROLE r_api
 
-# 4. API (http://127.0.0.1:8080)
+# 4. API: public listener http://127.0.0.1:8080 (customers, API keys) + internal listener http://127.0.0.1:8081 (our services; allowlisted
+#    client IP + RECON-SVC-V1 signature + API key). The process refuses to start without RECON_INTERNAL_ALLOWED_CIDRS and RECON_SERVICE_KEYS.
+#    Dev service key: `node -e "console.log(require('node:crypto').randomBytes(32).toString('base64url'))"`
 RECON_W_URL=postgres://dev_w_cmd@localhost:5440/recon_w RECON_R_URL=postgres://dev_r_api@localhost:5441/recon_r \
+  RECON_INTERNAL_ALLOWED_CIDRS=127.0.0.1/32,::1/128 RECON_SERVICE_KEYS=dev-bff:<base64url secret, >= 32 bytes> \
   cargo run -p recon-api --bin recon-api
 
 # 5. Tenant + API key (the token is printed once)
@@ -103,7 +106,8 @@ RECON_W_URL=postgres://dev_w_cmd@localhost:5440/recon_w cargo run -p recon-api -
 # 6. Browser: dev-only mock IdP (https://localhost:9443, signs anyone in, hands the API key to the BFF) + frontend
 RECON_DEV_API_TOKEN=rk_... node tools/dev/dev-idp.mjs
 cd frontend && NODE_EXTRA_CA_CERTS=<repo>/.dev/idp/cert.pem OIDC_ISSUER=https://localhost:9443 OIDC_CLIENT_ID=recon-web \
-  APP_BASE_URL=http://localhost:3000 RECON_API_BASE_URL=http://127.0.0.1:8080 SESSION_SECRET=<base64url 32 bytes> npm run dev
+  APP_BASE_URL=http://localhost:3000 RECON_API_BASE_URL=http://127.0.0.1:8080 RECON_API_INTERNAL_URL=http://127.0.0.1:8081 \
+  RECON_SERVICE_KEY_ID=dev-bff RECON_SERVICE_KEY_SECRET=<the same secret> SESSION_SECRET=<base64url 32 bytes> npm run dev
 # open http://localhost:3000 (accept the self-signed certificate of https://localhost:9443 once)
 
 # 7. Engine and synthetic data (dev/test only; the synthetic pack makes no regulatory claim)

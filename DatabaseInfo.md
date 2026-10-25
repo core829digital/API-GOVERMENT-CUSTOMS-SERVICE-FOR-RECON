@@ -353,6 +353,8 @@ Notes:
 
 `REVOKE ALL ON SCHEMA ... FROM PUBLIC` everywhere. There is **no** role that can write R's replicated tables other than `r_sub_owner`, and none that `r_api`-style code can acquire on W for queries.
 
+**Connection requirements (network level).** Roles say what a connection may do; `infra/postgres/pg_hba.conf.template` says who may connect: TLS-only (`hostssl`), `scram-sha-256` plus client certificate, one line per role (`+w_cmd`, `+r_api`, … match the group roles above) and database, the replication role `repl_r` reachable **only from R's address**, the superuser refused over the network, and a final `reject`. It is combined with a provider-level network allowlist and `sslmode=verify-full` on every client URL (Rules.md R-SEC-1, R-SEC-10). The template is not deployed anywhere yet (provider undecided, D-2); `infra/postgres/README.md` explains the layers. No role or grant changed.
+
 ### 6.1 Row-level security (both clusters)
 ```sql
 ALTER TABLE recon.finding ENABLE ROW LEVEL SECURITY;
@@ -440,3 +442,38 @@ SELECT chunk_id FROM vec.legal_chunk_emb_v1
 | DB-2 | Embedding dimension/model | `halfvec(1024)` placeholder; blocked on D-4 |
 | DB-3 | Ledger partitioning strategy once volume known | none until measured |
 | DB-4 | Per-tenant dedicated W/R for enterprise tier | not offered in v1 |
+
+## 12. Billing (cluster W only)
+
+Authoritative DDL: `migrations/w/0008_billing.sql` (`-- target: w`; applied on a fresh PostgreSQL 18.6 pair 2026-10-25 after 0001–0007; `recon-migrate compare` still reports identical W/R replicated-schema fingerprints, because `billing` is outside `REPLICATED_SCHEMAS`). Logic and tests: `crates/recon-billing`. Architecture: Architecture.md §19.
+
+**Placement.** Schema `billing` exists in W only. It is **not** in publication `recon_pub` (like `api`, payment data never leaves W), has no R migration, and needs no `REFRESH PUBLICATION`. CI gate L4 scans only `core, ingest, recon, rules, ledger, privacy, ops` and its unpublished-schema check lists `api` only, so L4 neither reads nor checks `billing` today; every column nevertheless carries a classification comment in L4's grammar, so adding `billing` to L4's unpublished list is a one-line change owned by the CI slice.
+
+| Table | Tenant-scoped (RLS) | Purpose |
+|---|---|---|
+| `billing.plan` | no (catalogue) | Plan/price rows: `code`, `display_key` (i18n key), `billing_interval` (`month`\|`year`), `currency char(3)`, `unit_amount_minor bigint`, `is_public`, `is_fallback`, `sort_order`, `provider_price_id` (UNIQUE), `valid_from`, `valid_to`. **Immutable** by trigger (only `valid_to` once, `is_public`, `sort_order` may change); DELETE/TRUNCATE denied; a new price is a new row. At most one open-ended `is_fallback` plan (partial unique index); a fallback plan is free and has no provider price. |
+| `billing.plan_entitlement` | no | `(plan_id, key)` with exactly one of `int_value` (numeric limit ≥ 0) or `bool_value`. Never updated or deleted (trigger). Keys in use: `runs_per_month`, `records_per_month`, `legal_entities`, `users`, `countries`, `api_keys`, `evidence_packs`, `support_tier`. "Unlimited" is not modelled: use an explicit large number. |
+| `billing.subscription` | yes | One row per provider subscription. `status` ∈ `trialing\|active\|past_due\|canceled\|incomplete`; `current_period_start/end`, `cancel_at_period_end`, `past_due_since`, `provider_customer_id`, `provider_subscription_id` (UNIQUE), `provider_event_created` (ordering guard). Partial unique index: **one non-canceled subscription per tenant**; canceled rows stay as history. Live statuses require a period. Stripe `unpaid`, `paused`, `incomplete_expired` are stored as `canceled` (no access). |
+| `billing.usage_counter` | yes | `(tenant_id, metric, period_start)` → `quantity`. |
+| `billing.usage_consumption` | yes | Idempotency record `(tenant_id, metric, idempotency_key)` → amount, window. A rejected (over-limit) attempt leaves no row. Growth is unbounded until a purge procedure exists (open). |
+| `billing.provider_event` | yes (`tenant_id` NULL = unattributed) | `provider_event_id` UNIQUE = webhook idempotency; `event_type`, `provider_created`, `received_at`, `processed_at`, `outcome`, `payload`. `payload` is an **allow-listed projection** built by recon-billing (ids, status, amounts, periods): never the raw event, never card data, never name/e-mail/address, never the hosted-invoice URL. |
+| `billing.invoice_ref` | yes | `provider_invoice_id` UNIQUE, `number`, `amount_minor bigint` + `currency char(3)`, `status`, `hosted_url`, ordering guard. `hosted_url` is a bearer link to a Stripe-hosted page that shows the customer's billing details: classified `secret`, returned only to the owning tenant; application-layer encryption is an open decision. |
+
+**Customer billing contact PII is not stored.** Name, address, VAT id and e-mail are collected and held by the payment provider on its hosted pages; no ciphertext column exists for them, so no key management is involved (crates/recon-store/src/privacy.rs patterns are not needed). The only identifier-like columns are the opaque provider ids. `provider_customer_id` is classified `internal` (an opaque processor reference that identifies nobody without access to the processor account); because a customer may be a sole trader the ROPA row (docs/privacy/ROPA.md §10) treats it as pseudonymous personal data, and the DPO may reclassify it (`pii` would require a documented L4 exception, as for `ledger.audit_event.actor_ref`).
+
+**RLS.** Enabled (not forced, exactly as 0003/0005: no application role owns an object) with `tenant_isolation` `USING (tenant_id = current_setting('app.tenant_id')::uuid)` on `subscription`, `usage_counter`, `usage_consumption`, `provider_event`, `invoice_ref`; an unset or empty `app.tenant_id` raises (fail closed). `SECURITY DEFINER` functions run as owner and therefore call `privacy.require_bound_tenant()` first (same guard as 0007).
+
+**Roles and grants.** `w_cmd` (and `w_worker` through membership): `USAGE` on `billing`; `SELECT` on `plan`, `plan_entitlement`, `subscription`, `usage_counter`, `invoice_ref`; `EXECUTE` on `usage_period`, `consume_usage`, `resolve_tenant`, `record_unattributed_event`, `apply_subscription_event`, `apply_checkout_completed`, `apply_invoice_event`. No INSERT/UPDATE/DELETE/TRUNCATE/DDL on any billing table; no access to `provider_event` or `usage_consumption`. New NOLOGIN role `w_billing_admin` (operator): `EXECUTE` on `create_plan`, `retire_plan` and `SELECT` on the catalogue only. `REVOKE ALL ON SCHEMA billing FROM PUBLIC` and `REVOKE EXECUTE … FROM PUBLIC` on every function.
+
+**Functions** (all `SET search_path = pg_catalog`, objects schema-qualified):
+
+| Function | Kind | Notes |
+|---|---|---|
+| `create_plan(...)`, `retire_plan(uuid, timestamptz)` | DEFINER | operator seeding; one transaction per plan with its entitlements |
+| `usage_period(start, end, interval, now)` | IMMUTABLE | the window containing `now`; past `end` it rolls forward in whole intervals anchored on `end` |
+| `consume_usage(tenant, metric, amount, key, period_start, limit)` | DEFINER | race-safe check-and-increment (conditional `UPDATE` on the counter row), idempotent per key; returns `allowed\|replayed\|limit_exceeded\|key_reused` |
+| `resolve_tenant(hint, subscription, customer)` | DEFINER, STABLE | cross-tenant lookup used before a tenant can be bound (pattern of `api.lookup_api_key`, 0006); returns a tenant id or NULL |
+| `claim_event`, `finish_event`, `record_unattributed_event` | DEFINER | webhook idempotency |
+| `apply_subscription_event`, `apply_checkout_completed`, `apply_invoice_event` | DEFINER | apply one provider event; subscription changes append `billing.subscription.created`, `…plan_changed`, `…status_changed`, `…cancel_at_period_end_changed` through `ledger.append_event_jcs()` in the same transaction (payload: plan id/code, statuses, provider event id; no PII) |
+
+Retention classes used in the comments: `tax_record` (subscription, invoice references), `operational` (plans, usage, provider events). The periods are not defined here; `privacy.retention_policy` rows are still empty (docs/privacy/ROPA.md §7). Whether invoice references need a different class than the provider's own invoice record is for the DPO.

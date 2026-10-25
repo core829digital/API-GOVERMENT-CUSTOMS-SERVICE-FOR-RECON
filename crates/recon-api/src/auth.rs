@@ -7,12 +7,18 @@
 //! **Documented exception to "queries hit R":** credential lookup reads W through `api.lookup_api_key()` because
 //! secret hashes must never exist on R. It is the only W read on a request path, it is confined to this module,
 //! and it is not cached yet (revocation is immediate); add a cache only when measured (R-GEN-4).
+//!
+//! **Abuse limits (R-SEC-9).** Argon2 is expensive, so it is never reached by traffic that has not passed the
+//! per-IP limiter (`http::limit_ip`, public listener), a token that is not even shaped like a key costs no Argon2
+//! at all, and verifications are capped at `argon2_concurrency` at a time (`Guard::verify_password`, `503 busy`
+//! when saturated). After a successful verification the per-key and per-tenant limiters apply (stricter for
+//! POST).
 
 use crate::{AppState, error::ApiError};
 use argon2::password_hash::phc::PasswordHash;
 use argon2::{Argon2, PasswordHasher, PasswordVerifier};
 use axum::extract::FromRequestParts;
-use axum::http::{header, request::Parts};
+use axum::http::{Method, header, request::Parts};
 use uuid::Uuid;
 
 /// Scopes a key may carry.
@@ -97,19 +103,17 @@ impl FromRequestParts<AppState> for Principal {
         parts: &mut Parts,
         state: &AppState,
     ) -> Result<Self, Self::Rejection> {
-        let header = parts
-            .headers
-            .get(header::AUTHORIZATION)
-            .and_then(|v| v.to_str().ok())
-            .ok_or_else(ApiError::unauthorized)?;
-        let token = header
-            .strip_prefix("Bearer ")
-            .ok_or_else(ApiError::unauthorized)?;
-        let Some((prefix, secret)) = parse_token(token) else {
-            // keep timing comparable with a real lookup
-            verify((*state.dummy_hash).clone(), token.to_string()).await;
+        let mut values = parts.headers.get_all(header::AUTHORIZATION).iter();
+        let (Some(value), None) = (values.next(), values.next()) else {
             return Err(ApiError::unauthorized());
         };
+        let token = value
+            .to_str()
+            .ok()
+            .and_then(|h| h.strip_prefix("Bearer "))
+            .ok_or_else(ApiError::unauthorized)?;
+        // A malformed token carries no secret to protect and must not cost Argon2 time.
+        let (prefix, secret) = parse_token(token).ok_or_else(ApiError::unauthorized)?;
 
         let mut tx = state.w.begin_unbound().await?;
         let row: Option<(Uuid, Uuid, Vec<u8>, Vec<String>)> =
@@ -120,13 +124,19 @@ impl FromRequestParts<AppState> for Principal {
         drop(tx); // read-only use: roll back
 
         let Some((key_id, tenant, hash, scopes)) = row else {
-            verify((*state.dummy_hash).clone(), secret.to_string()).await; // equalise timing for unknown prefixes
+            // equalise timing for unknown prefixes
+            state
+                .guard
+                .verify_password((*state.dummy_hash).clone(), secret.to_string())
+                .await?;
             return Err(ApiError::unauthorized());
         };
         let hash = String::from_utf8(hash).map_err(|_| ApiError::internal())?;
-        if !verify(hash, secret.to_string()).await {
+        if !state.guard.verify_password(hash, secret.to_string()).await? {
             return Err(ApiError::unauthorized());
         }
+        let write = !matches!(parts.method, Method::GET | Method::HEAD);
+        state.guard.check_principal(key_id, tenant, write)?;
         Ok(Principal {
             tenant,
             key_id,

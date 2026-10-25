@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import { LenisProvider } from "@/components/lenis-provider";
+import { AmbientLayer } from "@/components/site/ambient/ambient-layer";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 
@@ -9,6 +10,7 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
   const t = await getTranslations("shell");
   return (
     <LenisProvider>
+      <AmbientLayer />
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-background focus:px-3 focus:py-2 focus:ring-2 focus:ring-ring"

@@ -80,6 +80,18 @@
   --sidebar-accent-foreground: oklch(0.16 0.01 260);
   --sidebar-border: oklch(0.16 0.01 260 / 16%);
   --sidebar-ring: oklch(0.45 0.13 250);
+
+  /*
+   * Ambient background layer (components/site/ambient). Peak ink of its pattern layers, tuned to a budget:
+   * where rest, dots and hatch stack at full strength on one pixel, text in --muted-foreground (the faintest
+   * colour used for reading) must still keep 4.5:1 against the darkened background. Alpha composited in sRGB,
+   * that allows 19.5 % cumulative ink on paper and 22.5 % on ink; these values use 17.9 % and 21.5 %. The
+   * specimen sits on an opaque plate that hides the others, so it alone may use the whole budget.
+   */
+  --ambient-rest: 0.03;
+  --ambient-dots: 0.08;
+  --ambient-hatch: 0.08;
+  --ambient-specimen: 0.18;
 }
 
 .dark {
@@ -114,6 +126,11 @@
   --sidebar-accent-foreground: oklch(0.95 0.006 95);
   --sidebar-border: oklch(1 0 0 / 13%);
   --sidebar-ring: oklch(0.82 0.09 235);
+
+  --ambient-rest: 0.02;
+  --ambient-dots: 0.105;
+  --ambient-hatch: 0.105;
+  --ambient-specimen: 0.2;
 }
 
 @layer base {
@@ -273,6 +290,112 @@
       transform: translate(-4px, 4px);
     }
   }
+
+  /* ---------------------------------------------------------------- ambient layer
+   * Fixed, behind everything, never interactive. At rest only the registration crosses show. Under a fine
+   * pointer (or, on touch, along the scroll position) a soft circular mask uncovers two pattern fields of
+   * the wordmark and one small clear instance. All motion is custom properties written by
+   * ambient-controller.ts, consumed as transforms only: the reveal is a fixed-size masked window that is
+   * translated, its fields are translated back so they stay on the page, and nothing repaints or lays out
+   * per frame. Fields draw with the foreground colour,
+   * so both themes follow.
+   */
+  .ambient {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: clip;
+    pointer-events: none;
+    user-select: none;
+    contain: layout paint style;
+    color: var(--foreground);
+    --ambient-d: 560px;
+    --ambient-gain: 1;
+  }
+  .ambient svg {
+    display: block;
+  }
+  .ambient__rest {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: calc(var(--ambient-rest) * var(--ambient-gain));
+  }
+  .ambient__reveal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: var(--ambient-d);
+    height: var(--ambient-d);
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    transform: translate3d(var(--ambient-lx, 0px), var(--ambient-ly, 0px), 0);
+    will-change: transform;
+    -webkit-mask-image: radial-gradient(
+      closest-side,
+      #000 0,
+      rgb(0 0 0 / 0.85) 30%,
+      rgb(0 0 0 / 0.45) 60%,
+      rgb(0 0 0 / 0.12) 85%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      closest-side,
+      #000 0,
+      rgb(0 0 0 / 0.85) 30%,
+      rgb(0 0 0 / 0.45) 60%,
+      rgb(0 0 0 / 0.12) 85%,
+      transparent 100%
+    );
+  }
+  .ambient__field {
+    position: absolute;
+    left: -400px;
+    top: -240px;
+    width: calc(100vw + 800px);
+    height: calc(100vh + 480px);
+    will-change: transform;
+  }
+  .ambient__field--dots {
+    opacity: calc(var(--ambient-dots) * var(--ambient-gain));
+    transform: translate3d(var(--ambient-dots-x, 0px), var(--ambient-dots-y, 0px), 0);
+  }
+  .ambient__field--hatch {
+    opacity: calc(var(--ambient-hatch) * var(--ambient-gain));
+    transform: translate3d(var(--ambient-hatch-x, 0px), var(--ambient-hatch-y, 0px), 0);
+  }
+  .ambient__specimen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: var(--background);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    transform: translate3d(var(--ambient-specimen-x, 0px), var(--ambient-specimen-y, 0px), 0);
+    will-change: transform;
+  }
+  .ambient__specimen-art {
+    opacity: calc(var(--ambient-specimen) * var(--ambient-gain));
+  }
+  .ambient[data-state="active"] :is(.ambient__reveal, .ambient__specimen) {
+    opacity: 1;
+  }
+  /* Nothing is revealed where there is nothing to hover with and the visitor asked for no motion. */
+  .ambient[data-mode="off"] :is(.ambient__reveal, .ambient__specimen) {
+    display: none;
+  }
+  @media (prefers-contrast: more) {
+    .ambient {
+      --ambient-gain: 0.5;
+    }
+  }
+  @media (forced-colors: active), print {
+    .ambient {
+      display: none;
+    }
+  }
 }
 
 /* ------------------------------------------------------------------ motion
@@ -343,7 +466,9 @@
   }
   .plate::before,
   .plate::after,
-  .link-sweep {
+  .link-sweep,
+  .ambient__reveal,
+  .ambient__specimen {
     transition: none;
   }
 }

@@ -42,6 +42,10 @@ Keywords per RFC 2119. Rule IDs are stable — never renumber; retire with a not
 | R-API-4 | The OpenAPI spec is generated from code; the TypeScript client is generated from the spec; CI fails on drift. Additive-only within a major version. | CI |
 | R-API-5 | Error bodies MUST NOT leak internals, SQL, other tenants' identifiers, or PII. | TEST, REVIEW |
 | R-API-6 | Webhooks MUST be signed and replay-protected (timestamp + signature). | TEST |
+| R-API-7 | Request bodies MUST be typed structs with `deny_unknown_fields` (duplicate keys refused), sent as `application/json` (415 otherwise) and limited per endpoint (413; 8 KiB for the two POST endpoints, none for GET; any larger limit needs a justification next to its constant). Ids, hashes, dates, enums, URIs, `Idempotency-Key`, `limit`, URI length and header sizes MUST be validated strictly and rejected, never coerced or clamped. | TEST (`validate::tests`, `tests/security.rs`) |
+| R-API-8 | Text from clients MUST be rejected with `400 invalid_characters` if it contains NUL/C0/C1 controls, zero-width or BOM characters or bidirectional overrides/isolates; it is stored as sent (no HTML escaping on input) and only through parameterised SQL. A new free-text field MUST add NFC handling. | TEST (`validate::tests`, `tests/security.rs::hostile_sql_text_…`) |
+| R-API-9 | Every API response, errors and rejections included, MUST carry `nosniff`, `Cache-Control: no-store`, `Content-Security-Policy: default-src 'none'; frame-ancestors 'none'`, `Referrer-Policy: no-referrer`, `Cross-Origin-Resource-Policy: same-origin`; error messages MUST be fixed strings that never contain request input. | TEST (`tests/security.rs`) |
+| R-API-10 | The service plane (internal listener) MUST fail closed: no start without `RECON_INTERNAL_ALLOWED_CIDRS` and `RECON_SERVICE_KEYS`; every request needs an allowlisted client IP and a valid `RECON-SVC-V1` signature (±60 s, nonce once per 120 s, constant-time compare, unknown key id indistinguishable from a bad signature) in addition to the API key. `X-Forwarded-For` counts only from `RECON_TRUSTED_PROXY_CIDRS`. The Rust verifier and the TypeScript signer MUST pass the same vectors (`crates/recon-api/tests/vectors/service-signature-v1.json`). | TEST (`service::tests`, `net::tests`, `tests/security.rs`, `frontend/tests/service-signature.test.ts`) |
 
 ## R-ENG — reconciliation engine
 
@@ -74,6 +78,8 @@ Keywords per RFC 2119. Rule IDs are stable — never renumber; retire with a not
 | R-SEC-6 | No `unwrap()`/`expect()` on fallible runtime paths in non-test code; no panics on user input. | CI (clippy deny) |
 | R-SEC-7 | Dependencies: license allowlist, no known-vulnerable versions, SBOM generated per release, GitHub Actions pinned by commit SHA. | CI L1, L2 |
 | R-SEC-8 | Release artifacts MUST be signed and carry provenance; deploy verifies signature and the legal-audit attestation. | CI L12 |
+| R-SEC-9 | Argon2 MUST NOT be reachable by traffic that has not passed the per-IP limiter; concurrent verifications are capped (`503 busy` when saturated). After authentication per-key and per-tenant limits apply, stricter for writes. Limiters are memory-bounded; 429 carries `Retry-After` and `RateLimit-*`. In-process state is per replica and docs MUST say so. | TEST (`ratelimit::tests`, `guard::tests`, `tests/security.rs`) |
+| R-SEC-10 | Database servers accept connections only from the application networks: provider-level allowlist AND `pg_hba.conf` (`hostssl`, `scram-sha-256`, per-role per-database lines, replication role only from R, final `reject`); clients use `sslmode=verify-full`. Currently a template (`infra/postgres/`), not deployed. | REVIEW (template), CI L10 (config test once a provider is chosen) |
 
 ## R-PRIV — privacy and retention
 
@@ -106,6 +112,8 @@ Keywords per RFC 2119. Rule IDs are stable — never renumber; retire with a not
 | R-FE-3 | No hard-coded user-facing strings; i18n catalogs only. | CI (lint) |
 | R-FE-4 | Browser never holds bearer tokens; session via HttpOnly, Secure, SameSite cookie through the Next.js BFF. | TEST, REVIEW |
 | R-FE-5 | shadcn components are copied into the repo and owned; do not patch `node_modules`. | REVIEW |
+| R-FE-6 | Pages MUST be served with a per-request nonce Content-Security-Policy (no `unsafe-inline`/`unsafe-eval` for scripts in production; `object-src 'none'`, `base-uri 'self'`, `form-action 'self'`, `frame-ancestors 'none'`) and the headers set in `next.config.ts`. No `dangerouslySetInnerHTML`, `innerHTML` or eval-style code; a library that needs eval MUST be configured not to (zod `jitless`). | TEST (`csp.test.ts`), REVIEW; the browser-console check was run by hand, no automated check yet |
+| R-FE-7 | The BFF MUST reach the API only through the internal listener with a service signature, forward only allowlisted v1 routes, query parameters and request headers, and answer every other path with 400. | TEST (`bff.test.ts`, `service-signature.test.ts`) |
 
 ## R-OPS — operations
 

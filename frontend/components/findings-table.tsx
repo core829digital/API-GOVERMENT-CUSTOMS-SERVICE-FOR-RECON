@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useFindings } from "@/lib/api/hooks";
-import type { Severity } from "@/lib/api/schemas";
+import { instant, type Severity } from "@/lib/api/schemas";
 
 const severityClass: Record<Severity, string> = {
   info: "border-sev-info text-sev-info",
@@ -92,7 +92,7 @@ export function FindingsTable() {
             <TableCell className="min-w-48 whitespace-normal">{finding.rule_citation}</TableCell>
             <TableCell>
               <time dateTime={finding.created_at}>
-                {format.dateTime(new Date(finding.created_at), {
+                {format.dateTime(instant(finding.created_at), {
                   year: "numeric",
                   month: "short",
                   day: "numeric",

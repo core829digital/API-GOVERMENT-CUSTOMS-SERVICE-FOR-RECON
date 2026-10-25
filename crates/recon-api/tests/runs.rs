@@ -8,7 +8,9 @@ use axum::body::Body;
 use axum::http::{HeaderMap, Request, StatusCode};
 use http_body_util::BodyExt;
 use recon_api::admin::{create_tenant, issue_api_key};
-use recon_api::{AppState, app};
+use recon_api::guard::RateLimits;
+use recon_api::ratelimit::Quota;
+use recon_api::{AppState, SecurityConfig, app};
 use recon_engine::{Engine, Step};
 use recon_store::{Actor, ReadStore, WriteStore};
 use serde_json::{Value, json};
@@ -61,7 +63,20 @@ async fn fx() -> Fx {
     let r_api = ReadStore::connect_with(as_user(&r_url, "t_r_api"), 8).await.unwrap();
     let r_engine = ReadStore::connect_with(as_user(&r_url, "t_r_api"), 2).await.unwrap();
     let engine = Engine::new(w_worker, r_engine, Duration::from_secs(10));
-    let state = AppState::new(w_cmd.clone(), r_api, Duration::from_secs(10)).unwrap();
+    // These tests exercise behaviour, not abuse limits (those are tests/security.rs): quotas out of the way.
+    let roomy = Quota::new(600_000, 100_000);
+    let security = SecurityConfig {
+        limits: RateLimits {
+            ip: roomy,
+            key_read: roomy,
+            key_write: roomy,
+            tenant_read: roomy,
+            tenant_write: roomy,
+            ..RateLimits::default()
+        },
+        ..SecurityConfig::default()
+    };
+    let state = AppState::with_security(w_cmd.clone(), r_api, Duration::from_secs(10), security).unwrap();
     Fx { admin_w, w_admin, w_cmd, engine, app: app(state) }
 }
 
@@ -178,6 +193,10 @@ async fn call(
     }
     if let Some(s) = min_seq {
         req = req.header("x-min-seq", s.to_string());
+    }
+    let has_body = body.is_some();
+    if has_body {
+        req = req.header("content-type", "application/json");
     }
     let body = body.map_or_else(Body::empty, |b| Body::from(b.to_string()));
     let res = f.app.clone().oneshot(req.body(body).unwrap()).await.unwrap();
