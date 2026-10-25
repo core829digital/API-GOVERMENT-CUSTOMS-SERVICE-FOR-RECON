@@ -1,0 +1,135 @@
+{
+  "checks": {
+    "metadata": {
+      "title": "Checks",
+      "description": "The catalogue of candidate reconciliation checks C1 to C8: what each compares, whether an authority holds one of the sources, and how far each has got."
+    },
+    "status": {
+      "building": "Building",
+      "planned": "Planned",
+      "later": "Later",
+      "buildingHint": "Exists and runs. Synthetic data only.",
+      "plannedHint": "Designed and written down. Not built yet.",
+      "laterHint": "Deliberately after the first versions."
+    },
+    "hero": {
+      "eyebrow": "Checks",
+      "title": "Eight candidate checks. One runs, on synthetic data.",
+      "lead": "A check compares two or more sources and reports where they disagree. This is the catalogue of candidates. Only the first exists, and it has never seen real data."
+    },
+    "catalogue": {
+      "eyebrow": "Catalogue",
+      "title": "What is compared with what",
+      "lead": "Authority side says whether one of the compared sources is a copy held by an authority: yes, partly, or no. Status shows how far each check has got. The list is a set of candidates and may change.",
+      "caption": "Candidate checks C1 to C8, the sources each one compares, whether an authority holds one of them, and the status of each check",
+      "columns": {
+        "id": "ID",
+        "check": "Check",
+        "sources": "Sources compared",
+        "authority": "Authority side",
+        "status": "Status"
+      },
+      "authority": {
+        "yes": "Yes",
+        "partial": "Partly",
+        "no": "No"
+      },
+      "rows": {
+        "c1": {
+          "check": "Invoice issued against clearance status and content",
+          "sources": "Accounting ledger and the status held by an e-invoice clearance system (examples: KSeF, e-Factura, SdI)"
+        },
+        "c2": {
+          "check": "Invoice PDF against its structured XML",
+          "sources": "Invoice PDF and invoice XML"
+        },
+        "c3": {
+          "check": "VAT return boxes against the ledger, by period",
+          "sources": "Accounting ledger and the filed return"
+        },
+        "c4": {
+          "check": "OSS or IOSS return against business-to-consumer sales, by consumption state and rate",
+          "sources": "Ledger or marketplace data and the OSS return"
+        },
+        "c5": {
+          "check": "Intra-EU business-to-business supplies against VAT ID validity at the time of supply",
+          "sources": "Accounting ledger and the history of VIES results"
+        },
+        "c6": {
+          "check": "Import VAT claimed against the customs or import statement",
+          "sources": "Accounting ledger and the customs file"
+        },
+        "c7": {
+          "check": "Marketplace report against the ledger",
+          "sources": "Marketplace report and accounting ledger"
+        },
+        "c8": {
+          "check": "Payments against invoices",
+          "sources": "Bank or payment-provider records and accounting ledger"
+        }
+      }
+    },
+    "c1": {
+      "eyebrow": "Check C1",
+      "title": "What C1 reports today",
+      "lead": "Invoices in the ledger are compared with the clearance status reported for them. For each invoice reference at most one outcome is reported: the first that matches, in this order. This runs on synthetic data only.",
+      "outcomes": {
+        "noClearance": "No clearance record exists for the invoice.",
+        "notAccepted": "The clearance record has a status other than accepted.",
+        "amountMismatch": "The currency or the total differs between the invoice and the clearance record.",
+        "orphan": "A clearance record exists without an invoice."
+      },
+      "note": "If two invoice records or two clearance records share a reference, the input is ambiguous. The run fails instead of guessing."
+    },
+    "produces": {
+      "eyebrow": "Output",
+      "title": "What a check produces",
+      "lead": "Every result is a finding. A finding is a statement about two sources, never about what to do.",
+      "items": {
+        "disagreement": {
+          "title": "A disagreement",
+          "body": "Two sources say different things about the same item. For example: an invoice in the ledger that the clearance side does not list as accepted."
+        },
+        "rule": {
+          "title": "A cited rule",
+          "body": "The finding names the rule under which the sources were compared, looked up in the run's pinned rule pack. If the pack lacks that rule, the run fails instead of raising a finding with no citation."
+        },
+        "inputs": {
+          "title": "Its inputs",
+          "body": "The finding points to the input records, their hashes and the rule-pack version. The same inputs and the same version give the same finding. Severity is an engineering triage default, not a legal rating."
+        }
+      },
+      "notice": {
+        "title": "Not tax advice",
+        "body": "The service is not a tax adviser. A finding says that two sources disagree under a cited rule. It does not say whether anything is owed, lawful or compliant, and it does not recommend an action. That judgement stays with you and your adviser."
+      }
+    },
+    "unproven": {
+      "eyebrow": "Limits",
+      "title": "What is not proven yet",
+      "lead": "This product is in early development. These are the open questions, stated plainly.",
+      "items": {
+        "realData": {
+          "title": "No check has met real data",
+          "body": "No check has run on real customer data, and none is validated against real authority data. C1 runs on synthetic data only."
+        },
+        "rules": {
+          "title": "Rule packs are drafts",
+          "body": "The rule packs written so far are drafts. None is enabled and no human has reviewed them. No compliance owner has been named yet."
+        },
+        "competitors": {
+          "title": "Other products are not yet compared",
+          "body": "What other products already cover has not been established. Reconciliation features may exist elsewhere; the comparison, check by check, is still to be written from first-party documentation."
+        },
+        "demand": {
+          "title": "Demand is untested",
+          "body": "Whether finance teams would pay for this has not been tested. No customer interviews have been held yet."
+        },
+        "availability": {
+          "title": "Authority data may not be reachable",
+          "body": "Whether each authority side can be read at all, and in what form, is open for every country. The checks marked as authority side depend on that answer."
+        }
+      }
+    }
+  }
+}

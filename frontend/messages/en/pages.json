@@ -1,0 +1,13 @@
+{
+  "pages": {
+    "notFound": {
+      "title": "Page not found",
+      "description": "The page you asked for does not exist or has moved.",
+      "back": "Back to the site"
+    },
+    "error": {
+      "title": "Something went wrong",
+      "description": "The page could not be shown. Try again; if it keeps happening, reload the page."
+    }
+  }
+}

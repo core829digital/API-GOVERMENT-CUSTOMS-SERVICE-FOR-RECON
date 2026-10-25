@@ -1,0 +1,140 @@
+{
+  "platform": {
+    "metadata": {
+      "title": "Platform",
+      "description": "How the service moves data from your books to a finding: ingest, normalise, reconcile, project and evidence, with the status of every part."
+    },
+    "status": {
+      "building": "Building",
+      "planned": "Planned",
+      "later": "Later",
+      "buildingHint": "Exists and runs. Synthetic data only.",
+      "plannedHint": "Designed and written down. Not built yet.",
+      "laterHint": "Deliberately after the first versions."
+    },
+    "hero": {
+      "eyebrow": "Platform",
+      "title": "How the service works",
+      "lead": "Books go in. A deterministic engine compares them with the copy an authority holds. Each disagreement comes out as a finding with its cited rule and its evidence. Every part below carries its status."
+    },
+    "flow": {
+      "eyebrow": "Data flow",
+      "title": "From a file to a finding, in five steps",
+      "lead": "Each step does one job and hands over to the next. Nothing here has run on real customer data.",
+      "steps": {
+        "ingest": {
+          "name": "Ingest",
+          "body": "A client registers an uploaded file with the API by its SHA-256, source type and period. The registration and a ledger event are written in one transaction. Only this metadata is accepted today; no adapter reads file contents yet."
+        },
+        "normalise": {
+          "name": "Normalise",
+          "body": "A worker parses each source into one canonical record shape so that records from different systems can be compared. Invoices map to a common model shaped on the EN 16931 e-invoice standard, with an adapter per country."
+        },
+        "reconcile": {
+          "name": "Reconcile",
+          "body": "The engine reads the normalised records, applies one pinned version of the rule pack and writes the run and its findings. The result depends only on the input records and that version. Today this is check C1, on synthetic data."
+        },
+        "project": {
+          "name": "Project",
+          "body": "A projector turns replicated findings and ledger entries into views that are quick to read and, later, an index over public legal text. It writes only to the read copy."
+        },
+        "evidence": {
+          "name": "Evidence",
+          "body": "Every change leaves an event in a hash-chained ledger. The chain head is meant to be timestamped from time to time, and evidence packs are meant to be generated on request. The ledger and a chain verifier exist; timestamping and packs are planned."
+        }
+      }
+    },
+    "stores": {
+      "eyebrow": "Storage",
+      "title": "Two databases, one truth",
+      "lead": "Customer data lives in two PostgreSQL clusters with separate jobs. The code is typed so that a query cannot reach the write side and a command cannot read from the wrong one.",
+      "w": {
+        "name": "W: the authoritative store",
+        "body": "Only commands write here: registering a batch, starting a run, raising a finding. Every command appends a ledger event in the same transaction as its change. W is the single place where a fact is decided."
+      },
+      "r": {
+        "name": "R: the read copy",
+        "body": "Logical replication feeds R from W. The API only ever queries R. R also holds derived data, such as projections, that W never sees. If R is unavailable, a query gets an error; it is never quietly answered from W."
+      },
+      "ryw": {
+        "title": "Seeing what you just wrote",
+        "body": "Replication takes a moment, so a read straight after a write could miss it. A client that just wrote can ask the API to wait until the read copy has caught up. Each write returns the ledger sequence number it produced, and sending that number with the next read is the whole mechanism. If the read copy has not caught up within the time limit, the client gets a clear 503 response, never a silent fallback to the write side.",
+        "detail": "Exercised on a local database pair only. No failover or load test has been run."
+      },
+      "diagram": {
+        "label": "Diagram of the write side W and the read copy R",
+        "caption": "Illustrative diagram. Your systems call the API. The API sends commands to W and queries R. W replicates to R. The engine reads R and writes W.",
+        "nodes": {
+          "clients": { "name": "Clients", "note": "Your systems" },
+          "api": { "name": "API", "note": "Entry point" },
+          "w": { "name": "W", "note": "Authoritative" },
+          "r": { "name": "R", "note": "Read copy" },
+          "engine": { "name": "Engine", "note": "Rules" }
+        },
+        "flows": {
+          "writes": "writes",
+          "reads": "reads",
+          "replication": "replication"
+        }
+      }
+    },
+    "api": {
+      "eyebrow": "API",
+      "title": "API surface",
+      "lead": "Five endpoints exist today. The rest of the sketched surface is planned and may change.",
+      "side": {
+        "write": "Writes to W",
+        "read": "Reads from R",
+        "push": "Pushes to you"
+      },
+      "webhooksName": "Webhooks",
+      "items": {
+        "batchesCreate": "Register an uploaded file by its SHA-256, source type and period. Idempotent. Returns the ledger sequence number of the write.",
+        "batchesGet": "Processing status of a registered batch.",
+        "runsCreate": "Start a reconciliation run pinned to one rule-pack version. Asynchronous.",
+        "runsGet": "Status of a reconciliation run.",
+        "findingsList": "List the findings that runs have raised.",
+        "evidence": "The evidence pack for one finding, delivered as a signed link.",
+        "rulesSearch": "Search the cited legal corpus by keyword and by meaning.",
+        "erasure": "Ask for personal data to be erased. Retention rules can defer a request; that decision is recorded.",
+        "export": "Export personal data in a machine-readable format.",
+        "webhooks": "Signed callbacks when a run completes or a finding is raised."
+      },
+      "headers": "Every write requires an <code>Idempotency-Key</code> header, so a retried request cannot create a second batch or run. Every write answers with an <code>X-Commit-Seq</code> header carrying the ledger sequence number it produced. Every read answers with <code>X-Data-Watermark</code> and honours <code>X-Min-Seq</code>, the wait described above."
+    },
+    "evidence": {
+      "eyebrow": "Evidence",
+      "title": "Evidence that can be checked offline",
+      "lead": "The aim is that a finding comes with proof you can check without trusting the service. Parts of that exist. Others are planned, and each is tagged.",
+      "items": {
+        "ledger": {
+          "title": "Append-only, hash-chained ledger",
+          "body": "Every command appends an event to its customer's ledger. An event's hash covers the previous event's hash and a canonical form of its payload, so editing history breaks every hash after it. Updates, deletes and truncation are blocked by privileges and by triggers.",
+          "detail": "On a local test pair, a privileged edit to one row was detected by chain verification."
+        },
+        "verifier": {
+          "title": "Offline chain verifier",
+          "body": "A command-line tool reads an exported chain and reports whether it is internally consistent. It shares no code with the database. A hash chain cannot show that its newest events were cut off, so the tool can also be given the head hash you expect."
+        },
+        "token": {
+          "title": "Timestamp token verification",
+          "body": "Code exists that checks an RFC 3161 timestamp token against a ledger-head hash and a set of trusted certificates."
+        },
+        "anchoring": {
+          "title": "Timestamp anchoring",
+          "body": "A scheduled worker is meant to obtain a timestamp token for each customer's ledger head. No qualified timestamp provider has been chosen yet."
+        },
+        "pack": {
+          "title": "Evidence pack",
+          "body": "On request, a pack for one finding: a manifest with the citations and input hashes, extracts of the source records, the chain segment, the timestamp tokens and a verification script."
+        }
+      },
+      "chain": {
+        "label": "Illustration of a hash chain",
+        "caption": "Illustration, not real data. Each event stores the hash of the one before it.",
+        "event": "Event {n}",
+        "prev": "prev hash"
+      }
+    }
+  }
+}

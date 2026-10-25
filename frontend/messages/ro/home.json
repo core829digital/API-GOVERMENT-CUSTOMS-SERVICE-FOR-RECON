@@ -1,0 +1,155 @@
+{
+  "home": {
+    "metaTitle": "Contabilitatea față de copia autorității",
+    "metaDescription": "Recon compară registrele contabile ale companiilor cu datele deținute de autoritățile fiscale și vamale și listează fiecare diferență, împreună cu regula în baza căreia a fost verificată. Dezvoltare timpurie, doar date sintetice.",
+    "status": {
+      "building": "În lucru · date sintetice",
+      "planned": "Planificat"
+    },
+    "hero": {
+      "eyebrow": "Reconciliere față de datele autorităților",
+      "title": "Unde contabilitatea ta și copia autorității nu se potrivesc.",
+      "lead": "Recon compară registrele contabile ale unei companii cu datele deținute de fiecare autoritate fiscală și vamală și listează fiecare diferență, împreună cu regula în baza căreia a fost verificată.",
+      "secondary": "Vezi cum funcționează",
+      "note": "Dezvoltare timpurie. Tot ce este arătat aici rulează doar pe date sintetice."
+    },
+    "field": {
+      "books": "Contabilitate",
+      "authority": "Copia autorității",
+      "mismatch": "Diferență",
+      "rule": "Regulă",
+      "status": {
+        "cleared": "Validată",
+        "rejected": "Respinsă"
+      },
+      "caption": "Doar ilustrativ. Înregistrări sintetice, nu date reale.",
+      "description": "Ilustrație: două registre alăturate, Contabilitate și Copia autorității. Majoritatea rândurilor se potrivesc și sunt unite printr-o linie. Un rând diferă și este marcat ca diferență în baza unei reguli citate."
+    },
+    "gap": {
+      "eyebrow": "Decalajul",
+      "title": "Contabilitatea spune un lucru. Copia autorității poate spune altceva.",
+      "lead": "Registrul unei companii și copia deținută de o autoritate fiscală sau vamală sunt ținute separat. Când se îndepărtează una de alta, diferența poate rămâne nevăzută până când o aduce în discuție o notificare, un control sau o închidere de perioadă, iar atunci motivul este greu de reconstituit.",
+      "inputsLabel": "Ce citește Recon",
+      "items": {
+        "erp": {
+          "title": "Exporturi din registrele ERP",
+          "body": "Partea companiei: facturi și înregistrări contabile exportate din sistemul ei de contabilitate sau ERP."
+        },
+        "clearance": {
+          "title": "Starea de la autoritate",
+          "body": "Partea autorității, de exemplu starea de validare a unei facturi electronice într-un sistem precum KSeF, e-Factura sau SdI. Astăzi acest tip de înregistrare este citit doar din loturi sintetice; nimic nu este conectat la un sistem real al vreunei autorități."
+        },
+        "returns": {
+          "title": "Declarații și date vamale",
+          "body": "Declarațiile depuse și declarațiile vamale, comparate cu contabilitatea. Încă nu există nicio verificare pentru acestea."
+        }
+      }
+    },
+    "pipeline": {
+      "eyebrow": "Fluxul",
+      "title": "De la un export la ceva ce poți verifica.",
+      "lead": "Patru etape. Fiecare este marcată cu ceea ce există astăzi.",
+      "steps": {
+        "ingest": {
+          "name": "Preluare",
+          "body": "Citește exporturile și datele de la autoritate în loturi imutabile, cu amprentă criptografică. Astăzi există doar API-ul pentru loturi; adaptoarele pentru sursele ERP și cele ale autorităților sunt planificate."
+        },
+        "normalise": {
+          "name": "Normalizare",
+          "body": "Aduce fiecare sursă la o formă canonică unică a înregistrărilor, astfel încât aceeași regulă să poată citi ambele părți."
+        },
+        "reconcile": {
+          "name": "Reconciliere",
+          "body": "Aplică reguli citate pe ambele părți și înregistrează fiecare diferență. Verificarea C1, factură față de starea de validare, rulează pe date sintetice."
+        },
+        "evidence": {
+          "name": "Dovezi",
+          "body": "Constatările ajung într-un registru cu adăugare exclusivă, legat printr-un lanț de hash-uri. Verificatorul lanțului și codul de verificare a token-urilor de marcare temporală există; pachetele de dovezi sunt planificate."
+        }
+      }
+    },
+    "anatomy": {
+      "eyebrow": "O constatare",
+      "title": "Anatomia unei constatări.",
+      "lead": "Fiecare constatare are aceleași părți, astfel încât să poată fi citită, contestată și reprodusă. Cea de mai jos este sintetică.",
+      "cardLabel": "Constatare ilustrativă",
+      "cardNote": "Date sintetice. Nicio companie sau autoritate reală.",
+      "calloutsLabel": "De ce există fiecare parte",
+      "fields": {
+        "check": "Verificare",
+        "severity": "Severitate",
+        "summary": "Rezumat",
+        "rule": "Regulă citată",
+        "inputs": "Intrări"
+      },
+      "values": {
+        "checkName": "Factură față de starea de validare",
+        "severity": "Medie",
+        "summary": "Factura {invoice} figurează în contabilitate ca emisă. Copia de la autoritate conține o altă stare de validare pentru aceeași factură.",
+        "booksInput": "Înregistrare din contabilitate",
+        "authorityInput": "Înregistrare de la autoritate"
+      },
+      "callouts": {
+        "reproducible": {
+          "title": "Verificare și severitate",
+          "body": "Numește verificarea deterministă care a rulat. Aceleași intrări, cu aceeași versiune a pachetului de reguli, dau aceeași constatare, iar niciun model nu o decide."
+        },
+        "neutral": {
+          "title": "Rezumat",
+          "body": "Spune doar că două surse nu se potrivesc. Recon nu este consultant fiscal: ce se face cu o diferență rămâne la latitudinea companiei și a consultanților ei."
+        },
+        "cited": {
+          "title": "Regulă citată",
+          "body": "Numește regula în baza căreia s-a făcut comparația. Regulile sunt date versionate care își citează sursa și sunt aprobate de un responsabil uman de conformitate."
+        },
+        "evidence": {
+          "title": "Intrări",
+          "body": "Indică înregistrările exacte prin hash, astfel încât constatarea să poată fi urmărită înapoi și verificată față de registrul cu protecție la modificare."
+        }
+      }
+    },
+    "principles": {
+      "eyebrow": "Principii",
+      "title": "Ce rămâne neschimbat.",
+      "lead": "Constrângeri în jurul cărora este construit produsul. Acolo unde este doar o decizie de proiectare și nu ceva ce rulează deja, se spune explicit.",
+      "kind": {
+        "exists": "Există · date sintetice",
+        "rule": "Regulă de proiectare",
+        "decision": "Decizie de proiectare"
+      },
+      "items": {
+        "determinism": {
+          "title": "Aceleași intrări, aceleași constatări",
+          "body": "O constatare este o funcție pură a hash-urilor înregistrărilor de intrare și a versiunii pachetului de reguli. Rulată din nou, se reproduce. Niciun model nu decide o constatare."
+        },
+        "isolation": {
+          "title": "Fiecare client este izolat",
+          "body": "Securitatea la nivel de rând din ambele baze de date ține înregistrările unui client în afara interogărilor altui client."
+        },
+        "ledger": {
+          "title": "Registru cu adăugare exclusivă",
+          "body": "Evenimentele sunt legate printr-un lanț de hash-uri pentru fiecare client și nu pot fi modificate sau șterse. Un verificator recalculează lanțul."
+        },
+        "privacy": {
+          "title": "Fără date personale în jurnale",
+          "body": "Jurnalele, urmele de execuție și conținutul registrului trebuie ținute fără date personale."
+        },
+        "rules": {
+          "title": "Regulile sunt date citate",
+          "body": "Datele, pragurile și ratele se află în pachete de reguli versionate, cu referință la sursă, niciodată în cod. Un responsabil uman de conformitate aprobă fiecare modificare."
+        },
+        "residency": {
+          "title": "Rezidență exclusiv în UE",
+          "body": "Datele clienților sunt menite să rămână la procesatori din UE. Aceasta este o decizie de proiectare; furnizorul de găzduire nu a fost ales încă."
+        }
+      },
+      "trustLink": "Citește notele despre încredere"
+    },
+    "closing": {
+      "eyebrow": "Mai departe",
+      "title": "Vezi unde cele două copii nu se potrivesc.",
+      "body": "Recon este în dezvoltare timpurie și rulează astăzi doar pe date sintetice. Autentifică-te ca să vezi versiunea curentă sau citește ce verificări există și care sunt planificate.",
+      "checksLink": "Vezi verificările"
+    }
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "checks": {
+    "metadata": {
+      "title": "Comprobaciones",
+      "description": "El catálogo de comprobaciones de conciliación candidatas C1 a C8: qué compara cada una, si una autoridad conserva alguna de las fuentes y hasta dónde ha llegado cada una."
+    },
+    "status": {
+      "building": "En construcción",
+      "planned": "Planificado",
+      "later": "Después",
+      "buildingHint": "Existe y funciona. Solo con datos sintéticos.",
+      "plannedHint": "Diseñado y documentado. Aún no construido.",
+      "laterHint": "Deliberadamente posterior a las primeras versiones."
+    },
+    "hero": {
+      "eyebrow": "Comprobaciones",
+      "title": "Ocho comprobaciones candidatas. Una funciona, con datos sintéticos.",
+      "lead": "Una comprobación compara dos o más fuentes e indica dónde discrepan. Este es el catálogo de candidatas. Solo existe la primera, y nunca ha visto datos reales."
+    },
+    "catalogue": {
+      "eyebrow": "Catálogo",
+      "title": "Qué se compara con qué",
+      "lead": "Lado autoridad indica si una de las fuentes comparadas es una copia conservada por una autoridad: sí, en parte o no. Estado muestra hasta dónde ha llegado cada comprobación. La lista es un conjunto de candidatas y puede cambiar.",
+      "caption": "Comprobaciones candidatas C1 a C8, las fuentes que compara cada una, si una autoridad conserva alguna de ellas y el estado de cada comprobación",
+      "columns": {
+        "id": "ID",
+        "check": "Comprobación",
+        "sources": "Fuentes comparadas",
+        "authority": "Lado autoridad",
+        "status": "Estado"
+      },
+      "authority": {
+        "yes": "Sí",
+        "partial": "En parte",
+        "no": "No"
+      },
+      "rows": {
+        "c1": {
+          "check": "Factura emitida frente al estado y el contenido de su validación",
+          "sources": "Libro mayor contable y el estado conservado por un sistema de validación de facturas electrónicas (ejemplos: KSeF, e-Factura, SdI)"
+        },
+        "c2": {
+          "check": "PDF de la factura frente a su XML estructurado",
+          "sources": "PDF de la factura y XML de la factura"
+        },
+        "c3": {
+          "check": "Casillas de la declaración de IVA frente al libro mayor, por periodo",
+          "sources": "Libro mayor contable y la declaración presentada"
+        },
+        "c4": {
+          "check": "Declaración OSS o IOSS frente a las ventas a consumidores, por Estado de consumo y tipo",
+          "sources": "Libro mayor o datos del marketplace y la declaración OSS"
+        },
+        "c5": {
+          "check": "Entregas intracomunitarias entre empresas frente a la validez del NIF-IVA en el momento de la entrega",
+          "sources": "Libro mayor contable y el historial de resultados de VIES"
+        },
+        "c6": {
+          "check": "IVA a la importación deducido frente al documento aduanero o de importación",
+          "sources": "Libro mayor contable y el expediente aduanero"
+        },
+        "c7": {
+          "check": "Informe del marketplace frente al libro mayor",
+          "sources": "Informe del marketplace y libro mayor contable"
+        },
+        "c8": {
+          "check": "Pagos frente a facturas",
+          "sources": "Registros del banco o del proveedor de pagos y libro mayor contable"
+        }
+      }
+    },
+    "c1": {
+      "eyebrow": "Comprobación C1",
+      "title": "Lo que C1 indica hoy",
+      "lead": "Las facturas del libro mayor se comparan con el estado de validación comunicado para ellas. Para cada referencia de factura se indica como máximo un resultado: el primero que coincide, en este orden. Funciona solo con datos sintéticos.",
+      "outcomes": {
+        "noClearance": "No existe ningún registro de validación para la factura.",
+        "notAccepted": "El registro de validación tiene un estado distinto de aceptado.",
+        "amountMismatch": "La moneda o el total difieren entre la factura y el registro de validación.",
+        "orphan": "Existe un registro de validación sin factura."
+      },
+      "note": "Si dos registros de factura o dos registros de validación comparten una referencia, la entrada es ambigua. La ejecución falla en lugar de adivinar."
+    },
+    "produces": {
+      "eyebrow": "Resultado",
+      "title": "Qué produce una comprobación",
+      "lead": "Todo resultado es un hallazgo. Un hallazgo es una afirmación sobre dos fuentes, nunca sobre qué hacer.",
+      "items": {
+        "disagreement": {
+          "title": "Una discrepancia",
+          "body": "Dos fuentes dicen cosas distintas sobre el mismo elemento. Por ejemplo: una factura del libro mayor que el lado de validación no incluye como aceptada."
+        },
+        "rule": {
+          "title": "Una regla citada",
+          "body": "El hallazgo nombra la regla bajo la que se compararon las fuentes, buscada en el paquete de reglas fijado de la ejecución. Si el paquete no contiene esa regla, la ejecución falla en lugar de generar un hallazgo sin cita."
+        },
+        "inputs": {
+          "title": "Sus entradas",
+          "body": "El hallazgo señala los registros de entrada, sus hashes y la versión del paquete de reglas. Las mismas entradas y la misma versión dan el mismo hallazgo. La gravedad es un valor predeterminado de clasificación técnica, no una valoración jurídica."
+        }
+      },
+      "notice": {
+        "title": "No es asesoramiento fiscal",
+        "body": "El servicio no es un asesor fiscal. Un hallazgo indica que dos fuentes discrepan según una regla citada. No indica si se adeuda algo, si algo es lícito o conforme, ni recomienda ninguna acción. Ese juicio corresponde a usted y a su asesor."
+      }
+    },
+    "unproven": {
+      "eyebrow": "Límites",
+      "title": "Lo que aún no está demostrado",
+      "lead": "Este producto está en desarrollo temprano. Estas son las cuestiones abiertas, expuestas con claridad.",
+      "items": {
+        "realData": {
+          "title": "Ninguna comprobación ha visto datos reales",
+          "body": "Ninguna comprobación se ha ejecutado con datos reales de clientes, y ninguna está validada con datos reales de una autoridad. C1 funciona solo con datos sintéticos."
+        },
+        "rules": {
+          "title": "Los paquetes de reglas son borradores",
+          "body": "Los paquetes de reglas redactados hasta ahora son borradores. Ninguno está activado y ninguna persona los ha revisado. Todavía no se ha nombrado a ningún responsable de cumplimiento."
+        },
+        "competitors": {
+          "title": "Aún no se han comparado otros productos",
+          "body": "No se ha establecido qué cubren ya otros productos. Es posible que existan funciones de conciliación en otros lugares; la comparación, comprobación por comprobación, está por redactar a partir de documentación del propio fabricante."
+        },
+        "demand": {
+          "title": "La demanda no se ha puesto a prueba",
+          "body": "No se ha puesto a prueba si los equipos financieros pagarían por esto. Aún no se ha realizado ninguna entrevista con clientes."
+        },
+        "availability": {
+          "title": "Los datos de las autoridades pueden no ser accesibles",
+          "body": "Si el lado de cada autoridad puede leerse siquiera, y en qué forma, está abierto en todos los países. Las comprobaciones marcadas como lado autoridad dependen de esa respuesta."
+        }
+      }
+    }
+  }
+}

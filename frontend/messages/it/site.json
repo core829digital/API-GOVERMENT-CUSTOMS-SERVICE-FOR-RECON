@@ -1,0 +1,21 @@
+{
+  "site": {
+    "nav": {
+      "label": "Principale",
+      "platform": "Piattaforma",
+      "checks": "Controlli",
+      "trust": "Fiducia",
+      "console": "Console",
+      "openMenu": "Apri il menu",
+      "menuTitle": "Menu",
+      "menuDescription": "Navigazione del sito."
+    },
+    "footer": {
+      "tagline": "Riconciliazione della contabilità aziendale con la copia detenuta da ciascuna autorità.",
+      "explore": "Esplora",
+      "access": "Accesso",
+      "notice": "Le rilevazioni indicano che le fonti non concordano secondo una regola citata. Non costituiscono consulenza fiscale.",
+      "status": "Sviluppo iniziale. Questo sito descrive il prodotto previsto; ogni funzionalità è contrassegnata con il proprio stato."
+    }
+  }
+}

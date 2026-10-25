@@ -1,0 +1,21 @@
+{
+  "site": {
+    "nav": {
+      "label": "Principale",
+      "platform": "Plateforme",
+      "checks": "Contrôles",
+      "trust": "Confiance",
+      "console": "Console",
+      "openMenu": "Ouvrir le menu",
+      "menuTitle": "Menu",
+      "menuDescription": "Navigation du site."
+    },
+    "footer": {
+      "tagline": "Rapprochement de la comptabilité d'une entreprise avec la copie détenue par chaque autorité.",
+      "explore": "Explorer",
+      "access": "Accès",
+      "notice": "Un constat indique que des sources divergent selon une règle citée. Il ne constitue pas un conseil fiscal.",
+      "status": "Développement précoce. Ce site décrit le produit visé ; chaque fonctionnalité est signalée avec son état d'avancement."
+    }
+  }
+}

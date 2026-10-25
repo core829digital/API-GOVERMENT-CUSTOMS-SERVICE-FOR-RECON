@@ -1,0 +1,20 @@
+Provenance of the libtest transcripts in fixtures/l6 and fixtures/l7 (captured/generated 2026-10-23).
+
+REAL (captured by executing the existing, already built test binary
+target/debug/deps/recon_evidence-f0c7af6ea1d7fa58.exe directly - no cargo invocation):
+  running 5 tests / test tests::rejects_malformed_hex ... ok / test tests::segment_verification_starts_mid_chain ... ok /
+  test tests::verifies_independent_vector_including_non_ascii_lengths ... ok /
+  test tests::detects_field_tamper_prev_break_gap_and_cross_tenant ... ok /
+  test tests::jcs_hash_is_key_order_independent_and_matches_rfc8785_example_form ... ok /
+  test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+  (the five `test ...` lines and the `test result:` line of the recon-evidence section in l7/*.txt).
+
+CONSTRUCTED in libtest's documented default format (the tests were NOT executed here):
+  - everything for the crate recon-store (`tests/pair.rs`, `tests/privacy.rs`): those tests need the migrated W/R pair
+    and are run by the parent; l6/*.txt and the pair section of l7/*.txt are therefore format-faithful, not captured;
+  - the anchor_* tests (they do not exist in the repository yet);
+  - the cargo lines (`Finished`, `Running ...`, `Doc-tests`, `error: test failed, ...`), the panic text of FAILED tests,
+    the `ignored, <reason>` variant, timings and binary hashes;
+  - failed.txt / ignored.txt / missing.txt / no-tests.txt are variants of all-ok.txt.
+Replace the constructed sections with real transcripts once `cargo test -p recon-store --test privacy|pair` has been run
+by the parent (set RECON_TEST_W_URL / RECON_TEST_R_URL) - the gate logic does not change.

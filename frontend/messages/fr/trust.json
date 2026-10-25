@@ -1,0 +1,123 @@
+{
+  "trust": {
+    "metadata": {
+      "title": "Confiance",
+      "description": "La sécurité, la confidentialité et la position juridique du service en termes simples, y compris tout ce qui reste ouvert."
+    },
+    "status": {
+      "building": "En construction",
+      "planned": "Prévu",
+      "later": "Plus tard",
+      "buildingHint": "Existe et fonctionne. Données synthétiques uniquement.",
+      "plannedHint": "Conçu et documenté. Pas encore construit.",
+      "laterHint": "Volontairement après les premières versions."
+    },
+    "hero": {
+      "eyebrow": "Confiance",
+      "title": "Sécurité, confidentialité et position juridique",
+      "lead": "Ce que le service est conçu pour faire, ce qu'il n'est pas et ce qui reste ouvert, en termes simples. Il est en développement précoce et n'a pas fonctionné sur des données réelles de clients."
+    },
+    "principles": {
+      "eyebrow": "Comment il est construit",
+      "title": "Sept exigences de la conception",
+      "lead": "Ce sont des règles de conception sur lesquelles le code est écrit. Chacune est étiquetée selon son degré d'avancement réel.",
+      "items": {
+        "isolation": {
+          "title": "Isolation des locataires",
+          "body": "Chaque table contenant des données de clients porte un identifiant de locataire, et la sécurité au niveau des lignes, dans les deux bases de données, limite chaque session aux lignes de son propre locataire. Si aucun locataire n'est défini, une requête échoue avec une erreur au lieu de renvoyer des lignes : elle échoue en mode fermé.",
+          "detail": "Vérifié sur une paire de bases de données locale, avec un rôle ordinaire, non superutilisateur. Pas encore vérifié sur une infrastructure proche de la production."
+        },
+        "ledger": {
+          "title": "Un registre infalsifiable",
+          "body": "Chaque client dispose d'un registre en ajout seul. Chaque événement conserve un hachage qui couvre l'événement précédent ; modifier l'historique rompt donc la chaîne. Les modifications et suppressions sont bloquées par des privilèges et par des déclencheurs. Pour remarquer que les événements les plus récents ont été retirés, un ancrage par horodatage est nécessaire ; il est prévu.",
+          "detail": "La modification privilégiée d'une ligne sur une paire de test locale a été détectée par la vérification de la chaîne."
+        },
+        "privacy": {
+          "title": "Aucune donnée personnelle dans les journaux, le registre ou les embeddings",
+          "body": "Les contenus du registre portent des références opaques, non des noms ni des identifiants fiscaux. Les champs d'identifiants sont stockés chiffrés, et l'effacement est censé passer par la destruction de la clé, de sorte que la chaîne reste vérifiable une fois les données disparues. Les journaux, les traces et l'index de recherche sur les textes juridiques ne doivent contenir ni enregistrements de clients ni données personnelles.",
+          "detail": "Les colonnes d'identifiants chiffrées et la destruction de clé ont été éprouvées sur une paire de test locale. Il s'agit d'une règle de conception, non d'une certification."
+        },
+        "residency": {
+          "title": "Hébergement exclusivement dans l'UE, comme décision de conception",
+          "body": "La conception conserve les données des clients dans des régions de l'UE et n'en envoie aucune à des sous-traitants hors UE ni à des API de modèles de langage hébergées. Il s'agit d'une décision de conception, non d'une affirmation sur un service en fonctionnement : l'hébergeur n'a pas été choisi et il n'existe aucun déploiement en production.",
+          "detail": "Une analyse d'impact relative à la protection des données et un registre des traitements existent sous forme d'ébauches destinées au délégué à la protection des données et aux juristes. Personne ne les a relus et elles ne constituent pas un avis juridique. La liste des sous-traitants ultérieurs n'est pas encore rédigée."
+        },
+        "deterministic": {
+          "title": "Constats déterministes ; aucun modèle ne décide",
+          "body": "Un constat est une fonction pure des hachages des enregistrements d'entrée et de la version du lot de règles. L'évaluation des règles ne comporte ni horloge, ni aléa, ni appel réseau, ni modèle de langage ; une nouvelle exécution donne donc le même résultat. Si un modèle de langage est un jour utilisé, il reste consultatif et ne peut créer ni constat ni citation.",
+          "detail": "Mis en œuvre pour le contrôle C1, sur des données synthétiques."
+        },
+        "rules": {
+          "title": "Les règles sont des données citées et exigent une approbation humaine",
+          "body": "Chaque règle, durée de conservation et date propre à un pays est stockée comme donnée avec une citation de sa source primaire, jamais comme constante dans le code. Un lot de règles doit recevoir l'approbation d'un responsable de la conformité avant d'être activé. Aucun responsable de la conformité n'a été désigné, et tous les lots de règles rédigés jusqu'ici sont des ébauches non relues et désactivées."
+        },
+        "keys": {
+          "title": "Clés d'API",
+          "body": "Les clés d'API ne sont stockées que sous forme de hachages Argon2id, affichées une seule fois à leur création, et limitées à des actions précises. Dans la console web, le navigateur ne détient qu'un cookie de session scellé, de type HttpOnly, jamais un jeton d'accès."
+        }
+      }
+    },
+    "legal": {
+      "eyebrow": "Juridique",
+      "title": "La position juridique",
+      "lead": "Ce que le service ne fait pas compte autant que ce qu'il fait.",
+      "items": {
+        "adviser": {
+          "title": "Pas un conseiller fiscal",
+          "body": "{app} est un service logiciel qui compare des sources. Ce n'est pas un conseiller fiscal, et rien de ce qu'il produit ne constitue un conseil fiscal, juridique ou comptable."
+        },
+        "conclusions": {
+          "title": "Un constat n'énonce jamais de conclusion juridique",
+          "body": "Un constat indique que deux sources divergent selon une règle citée. Il n'indique pas si quelque chose est licite, dû ou conforme, et ne recommande aucune action. Les modèles de constats sont rédigés selon cette règle."
+        },
+        "review": {
+          "title": "Le positionnement est encore en cours d'examen",
+          "body": "Savoir si des constats assortis de règles citées relèvent du conseil réglementé dans les pays visés est une question pour des juristes, et elle n'a pas reçu de réponse. La formulation des constats et de ce site pourra changer lorsqu'elle en recevra une."
+        }
+      }
+    },
+    "open": {
+      "eyebrow": "Points ouverts",
+      "title": "Ce qui reste ouvert",
+      "lead": "Non décidé, non construit ou non mesuré. Aucune certification de sécurité ou de conformité n'est détenue ni revendiquée.",
+      "items": {
+        "failover": {
+          "title": "Basculement",
+          "body": "Le basculement de la base d'écriture pendant que la copie en lecture continue de se répliquer n'a pas été vérifié. Une étude exploratoire est prévue dans la phase de fondations."
+        },
+        "load": {
+          "title": "Charge et disponibilité",
+          "body": "Rien n'a fait l'objet d'un test de charge. Tous les chiffres de disponibilité et de reprise de la conception sont des objectifs de conception, non des mesures."
+        },
+        "penTest": {
+          "title": "Test d'intrusion indépendant",
+          "body": "Aucun test d'intrusion n'a été réalisé. Il est prévu dans une phase de renforcement."
+        },
+        "timestamp": {
+          "title": "Prestataire d'horodatage qualifié",
+          "body": "Aucun prestataire d'horodatage qualifié n'a été choisi. L'ancrage par horodatage attend cette décision."
+        },
+        "owner": {
+          "title": "Responsable de la conformité",
+          "body": "Aucun responsable de la conformité n'a été désigné. Les lots de règles ne peuvent pas être approuvés tant qu'il n'y en a pas."
+        },
+        "counsel": {
+          "title": "Juristes et délégué à la protection des données",
+          "body": "Des juristes n'ont pas examiné le positionnement juridique, et aucun délégué à la protection des données n'a été désigné."
+        },
+        "hosting": {
+          "title": "Hébergeur",
+          "body": "L'hébergeur et les régions de l'UE ne sont pas choisis. Tant qu'ils ne le sont pas, il n'existe aucun déploiement en production."
+        },
+        "identity": {
+          "title": "Fournisseur d'identité des clients",
+          "body": "Le fournisseur d'identité pour la connexion des clients n'a pas été choisi."
+        },
+        "certification": {
+          "title": "Certifications",
+          "body": "Aucune certification de sécurité ou de conformité n'est détenue ni revendiquée. Une évaluation de préparation est prévue dans une phase ultérieure."
+        }
+      }
+    }
+  }
+}

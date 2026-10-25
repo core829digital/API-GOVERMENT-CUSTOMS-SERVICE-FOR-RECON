@@ -1,0 +1,138 @@
+# DRAFT rule pack. Not approved. Not legal advice. Disabled until a human compliance approver signs off (Rules.md R-RULES-2, Progress.md D-5).
+# Scope: Directive 2006/112/EC Chapter 6 (recapitulative statements, Arts. 262-266) and the Art. 138 provisions that refer to it.
+# Source text read on 2026-10-23: consolidated text dated 2025-04-14 (EUR-Lex CELEX:02006L0112-20250414) plus the amending acts below.
+# `valid_from` = application date of the amending act that produced the wording read:
+#   Directive 2006/112/EC 2007-01-01 (Art. 413); Directive 2008/117/EC (Arts. 263, 264(2), 265(2)) and Directive 2008/8/EC Art. 2
+#   (Arts. 262, 264(1)) 2010-01-01; Directive (EU) 2018/1910 2020-01-01 (its Art. 2(1)).
+# Member States set procedures, thresholds options and electronic submission conditions; this pack records only the EU-level provision.
+# From 2030-07-01 Arts. 262-264 are replaced and Arts. 265-271 deleted by Directive (EU) 2025/516 (see pack vida); the old text stays here
+# until a human releases a new pack version (R-RULES-4, R-RULES-5).
+pack: vat-recapitulative-statement
+jurisdiction: EU
+version: 0.1.0
+valid_from: 2007-01-01
+valid_to:
+last_reviewed: 2026-10-23
+reviewed_by: "UNREVIEWED agent draft (awaiting @compliance, Progress.md D-5)"
+enabled: false
+rules:
+  - code: RS-001
+    title: "Every taxable person identified for VAT submits a recapitulative statement of: acquirers identified for VAT supplied under Art. 138(1) and 138(2)(c); persons supplied after an Art. 42 intra-Community acquisition; taxable and non-taxable legal persons identified for VAT to whom services were supplied with customer-liable VAT under Art. 196 (other than services exempt where taxable)"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 262(1)"
+    accessed_on: 2026-10-23
+    valid_from: 2020-01-01
+    valid_to:
+    pending_change: "Replaced from 2030-07-01 by Directive (EU) 2025/516 Art. 5 point (15) (digital reporting requirements, per-transaction data). See pack vida, rule VIDA-013."
+  - code: RS-002
+    title: "Additional information on the VAT identification number of taxable persons for whom goods dispatched or transported under call-off stock arrangements (Art. 17a) are intended, and on changes to it"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 262(2)"
+    accessed_on: 2026-10-23
+    valid_from: 2020-01-01
+    valid_to:
+    pending_change: "Paragraph deleted from 2029-07-01 by Directive (EU) 2025/516 Art. 4 point (2). See pack vida, rule VIDA-006."
+  - code: RS-003
+    title: "Recapitulative statement drawn up for each calendar month within a period not exceeding one month, in accordance with procedures determined by Member States"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 263(1)"
+    accessed_on: 2026-10-23
+    valid_from: 2010-01-01
+    valid_to:
+    pending_change: "Replaced from 2030-07-01 by Directive (EU) 2025/516 Art. 5 point (16). See pack vida, rule VIDA-014."
+  - code: RS-004
+    title: "Member State option to allow quarterly statements within one month of quarter end where the quarterly total, excluding VAT, of Art. 264(1)(d) and 265(1)(c) supplies of goods does not exceed EUR 50 000 in the quarter or any of the previous four quarters; option ceases after the month in which the total exceeds EUR 50 000"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 263(1a)"
+    accessed_on: 2026-10-23
+    valid_from: 2010-01-01
+    valid_to:
+    pending_change: "Replaced from 2030-07-01 by Directive (EU) 2025/516 Art. 5 point (16). See pack vida, rule VIDA-014."
+  - code: RS-005
+    title: "Member State option to allow quarterly statements within one month of quarter end for supplies of services as referred to in Art. 264(1)(d)"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 263(1c)"
+    accessed_on: 2026-10-23
+    valid_from: 2010-01-01
+    valid_to:
+    pending_change: "Replaced from 2030-07-01 by Directive (EU) 2025/516 Art. 5 point (16). See pack vida, rule VIDA-014."
+  - code: RS-006
+    title: "Member States allow, and may require, the recapitulative statement to be submitted by electronic file transfer in accordance with conditions they lay down"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 263(2)"
+    accessed_on: 2026-10-23
+    valid_from: 2010-01-01
+    valid_to:
+    pending_change: "Replaced from 2030-07-01 by Directive (EU) 2025/516 Art. 5 point (16). See pack vida, rule VIDA-014."
+  - code: RS-007
+    title: "Statement content (a) and (b): the supplier's VAT identification number in the submitting Member State, and the VAT identification number of the person acquiring the goods or receiving the services in another Member State"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 264(1)(a) and (b)"
+    accessed_on: 2026-10-23
+    valid_from: 2010-01-01
+    valid_to:
+    pending_change: "Replaced from 2030-07-01 by Directive (EU) 2025/516 Art. 5 point (17). See pack vida, rule VIDA-015."
+  - code: RS-008
+    title: "Statement content (c): for a transfer to another Member State under Art. 138(2)(c), the transferor's VAT identification number and the number by which the transferor is identified in the Member State where dispatch or transport ended"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 264(1)(c)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change: "Replaced from 2030-07-01 by Directive (EU) 2025/516 Art. 5 point (17). See pack vida, rule VIDA-015."
+  - code: RS-009
+    title: "Statement content (d): for each person who acquired goods or received services, the total value of supplies of goods and the total value of supplies of services"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 264(1)(d)"
+    accessed_on: 2026-10-23
+    valid_from: 2010-01-01
+    valid_to:
+    pending_change: "Replaced from 2030-07-01 by Directive (EU) 2025/516 Art. 5 point (17). See pack vida, rule VIDA-015."
+  - code: RS-010
+    title: "Statement content (e) and (f): the total value, determined under Art. 76, of transfers to another Member State under Art. 138(2)(c), and the amounts of adjustments made pursuant to Art. 90"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 264(1)(e) and (f)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change: "Replaced from 2030-07-01 by Directive (EU) 2025/516 Art. 5 point (17). See pack vida, rule VIDA-015."
+  - code: RS-011
+    title: "Period of declaration: the Art. 264(1)(d) value is declared for the submission period in which VAT became chargeable; Art. 264(1)(f) adjustment amounts for the period in which the acquirer was notified of the adjustment"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 264(2)"
+    accessed_on: 2026-10-23
+    valid_from: 2010-01-01
+    valid_to:
+    pending_change: "Replaced from 2030-07-01 by Directive (EU) 2025/516 Art. 5 point (17). See pack vida, rule VIDA-015."
+  - code: RS-012
+    title: "For intra-Community acquisitions under Art. 42, the statement sets out the acquirer's VAT identification number, the VAT identification number of the person to whom the subsequent supply was made in the Member State where dispatch or transport ended, and the total value exclusive of VAT per such person"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 265(1)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change: "Deleted from 2030-07-01 by Directive (EU) 2025/516 Art. 5 point (18) (Arts. 265 to 271 deleted). See pack vida, rule VIDA-016."
+  - code: RS-013
+    title: "Member States may provide that additional information is to be given in recapitulative statements"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 266"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change: "Deleted from 2030-07-01 by Directive (EU) 2025/516 Art. 5 point (18). See pack vida, rule VIDA-016."
+  - code: RS-014
+    title: "Intra-Community supply exemption conditions: goods supplied to another taxable person or non-taxable legal person acting as such in another Member State, and that customer is identified for VAT in a Member State other than that where dispatch begins and has indicated that number to the supplier"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 138(1)(a) and (b)"
+    accessed_on: 2026-10-23
+    valid_from: 2020-01-01
+    valid_to:
+    pending_change:
+  - code: RS-015
+    title: "The Art. 138(1) exemption does not apply where the supplier has not complied with the obligation in Arts. 262 and 263 to submit a recapitulative statement, or the statement does not set out correct information on the supply as required under Art. 264, unless the supplier can duly justify the shortcoming to the satisfaction of the competent authorities"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 138(1a)"
+    accessed_on: 2026-10-23
+    valid_from: 2020-01-01
+    valid_to:
+    pending_change: "Replaced from 2030-07-01 by Directive (EU) 2025/516 Art. 5 point (2) (wording refers to the obligation to communicate intra-Community transaction data). See pack vida, rule VIDA-018."

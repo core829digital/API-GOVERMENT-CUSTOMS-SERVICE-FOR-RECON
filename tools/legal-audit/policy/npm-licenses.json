@@ -1,0 +1,30 @@
+{
+  "description": "SPDX licence allowlist for npm dependencies (gate L1, R-SEC-7). A package passes when its licence expression evaluates to true: OR needs one allowed alternative, AND needs every term allowed. Unknown, UNLICENSED, missing or non-SPDX licence metadata fails.",
+  "policy_version": 1,
+  "reviewed_by": "UNREVIEWED agent draft (awaiting @compliance, Progress.md D-5)",
+  "allow": [
+    "MIT",
+    "Apache-2.0",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "0BSD",
+    "Zlib",
+    "Unicode-3.0",
+    "MPL-2.0",
+    "CC0-1.0",
+    "BlueOak-1.0.0",
+    "Python-2.0",
+    "CC-BY-4.0"
+  ],
+  "exceptions": [],
+  "rationale": {
+    "permissive": "MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, 0BSD, Zlib, BlueOak-1.0.0 and Unicode-3.0 are permissive licences with attribution-only or no conditions.",
+    "mpl_2_0": "MPL-2.0 is file-level copyleft: it is allowed for unmodified use of the package (e.g. axe-core in the frontend test tooling). Modifying an MPL-2.0 file and distributing it triggers source-disclosure for that file; such a change needs compliance review.",
+    "data_licences": "CC0-1.0 and CC-BY-4.0 cover data packages (language-subtag-registry, caniuse-lite); CC-BY-4.0 requires attribution, which the third-party notice generation must carry.",
+    "python_2_0": "Python-2.0 covers argparse (a port of the Python module); it is permissive.",
+    "excluded": "Strong and network copyleft (GPL-*, AGPL-*), LGPL-* , SSPL, BUSL, CC-BY-NC-*, proprietary and UNLICENSED are not allowed. LGPL is excluded on purpose: whether dynamic or optional use satisfies it is a legal decision, so an LGPL dependency must go through a dated waiver in docs/waivers.yml (owner, issue, expiry <= 90 days) instead of a standing allowance.",
+    "scope": "The list mirrors the cargo-deny allowlist in deny.toml by intent, not by file: Rust crates are judged by cargo-deny with deny.toml, npm packages by this file. Both are reviewed together.",
+    "note": "This is an engineering control derived from the licences observed in frontend/package-lock.json and tools/legal-audit/package-lock.json on 2026-10-23. It is not legal advice; the allowlist needs sign-off by the compliance owner (Progress.md D-5)."
+  }
+}

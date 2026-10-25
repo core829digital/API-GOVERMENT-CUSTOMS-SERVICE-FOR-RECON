@@ -1,0 +1,13 @@
+{
+  "pages": {
+    "notFound": {
+      "title": "Page introuvable",
+      "description": "La page demandée n’existe pas ou a été déplacée.",
+      "back": "Retour au site"
+    },
+    "error": {
+      "title": "Une erreur s’est produite",
+      "description": "La page n’a pas pu être affichée. Réessayez ; si le problème persiste, rechargez la page."
+    }
+  }
+}

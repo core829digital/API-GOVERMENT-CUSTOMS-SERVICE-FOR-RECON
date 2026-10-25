@@ -1,0 +1,56 @@
+# Dependency update PRs (weekly). Updates still pass through the full pipeline (L1 licences, L2 vulnerabilities, L3
+# secrets) like any other change; Dependabot output is never merged unreviewed. The commit prefix keeps the
+# Conventional Commits lint (tools/ci/commit-lint.mjs) green.
+version: 2
+updates:
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: "chore(deps)"
+    open-pull-requests-limit: 5
+    labels: [dependencies, rust]
+
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: "chore(deps)"
+    open-pull-requests-limit: 5
+    labels: [dependencies, frontend]
+
+  - package-ecosystem: npm
+    directory: /tools/legal-audit
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: "chore(deps)"
+    open-pull-requests-limit: 3
+    labels: [dependencies, tooling]
+
+  - package-ecosystem: github-actions
+    directories:
+      - /
+      - /.github/actions/*
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: "chore(ci)"
+    open-pull-requests-limit: 5
+    labels: [dependencies, ci]
+
+  - package-ecosystem: docker
+    directory: /infra/docker
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: "chore(deps)"
+    open-pull-requests-limit: 3
+    labels: [dependencies, docker]

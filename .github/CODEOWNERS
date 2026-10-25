@@ -1,0 +1,15 @@
+# CODEOWNERS (Workflow.md §1; consumed by gate L11 in tools/legal-audit/gates/l11.mjs and by GitHub branch protection).
+# Last matching pattern wins. Gated paths (compliance + engineering) are exactly those listed in Workflow.md §1.
+#
+# ASSUMPTION (Progress.md D-5 is unanswered): the GitHub organisation slug is `core829srl` and it has the teams
+# `compliance` and `engineering`. Both teams must exist, and `compliance` must contain the named human compliance owners,
+# before L11 can pass for any change to a gated path. Rename the slug here AND nowhere else: L11 and
+# tools/ci/collect-approvals.mjs read the team names from this file.
+
+*                          @core829srl/engineering
+
+/rules/                    @core829srl/compliance @core829srl/engineering
+/docs/privacy/             @core829srl/compliance @core829srl/engineering
+/migrations/               @core829srl/compliance @core829srl/engineering
+/crates/recon-evidence/    @core829srl/compliance @core829srl/engineering
+/infra/policies/           @core829srl/compliance @core829srl/engineering

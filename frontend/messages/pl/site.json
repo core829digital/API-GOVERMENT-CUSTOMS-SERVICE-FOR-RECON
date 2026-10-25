@@ -1,0 +1,21 @@
+{
+  "site": {
+    "nav": {
+      "label": "Główna",
+      "platform": "Platforma",
+      "checks": "Kontrole",
+      "trust": "Zaufanie",
+      "console": "Konsola",
+      "openMenu": "Otwórz menu",
+      "menuTitle": "Menu",
+      "menuDescription": "Nawigacja po witrynie."
+    },
+    "footer": {
+      "tagline": "Uzgadnianie ksiąg firmy z kopią danych posiadaną przez każdy organ.",
+      "explore": "Przeglądaj",
+      "access": "Dostęp",
+      "notice": "Rozbieżności stwierdzają jedynie, że źródła różnią się w świetle przytoczonej reguły. Nie stanowią porady podatkowej.",
+      "status": "Wczesna faza rozwoju. Ta witryna opisuje planowany produkt; każda funkcja jest oznaczona swoim statusem."
+    }
+  }
+}

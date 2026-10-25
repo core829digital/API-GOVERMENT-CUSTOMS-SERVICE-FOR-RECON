@@ -1,0 +1,45 @@
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.52s
+     Running tests/pair.rs (target/debug/deps/pair-8ef1c8f24ab2d114.exe)
+
+running 3 tests
+test application_roles_cannot_fork_or_mutate_the_ledger_and_own_nothing ... ok
+test concurrent_appends_for_one_tenant_serialise_into_a_valid_chain ... FAILED
+test rust_hash_layout_matches_sql_and_chain_verifies_on_w_and_r ... ok
+
+failures:
+
+---- concurrent_appends_for_one_tenant_serialise_into_a_valid_chain stdout ----
+thread 'concurrent_appends_for_one_tenant_serialise_into_a_valid_chain' panicked at crates/recon-store/tests/x.rs:310:9:
+assertion `left == right` failed: unexpected result
+  left: Some("DE123456789")
+ right: None
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    concurrent_appends_for_one_tenant_serialise_into_a_valid_chain
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.91s
+
+error: test failed, to rerun pass `-p recon-store --test pair`
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.52s
+     Running unittests src/lib.rs (target/debug/deps/recon_evidence-f0c7af6ea1d7fa58.exe)
+
+running 8 tests
+test anchor_rejects_tampered_token ... ok
+test anchor_rejects_wrong_hash ... ok
+test anchor_token_verifies_against_test_tsa ... ok
+test tests::detects_field_tamper_prev_break_gap_and_cross_tenant ... ok
+test tests::jcs_hash_is_key_order_independent_and_matches_rfc8785_example_form ... ok
+test tests::rejects_malformed_hex ... ok
+test tests::segment_verification_starts_mid_chain ... ok
+test tests::verifies_independent_vector_including_non_ascii_lengths ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests recon_evidence
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

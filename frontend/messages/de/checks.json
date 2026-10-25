@@ -1,0 +1,135 @@
+{
+  "checks": {
+    "metadata": {
+      "title": "Prüfungen",
+      "description": "Der Katalog möglicher Abgleichsprüfungen C1 bis C8: was jede vergleicht, ob eine Behörde eine der Quellen führt und wie weit jede gediehen ist."
+    },
+    "status": {
+      "building": "Im Aufbau",
+      "planned": "Geplant",
+      "later": "Später",
+      "buildingHint": "Vorhanden und lauffähig. Nur synthetische Daten.",
+      "plannedHint": "Entworfen und dokumentiert. Noch nicht gebaut.",
+      "laterHint": "Bewusst nach den ersten Versionen."
+    },
+    "hero": {
+      "eyebrow": "Prüfungen",
+      "title": "Acht mögliche Prüfungen. Eine läuft, mit synthetischen Daten.",
+      "lead": "Eine Prüfung vergleicht zwei oder mehr Quellen und meldet, wo sie voneinander abweichen. Dies ist der Katalog der Kandidaten. Nur die erste existiert, und sie hat nie echte Daten gesehen."
+    },
+    "catalogue": {
+      "eyebrow": "Katalog",
+      "title": "Was womit verglichen wird",
+      "lead": "Behördenseite gibt an, ob eine der verglichenen Quellen eine von einer Behörde geführte Kopie ist: ja, teilweise oder nein. Status zeigt, wie weit jede Prüfung gediehen ist. Die Liste umfasst Kandidaten und kann sich ändern.",
+      "caption": "Mögliche Prüfungen C1 bis C8, die jeweils verglichenen Quellen, ob eine Behörde eine davon führt, und der Status jeder Prüfung",
+      "columns": {
+        "id": "ID",
+        "check": "Prüfung",
+        "sources": "Verglichene Quellen",
+        "authority": "Behördenseite",
+        "status": "Status"
+      },
+      "authority": {
+        "yes": "Ja",
+        "partial": "Teilweise",
+        "no": "Nein"
+      },
+      "rows": {
+        "c1": {
+          "check": "Ausgestellte Rechnung gegen Clearance-Status und Inhalt",
+          "sources": "Hauptbuch und der Status eines E-Rechnungs-Clearance-Systems (Beispiele: KSeF, e-Factura, SdI)"
+        },
+        "c2": {
+          "check": "Rechnungs-PDF gegen strukturierte XML-Datei",
+          "sources": "Rechnungs-PDF und Rechnungs-XML"
+        },
+        "c3": {
+          "check": "Felder der USt-Erklärung gegen das Hauptbuch, je Zeitraum",
+          "sources": "Hauptbuch und die eingereichte Erklärung"
+        },
+        "c4": {
+          "check": "OSS- oder IOSS-Erklärung gegen Umsätze an Verbraucher, nach Verbrauchsstaat und Satz",
+          "sources": "Hauptbuch oder Marktplatzdaten und die OSS-Erklärung"
+        },
+        "c5": {
+          "check": "Innergemeinschaftliche B2B-Lieferungen gegen die Gültigkeit der USt-IdNr. zum Zeitpunkt der Lieferung",
+          "sources": "Hauptbuch und der Verlauf der VIES-Ergebnisse"
+        },
+        "c6": {
+          "check": "Geltend gemachte Einfuhr-USt gegen die Zoll- oder Einfuhrabrechnung",
+          "sources": "Hauptbuch und die Zolldatei"
+        },
+        "c7": {
+          "check": "Marktplatzbericht gegen das Hauptbuch",
+          "sources": "Marktplatzbericht und Hauptbuch"
+        },
+        "c8": {
+          "check": "Zahlungen gegen Rechnungen",
+          "sources": "Bank- oder Zahlungsdienstdaten und Hauptbuch"
+        }
+      }
+    },
+    "c1": {
+      "eyebrow": "Prüfung C1",
+      "title": "Was C1 heute meldet",
+      "lead": "Rechnungen im Hauptbuch werden mit dem dafür gemeldeten Clearance-Status verglichen. Je Rechnungsreferenz wird höchstens ein Ergebnis gemeldet: das erste zutreffende in dieser Reihenfolge. Das läuft nur mit synthetischen Daten.",
+      "outcomes": {
+        "noClearance": "Zur Rechnung existiert kein Clearance-Datensatz.",
+        "notAccepted": "Der Clearance-Datensatz hat einen anderen Status als akzeptiert.",
+        "amountMismatch": "Währung oder Gesamtbetrag unterscheiden sich zwischen Rechnung und Clearance-Datensatz.",
+        "orphan": "Ein Clearance-Datensatz existiert ohne Rechnung."
+      },
+      "note": "Teilen sich zwei Rechnungsdatensätze oder zwei Clearance-Datensätze eine Referenz, ist die Eingabe mehrdeutig. Der Lauf schlägt fehl, statt zu raten."
+    },
+    "produces": {
+      "eyebrow": "Ergebnis",
+      "title": "Was eine Prüfung liefert",
+      "lead": "Jedes Ergebnis ist eine Abweichung. Eine Abweichung ist eine Aussage über zwei Quellen, nie darüber, was zu tun ist.",
+      "items": {
+        "disagreement": {
+          "title": "Eine Unstimmigkeit",
+          "body": "Zwei Quellen sagen Verschiedenes über denselben Posten. Beispiel: eine Rechnung im Hauptbuch, die die Clearance-Seite nicht als akzeptiert führt."
+        },
+        "rule": {
+          "title": "Eine zitierte Regel",
+          "body": "Die Abweichung nennt die Regel, nach der die Quellen verglichen wurden, nachgeschlagen im festgelegten Regelpaket des Laufs. Fehlt diese Regel im Paket, schlägt der Lauf fehl, statt eine Abweichung ohne Zitat zu erfassen."
+        },
+        "inputs": {
+          "title": "Ihre Eingaben",
+          "body": "Die Abweichung verweist auf die Eingabedatensätze, ihre Hashwerte und die Version des Regelpakets. Dieselben Eingaben und dieselbe Version ergeben dieselbe Abweichung. Der Schweregrad ist ein technischer Triage-Standardwert, keine rechtliche Einstufung."
+        }
+      },
+      "notice": {
+        "title": "Keine Steuerberatung",
+        "body": "Der Dienst ist kein Steuerberater. Eine Abweichung hält fest, dass zwei Quellen nach einer zitierten Regel voneinander abweichen. Sie sagt nicht, ob etwas geschuldet, rechtmäßig oder regelkonform ist, und empfiehlt keine Maßnahme. Diese Beurteilung bleibt bei Ihnen und Ihrem Berater."
+      }
+    },
+    "unproven": {
+      "eyebrow": "Grenzen",
+      "title": "Was noch nicht belegt ist",
+      "lead": "Dieses Produkt befindet sich in früher Entwicklung. Dies sind die offenen Fragen, klar benannt.",
+      "items": {
+        "realData": {
+          "title": "Keine Prüfung hat echte Daten gesehen",
+          "body": "Keine Prüfung ist mit echten Kundendaten gelaufen, und keine ist gegen echte Behördendaten validiert. C1 läuft nur mit synthetischen Daten."
+        },
+        "rules": {
+          "title": "Regelpakete sind Entwürfe",
+          "body": "Die bisher geschriebenen Regelpakete sind Entwürfe. Keines ist aktiviert, und kein Mensch hat sie geprüft. Eine verantwortliche Compliance-Person ist noch nicht benannt."
+        },
+        "competitors": {
+          "title": "Andere Produkte sind noch nicht verglichen",
+          "body": "Was andere Produkte bereits abdecken, ist nicht ermittelt. Abgleichsfunktionen mögen anderswo existieren; der Vergleich, Prüfung für Prüfung, ist noch aus Primärdokumentation der Anbieter zu erstellen."
+        },
+        "demand": {
+          "title": "Die Nachfrage ist ungetestet",
+          "body": "Ob Finanzteams dafür zahlen würden, wurde nicht getestet. Es wurden noch keine Kundeninterviews geführt."
+        },
+        "availability": {
+          "title": "Behördendaten sind womöglich nicht erreichbar",
+          "body": "Ob jede Behördenseite überhaupt und in welcher Form gelesen werden kann, ist für jedes Land offen. Die als Behördenseite markierten Prüfungen hängen von dieser Antwort ab."
+        }
+      }
+    }
+  }
+}

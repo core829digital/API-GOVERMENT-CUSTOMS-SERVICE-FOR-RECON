@@ -1,0 +1,133 @@
+{
+  "common": {
+    "close": "Close",
+    "loading": "Loading",
+    "retry": "Try again",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "none": "Not set"
+  },
+  "metadata": {
+    "title": "Recon",
+    "description": "Reconciliation of company books against the copy each authority holds, with cited legal basis."
+  },
+  "shell": {
+    "appName": "Recon",
+    "console": "Console",
+    "skipToContent": "Skip to main content",
+    "sidebarTitle": "Navigation",
+    "sidebarDescription": "Main navigation links.",
+    "toggleSidebar": "Toggle navigation",
+    "navLabel": "Main",
+    "nav": {
+      "overview": "Overview",
+      "findings": "Findings"
+    },
+    "language": {
+      "label": "Language",
+      "en": "English",
+      "ro": "Română",
+      "it": "Italiano",
+      "es": "Español",
+      "fr": "Français",
+      "de": "Deutsch",
+      "nl": "Nederlands",
+      "pl": "Polski"
+    },
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "session": {
+      "checking": "Checking session"
+    }
+  },
+  "overview": {
+    "title": "Overview",
+    "intro": "Recon compares your books with the copy each authority holds and lists where the sources disagree under a cited rule.",
+    "notice": "Findings state that sources disagree under a cited rule. They are not tax advice.",
+    "findingsCard": {
+      "title": "Findings",
+      "description": "Disagreements between your books and an authority's copy, each with the rule it was checked under.",
+      "action": "Open findings"
+    },
+    "batchCard": {
+      "title": "Batch status",
+      "description": "Look up the processing status of an uploaded batch by its identifier.",
+      "label": "Batch identifier",
+      "placeholder": "00000000-0000-7000-8000-000000000000",
+      "submit": "Show status",
+      "invalid": "Enter a valid batch identifier (UUID)."
+    }
+  },
+  "findings": {
+    "title": "Findings",
+    "description": "Where your books and an authority's copy disagree under a cited rule. This is not tax advice.",
+    "tableLabel": "Findings list",
+    "columns": {
+      "check": "Check",
+      "severity": "Severity",
+      "jurisdiction": "Jurisdiction",
+      "summary": "Summary",
+      "citation": "Rule citation",
+      "created": "Raised"
+    },
+    "severity": {
+      "info": "Info",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "empty": {
+      "title": "No findings",
+      "description": "The service returned no findings."
+    }
+  },
+  "batch": {
+    "title": "Batch status",
+    "back": "Back to overview",
+    "fields": {
+      "id": "Batch identifier",
+      "status": "Status",
+      "sourceType": "Source type",
+      "period": "Period",
+      "created": "Registered",
+      "failureReason": "Failure reason"
+    },
+    "periodRange": "{start} to {end}",
+    "status": {
+      "registered": "Registered",
+      "parsing": "Parsing",
+      "parsed": "Parsed",
+      "failed": "Failed"
+    }
+  },
+  "errors": {
+    "unauthenticated": {
+      "title": "Sign in required",
+      "description": "Your session is missing or has expired. Sign in to continue."
+    },
+    "notFound": {
+      "title": "Not found",
+      "description": "The service has no record with this identifier."
+    },
+    "replicaLag": {
+      "title": "Data is still synchronising",
+      "description": "The read copy has not caught up yet. Try again shortly."
+    },
+    "unavailable": {
+      "title": "Service unavailable",
+      "description": "The service could not be reached or returned an error. Try again later."
+    },
+    "invalidResponse": {
+      "title": "Unexpected response",
+      "description": "The service replied in a format this application does not recognise."
+    },
+    "network": {
+      "title": "Connection problem",
+      "description": "The request did not complete. Check your connection and try again."
+    }
+  }
+}

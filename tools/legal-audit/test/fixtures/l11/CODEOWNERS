@@ -1,0 +1,7 @@
+# Fixture in the shape of .github/CODEOWNERS (Phase 1 contract 3.4). The org slug "core829srl" is an assumption (D-5).
+*                                   @core829srl/engineering
+/rules/                             @core829srl/compliance @core829srl/engineering
+/docs/privacy/                      @core829srl/compliance @core829srl/engineering
+/migrations/                        @core829srl/compliance @core829srl/engineering
+/crates/recon-evidence/             @core829srl/compliance @core829srl/engineering
+/infra/policies/                    @core829srl/compliance @core829srl/engineering

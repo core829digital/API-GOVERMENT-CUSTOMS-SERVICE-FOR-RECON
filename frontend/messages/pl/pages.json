@@ -1,0 +1,13 @@
+{
+  "pages": {
+    "notFound": {
+      "title": "Nie znaleziono strony",
+      "description": "Żądana strona nie istnieje lub została przeniesiona.",
+      "back": "Wróć do witryny"
+    },
+    "error": {
+      "title": "Coś poszło nie tak",
+      "description": "Nie udało się wyświetlić strony. Proszę spróbować ponownie; jeśli problem się powtarza, proszę odświeżyć stronę."
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "replicated_schemas": ["core", "ingest", "recon", "rules", "ledger", "privacy", "ops"],
+  "columns_inspected": 3,
+  "unclassified": [],
+  "retention_classes_in_use": ["operational", "tax_record"],
+  "rows": [
+    { "column": "core.legal_entity.vat_id_ct", "class": "pii_id", "basis": "gdpr_6_1_c", "retention": "tax_record", "encrypted": "true" },
+    { "column": "core.tenant.id", "class": "internal", "basis": "gdpr_6_1_c", "retention": "tax_record", "encrypted": "none" },
+    { "column": "core.tenant.name", "class": "internal", "basis": "contract_6_1_b", "retention": "operational", "encrypted": "none" }
+  ]
+}

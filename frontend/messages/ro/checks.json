@@ -1,0 +1,135 @@
+{
+  "checks": {
+    "metadata": {
+      "title": "Verificări",
+      "description": "Catalogul verificărilor de reconciliere candidate C1–C8: ce compară fiecare, dacă o autoritate deține una dintre surse și cât de departe a ajuns fiecare."
+    },
+    "status": {
+      "building": "În lucru",
+      "planned": "Planificat",
+      "later": "Mai târziu",
+      "buildingHint": "Există și rulează. Doar pe date sintetice.",
+      "plannedHint": "Proiectat și scris. Încă nu este construit.",
+      "laterHint": "Intenționat după primele versiuni."
+    },
+    "hero": {
+      "eyebrow": "Verificări",
+      "title": "Opt verificări candidate. Una rulează, pe date sintetice.",
+      "lead": "O verificare compară două sau mai multe surse și arată unde nu concordă. Acesta este catalogul candidatelor. Doar prima există și nu a văzut niciodată date reale."
+    },
+    "catalogue": {
+      "eyebrow": "Catalog",
+      "title": "Ce se compară cu ce",
+      "lead": "Coloana „Partea autorității” arată dacă una dintre sursele comparate este o copie deținută de o autoritate: da, parțial sau nu. Starea arată cât de departe a ajuns fiecare verificare. Lista cuprinde candidate și se poate schimba.",
+      "caption": "Verificările candidate C1–C8, sursele pe care le compară fiecare, dacă o autoritate deține una dintre ele și starea fiecărei verificări",
+      "columns": {
+        "id": "ID",
+        "check": "Verificare",
+        "sources": "Surse comparate",
+        "authority": "Partea autorității",
+        "status": "Stare"
+      },
+      "authority": {
+        "yes": "Da",
+        "partial": "Parțial",
+        "no": "Nu"
+      },
+      "rows": {
+        "c1": {
+          "check": "Factura emisă față de starea și conținutul din clearance",
+          "sources": "Registrul contabil și starea deținută de un sistem de clearance pentru facturi electronice (exemple: KSeF, e-Factura, SdI)"
+        },
+        "c2": {
+          "check": "PDF-ul facturii față de XML-ul ei structurat",
+          "sources": "PDF-ul facturii și XML-ul facturii"
+        },
+        "c3": {
+          "check": "Rubricile declarației de TVA față de registru, pe perioade",
+          "sources": "Registrul contabil și declarația depusă"
+        },
+        "c4": {
+          "check": "Declarația OSS sau IOSS față de vânzările către consumatori, pe stat de consum și cotă",
+          "sources": "Registrul sau datele din marketplace și declarația OSS"
+        },
+        "c5": {
+          "check": "Livrările intracomunitare între firme față de valabilitatea codului de TVA la momentul livrării",
+          "sources": "Registrul contabil și istoricul rezultatelor VIES"
+        },
+        "c6": {
+          "check": "TVA la import dedus față de declarația vamală sau de import",
+          "sources": "Registrul contabil și fișierul vamal"
+        },
+        "c7": {
+          "check": "Raportul marketplace-ului față de registru",
+          "sources": "Raportul marketplace-ului și registrul contabil"
+        },
+        "c8": {
+          "check": "Plățile față de facturi",
+          "sources": "Evidențe bancare sau ale furnizorului de plăți și registrul contabil"
+        }
+      }
+    },
+    "c1": {
+      "eyebrow": "Verificarea C1",
+      "title": "Ce raportează C1 astăzi",
+      "lead": "Facturile din registru sunt comparate cu starea de clearance raportată pentru ele. Pentru fiecare referință de factură se raportează cel mult un rezultat: primul care se potrivește, în această ordine. Rulează doar pe date sintetice.",
+      "outcomes": {
+        "noClearance": "Pentru factură nu există nicio înregistrare de clearance.",
+        "notAccepted": "Înregistrarea de clearance are o stare diferită de „acceptată”.",
+        "amountMismatch": "Moneda sau totalul diferă între factură și înregistrarea de clearance.",
+        "orphan": "Există o înregistrare de clearance fără factură."
+      },
+      "note": "Dacă două înregistrări de factură sau două înregistrări de clearance au aceeași referință, intrarea este ambiguă. Rularea eșuează, în loc să ghicească."
+    },
+    "produces": {
+      "eyebrow": "Rezultat",
+      "title": "Ce produce o verificare",
+      "lead": "Fiecare rezultat este o constatare. O constatare este o afirmație despre două surse, niciodată despre ce trebuie făcut.",
+      "items": {
+        "disagreement": {
+          "title": "O neconcordanță",
+          "body": "Două surse spun lucruri diferite despre același element. De exemplu: o factură din registru pe care partea de clearance nu o arată ca fiind acceptată."
+        },
+        "rule": {
+          "title": "O regulă citată",
+          "body": "Constatarea numește regula conform căreia au fost comparate sursele, căutată în pachetul de reguli fixat al rulării. Dacă pachetul nu conține acea regulă, rularea eșuează, în loc să emită o constatare fără citare."
+        },
+        "inputs": {
+          "title": "Intrările ei",
+          "body": "Constatarea indică înregistrările de intrare, hash-urile lor și versiunea pachetului de reguli. Aceleași intrări și aceeași versiune dau aceeași constatare. Severitatea este o valoare implicită de triere stabilită de ingineri, nu o evaluare juridică."
+        }
+      },
+      "notice": {
+        "title": "Nu este consultanță fiscală",
+        "body": "Serviciul nu este consultant fiscal. O constatare arată că două surse nu concordă conform unei reguli citate. Nu spune dacă ceva este datorat, legal sau conform și nu recomandă o acțiune. Această judecată rămâne la dumneavoastră și la consultantul dumneavoastră."
+      }
+    },
+    "unproven": {
+      "eyebrow": "Limite",
+      "title": "Ce nu este încă dovedit",
+      "lead": "Produsul este în dezvoltare timpurie. Acestea sunt întrebările deschise, spuse direct.",
+      "items": {
+        "realData": {
+          "title": "Nicio verificare nu a întâlnit date reale",
+          "body": "Nicio verificare nu a rulat pe date reale ale clienților și niciuna nu este validată pe date reale ale autorităților. C1 rulează doar pe date sintetice."
+        },
+        "rules": {
+          "title": "Pachetele de reguli sunt ciorne",
+          "body": "Pachetele de reguli scrise până acum sunt ciorne. Niciunul nu este activat și niciun om nu le-a revizuit. Nu a fost numit încă un responsabil de conformitate."
+        },
+        "competitors": {
+          "title": "Alte produse nu au fost încă comparate",
+          "body": "Ce acoperă deja alte produse nu a fost stabilit. Funcții de reconciliere pot exista în altă parte; comparația, verificare cu verificare, urmează să fie scrisă pe baza documentației oficiale a furnizorilor."
+        },
+        "demand": {
+          "title": "Cererea nu a fost testată",
+          "body": "Nu a fost testat dacă echipele financiare ar plăti pentru acest serviciu. Încă nu a avut loc niciun interviu cu clienți."
+        },
+        "availability": {
+          "title": "Datele autorităților pot fi inaccesibile",
+          "body": "Dacă partea fiecărei autorități poate fi citită și în ce formă rămâne o întrebare deschisă pentru fiecare țară. Verificările marcate ca având parte de autoritate depind de acest răspuns."
+        }
+      }
+    }
+  }
+}

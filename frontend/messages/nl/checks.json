@@ -1,0 +1,135 @@
+{
+  "checks": {
+    "metadata": {
+      "title": "Controles",
+      "description": "De catalogus van kandidaat-afstemmingscontroles C1 tot en met C8: wat elke controle vergelijkt, of een autoriteit een van de bronnen bijhoudt en hoe ver elke controle is."
+    },
+    "status": {
+      "building": "In aanbouw",
+      "planned": "Gepland",
+      "later": "Later",
+      "buildingHint": "Bestaat en draait. Alleen synthetische gegevens.",
+      "plannedHint": "Ontworpen en vastgelegd. Nog niet gebouwd.",
+      "laterHint": "Bewust na de eerste versies."
+    },
+    "hero": {
+      "eyebrow": "Controles",
+      "title": "Acht kandidaat-controles. Eén draait, op synthetische gegevens.",
+      "lead": "Een controle vergelijkt twee of meer bronnen en meldt waar ze verschillen. Dit is de catalogus van kandidaten. Alleen de eerste bestaat, en die heeft nooit echte gegevens gezien."
+    },
+    "catalogue": {
+      "eyebrow": "Catalogus",
+      "title": "Wat met wat wordt vergeleken",
+      "lead": "Kant autoriteit geeft aan of een van de vergeleken bronnen een kopie van een autoriteit is: ja, gedeeltelijk of nee. Status toont hoe ver elke controle is. De lijst bestaat uit kandidaten en kan veranderen.",
+      "caption": "Kandidaat-controles C1 tot en met C8, de bronnen die elke controle vergelijkt, of een autoriteit een ervan bijhoudt en de status van elke controle",
+      "columns": {
+        "id": "ID",
+        "check": "Controle",
+        "sources": "Vergeleken bronnen",
+        "authority": "Kant autoriteit",
+        "status": "Status"
+      },
+      "authority": {
+        "yes": "Ja",
+        "partial": "Deels",
+        "no": "Nee"
+      },
+      "rows": {
+        "c1": {
+          "check": "Uitgereikte factuur tegenover goedkeuringsstatus en inhoud",
+          "sources": "Grootboek en de status in een systeem voor goedkeuring van e-facturen (voorbeelden: KSeF, e-Factura, SdI)"
+        },
+        "c2": {
+          "check": "Factuur-pdf tegenover de gestructureerde XML",
+          "sources": "Factuur-pdf en factuur-XML"
+        },
+        "c3": {
+          "check": "Vakken van de btw-aangifte tegenover het grootboek, per periode",
+          "sources": "Grootboek en de ingediende aangifte"
+        },
+        "c4": {
+          "check": "OSS- of IOSS-aangifte tegenover verkopen aan consumenten, per land van verbruik en tarief",
+          "sources": "Grootboek of marktplaatsgegevens en de OSS-aangifte"
+        },
+        "c5": {
+          "check": "Intracommunautaire leveringen tussen bedrijven tegenover de geldigheid van het btw-nummer op het moment van levering",
+          "sources": "Grootboek en de historie van VIES-resultaten"
+        },
+        "c6": {
+          "check": "Ingevoerde btw in aftrek tegenover de douane- of invoerverklaring",
+          "sources": "Grootboek en het douanedossier"
+        },
+        "c7": {
+          "check": "Marktplaatsrapport tegenover het grootboek",
+          "sources": "Marktplaatsrapport en grootboek"
+        },
+        "c8": {
+          "check": "Betalingen tegenover facturen",
+          "sources": "Bank- of betaaldienstgegevens en grootboek"
+        }
+      }
+    },
+    "c1": {
+      "eyebrow": "Controle C1",
+      "title": "Wat C1 vandaag meldt",
+      "lead": "Facturen in het grootboek worden vergeleken met de goedkeuringsstatus die ervoor is gemeld. Per factuurreferentie wordt hoogstens één uitkomst gemeld: de eerste die overeenkomt, in deze volgorde. Dit draait uitsluitend op synthetische gegevens.",
+      "outcomes": {
+        "noClearance": "Er bestaat geen goedkeuringsrecord voor de factuur.",
+        "notAccepted": "Het goedkeuringsrecord heeft een andere status dan geaccepteerd.",
+        "amountMismatch": "De valuta of het totaalbedrag verschilt tussen de factuur en het goedkeuringsrecord.",
+        "orphan": "Er bestaat een goedkeuringsrecord zonder factuur."
+      },
+      "note": "Als twee factuurrecords of twee goedkeuringsrecords dezelfde referentie delen, is de invoer dubbelzinnig. De run mislukt in plaats van te gokken."
+    },
+    "produces": {
+      "eyebrow": "Uitvoer",
+      "title": "Wat een controle oplevert",
+      "lead": "Elk resultaat is een bevinding. Een bevinding is een vaststelling over twee bronnen, nooit over wat te doen.",
+      "items": {
+        "disagreement": {
+          "title": "Een verschil",
+          "body": "Twee bronnen zeggen iets anders over hetzelfde item. Bijvoorbeeld: een factuur in het grootboek die de goedkeuringskant niet als geaccepteerd vermeldt."
+        },
+        "rule": {
+          "title": "Een vermelde regel",
+          "body": "De bevinding noemt de regel waaronder de bronnen zijn vergeleken, opgezocht in het vastgezette regelpakket van de run. Ontbreekt die regel in het pakket, dan mislukt de run in plaats van een bevinding zonder bronvermelding te registreren."
+        },
+        "inputs": {
+          "title": "De invoer",
+          "body": "De bevinding verwijst naar de invoerrecords, hun hashes en de versie van het regelpakket. Dezelfde invoer en dezelfde versie geven dezelfde bevinding. Ernst is een technische triagestandaard, geen juridische beoordeling."
+        }
+      },
+      "notice": {
+        "title": "Geen belastingadvies",
+        "body": "De dienst is geen belastingadviseur. Een bevinding stelt vast dat twee bronnen verschillen volgens een vermelde regel. Ze zegt niet of er iets verschuldigd, toegestaan of conform is en beveelt geen handeling aan. Dat oordeel blijft bij u en uw adviseur."
+      }
+    },
+    "unproven": {
+      "eyebrow": "Beperkingen",
+      "title": "Wat nog niet bewezen is",
+      "lead": "Dit product is in een vroege fase van ontwikkeling. Dit zijn de open vragen, helder benoemd.",
+      "items": {
+        "realData": {
+          "title": "Geen enkele controle heeft echte gegevens gezien",
+          "body": "Geen enkele controle is uitgevoerd op echte klantgegevens en geen enkele is gevalideerd aan de hand van echte gegevens van een autoriteit. C1 draait uitsluitend op synthetische gegevens."
+        },
+        "rules": {
+          "title": "Regelpakketten zijn concepten",
+          "body": "De tot nu toe geschreven regelpakketten zijn concepten. Geen ervan is ingeschakeld en geen mens heeft ze beoordeeld. Er is nog geen compliance-verantwoordelijke aangewezen."
+        },
+        "competitors": {
+          "title": "Andere producten zijn nog niet vergeleken",
+          "body": "Wat andere producten al dekken, is niet vastgesteld. Afstemmingsfuncties kunnen elders bestaan; de vergelijking, controle per controle, moet nog worden opgesteld op basis van documentatie van de leveranciers zelf."
+        },
+        "demand": {
+          "title": "De vraag is niet getoetst",
+          "body": "Of financiële teams hiervoor zouden betalen, is niet getoetst. Er zijn nog geen klantgesprekken gevoerd."
+        },
+        "availability": {
+          "title": "Gegevens van autoriteiten zijn mogelijk niet bereikbaar",
+          "body": "Of de kant van elke autoriteit überhaupt kan worden gelezen, en in welke vorm, is voor elk land nog open. De controles die als kant autoriteit zijn gemarkeerd, hangen van dat antwoord af."
+        }
+      }
+    }
+  }
+}

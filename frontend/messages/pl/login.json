@@ -1,0 +1,56 @@
+{
+  "login": {
+    "metaTitle": "Logowanie",
+    "eyebrow": "Dostęp do konsoli",
+    "title": "Logowanie",
+    "redirectNote": "Nastąpi przekierowanie do dostawcy tożsamości Państwa organizacji, aby się zalogować.",
+    "backToSite": "Wróć do witryny",
+    "retry": "Spróbuj ponownie",
+    "notice": {
+      "idp_unreachable": {
+        "title": "Nie udało się połączyć z dostawcą tożsamości",
+        "description": "Usługa logowania nie odpowiedziała, a nic nie zostało zmienione. Spróbuj ponownie za chwilę."
+      },
+      "invalid_callback": {
+        "title": "Nie udało się dokończyć logowania",
+        "description": "Odpowiedź dostawcy tożsamości była niedostępna, wygasła lub nie odpowiadała żądaniu, które rozpoczęło logowanie. Rozpocznij ponownie."
+      },
+      "not_configured": {
+        "title": "Logowanie jest niedostępne",
+        "description": "To wdrożenie nie ma jeszcze skonfigurowanego dostawcy tożsamości, więc na tej stronie nie można nic zrobić."
+      },
+      "session_expired": {
+        "title": "Sesja została zakończona",
+        "description": "Zaloguj się ponownie, aby kontynuować od miejsca, w którym przerwano pracę."
+      },
+      "signed_out": {
+        "title": "Wylogowano",
+        "description": "Sesja w tej przeglądarce została zamknięta."
+      },
+      "unknown": {
+        "title": "Logowanie nie zostało ukończone",
+        "description": "Coś poszło nie tak. Spróbuj ponownie."
+      }
+    },
+    "panel": {
+      "eyebrow": "Wczesna faza rozwoju",
+      "statement": "Miejsca, w których księgi i kopia organu się różnią, wraz z regułą, według której je sprawdzono.",
+      "status": "Konsola działa wyłącznie na danych syntetycznych.",
+      "guaranteesTitle": "Czego można się spodziewać",
+      "guarantees": {
+        "advice": {
+          "title": "To nie jest porada podatkowa",
+          "description": "Rozbieżność oznacza, że dwa źródła różnią się w świetle przytoczonej reguły. Nigdy nie wskazuje, co jest należne ani czy coś jest zgodne z prawem."
+        },
+        "citation": {
+          "title": "Każda rozbieżność przytacza regułę",
+          "description": "Każda rozbieżność wskazuje regułę, według której została oceniona, dzięki czemu rozumowanie można sprawdzić."
+        },
+        "credentials": {
+          "title": "Przeglądarka nigdy nie przechowuje Państwa danych uwierzytelniających",
+          "description": "Logowanie odbywa się u dostawcy tożsamości. Sesja jest zaszyfrowanym plikiem cookie HTTP-only, a znajdujący się w nim token dostępu można otworzyć wyłącznie na serwerze."
+        }
+      }
+    }
+  }
+}

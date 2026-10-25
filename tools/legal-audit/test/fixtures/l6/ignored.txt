@@ -1,0 +1,12 @@
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.52s
+     Running tests/privacy.rs (target/debug/deps/privacy-3e2f1dfb30136306.exe)
+
+running 5 tests
+test crypto_shred_makes_plaintext_unrecoverable_on_w_and_r ... ok
+test erasure_deferral_is_ledgered ... ok
+test legal_hold_blocks_purge ... ok
+test purge_appends_ledger_event ... ignored, needs RECON_TEST_W_URL and RECON_TEST_R_URL
+test shred_keeps_chain_verifiable_on_w_and_r ... ok
+
+test result: ok. 4 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 4.37s

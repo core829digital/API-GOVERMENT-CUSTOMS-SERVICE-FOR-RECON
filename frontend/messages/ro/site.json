@@ -1,0 +1,21 @@
+{
+  "site": {
+    "nav": {
+      "label": "Principal",
+      "platform": "Platformă",
+      "checks": "Verificări",
+      "trust": "Încredere",
+      "console": "Consolă",
+      "openMenu": "Deschide meniul",
+      "menuTitle": "Meniu",
+      "menuDescription": "Navigarea site-ului."
+    },
+    "footer": {
+      "tagline": "Reconcilierea registrelor contabile ale companiei cu copia deținută de fiecare autoritate.",
+      "explore": "Explorează",
+      "access": "Acces",
+      "notice": "Constatările arată că sursele diferă conform unei reguli citate. Nu reprezintă consultanță fiscală.",
+      "status": "Dezvoltare timpurie. Acest site descrie produsul intenționat; fiecare funcționalitate este marcată cu starea ei."
+    }
+  }
+}

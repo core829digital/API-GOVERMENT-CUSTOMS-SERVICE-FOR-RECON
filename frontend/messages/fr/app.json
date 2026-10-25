@@ -1,0 +1,133 @@
+{
+  "common": {
+    "close": "Fermer",
+    "loading": "Chargement",
+    "retry": "Réessayer",
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter",
+    "none": "Non défini"
+  },
+  "metadata": {
+    "title": "Recon",
+    "description": "Rapprochement de la comptabilité d'une entreprise avec la copie détenue par chaque autorité, avec la base juridique citée."
+  },
+  "shell": {
+    "appName": "Recon",
+    "console": "Console",
+    "skipToContent": "Aller au contenu principal",
+    "sidebarTitle": "Navigation",
+    "sidebarDescription": "Liens de navigation principale.",
+    "toggleSidebar": "Afficher ou masquer la navigation",
+    "navLabel": "Principale",
+    "nav": {
+      "overview": "Aperçu",
+      "findings": "Constats"
+    },
+    "language": {
+      "label": "Langue",
+      "en": "English",
+      "ro": "Română",
+      "it": "Italiano",
+      "es": "Español",
+      "fr": "Français",
+      "de": "Deutsch",
+      "nl": "Nederlands",
+      "pl": "Polski"
+    },
+    "theme": {
+      "label": "Thème",
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système"
+    },
+    "session": {
+      "checking": "Vérification de la session"
+    }
+  },
+  "overview": {
+    "title": "Aperçu",
+    "intro": "Recon compare votre comptabilité avec la copie détenue par chaque autorité et liste les points où les sources divergent selon une règle citée.",
+    "notice": "Un constat indique que des sources divergent selon une règle citée. Il ne constitue pas un conseil fiscal.",
+    "findingsCard": {
+      "title": "Constats",
+      "description": "Divergences entre votre comptabilité et la copie d'une autorité, chacune avec la règle selon laquelle elle a été contrôlée.",
+      "action": "Ouvrir les constats"
+    },
+    "batchCard": {
+      "title": "État du lot",
+      "description": "Consultez l'état de traitement d'un lot téléversé à partir de son identifiant.",
+      "label": "Identifiant du lot",
+      "placeholder": "00000000-0000-7000-8000-000000000000",
+      "submit": "Afficher l'état",
+      "invalid": "Saisissez un identifiant de lot valide (UUID)."
+    }
+  },
+  "findings": {
+    "title": "Constats",
+    "description": "Points où votre comptabilité et la copie d'une autorité divergent selon une règle citée. Ceci ne constitue pas un conseil fiscal.",
+    "tableLabel": "Liste des constats",
+    "columns": {
+      "check": "Contrôle",
+      "severity": "Gravité",
+      "jurisdiction": "Juridiction",
+      "summary": "Résumé",
+      "citation": "Règle citée",
+      "created": "Émis le"
+    },
+    "severity": {
+      "info": "Info",
+      "low": "Faible",
+      "medium": "Moyenne",
+      "high": "Élevée"
+    },
+    "empty": {
+      "title": "Aucun constat",
+      "description": "Le service n'a renvoyé aucun constat."
+    }
+  },
+  "batch": {
+    "title": "État du lot",
+    "back": "Retour à l'aperçu",
+    "fields": {
+      "id": "Identifiant du lot",
+      "status": "État",
+      "sourceType": "Type de source",
+      "period": "Période",
+      "created": "Enregistré le",
+      "failureReason": "Cause de l'échec"
+    },
+    "periodRange": "du {start} au {end}",
+    "status": {
+      "registered": "Enregistré",
+      "parsing": "Analyse en cours",
+      "parsed": "Analysé",
+      "failed": "Échec"
+    }
+  },
+  "errors": {
+    "unauthenticated": {
+      "title": "Connexion requise",
+      "description": "Votre session est absente ou a expiré. Connectez-vous pour continuer."
+    },
+    "notFound": {
+      "title": "Introuvable",
+      "description": "Le service ne contient aucun enregistrement avec cet identifiant."
+    },
+    "replicaLag": {
+      "title": "Les données sont encore en cours de synchronisation",
+      "description": "La copie en lecture n'est pas encore à jour. Réessayez dans un instant."
+    },
+    "unavailable": {
+      "title": "Service indisponible",
+      "description": "Le service est injoignable ou a renvoyé une erreur. Réessayez plus tard."
+    },
+    "invalidResponse": {
+      "title": "Réponse inattendue",
+      "description": "Le service a répondu dans un format que cette application ne reconnaît pas."
+    },
+    "network": {
+      "title": "Problème de connexion",
+      "description": "La requête n'a pas abouti. Vérifiez votre connexion et réessayez."
+    }
+  }
+}

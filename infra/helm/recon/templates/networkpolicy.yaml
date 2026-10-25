@@ -1,0 +1,150 @@
+{{- if .Values.networkPolicy.enabled -}}
+{{- $fullname := include "recon.fullname" . -}}
+{{- $db := .Values.database -}}
+{{- $idp := required "frontend.idpEgress is required: the BFF must reach the OIDC issuer (list of NetworkPolicy `to:` peers)" .Values.frontend.idpEgress -}}
+# Default deny for every pod of this release's namespace (both directions); everything below is an explicit allow.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ $fullname }}-default-deny
+  labels:
+    {{- include "recon.labels" (dict "root" . "component" "network") | nindent 4 }}
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ $fullname }}-allow-dns
+  labels:
+    {{- include "recon.labels" (dict "root" . "component" "network") | nindent 4 }}
+spec:
+  podSelector: {}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              {{- toYaml .Values.networkPolicy.dnsNamespaceLabels | nindent 14 }}
+          podSelector:
+            matchLabels:
+              {{- toYaml .Values.networkPolicy.dnsPodLabels | nindent 14 }}
+      ports:
+        - {protocol: UDP, port: 53}
+        - {protocol: TCP, port: 53}
+---
+# api: reachable from the frontend (BFF) and, if exposed, from the ingress controller; egress ONLY to the two poolers.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ $fullname }}-api
+  labels:
+    {{- include "recon.labels" (dict "root" . "component" "api") | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "recon.selectorLabels" (dict "root" . "component" "api") | nindent 6 }}
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              {{- include "recon.selectorLabels" (dict "root" . "component" "frontend") | nindent 14 }}
+      ports:
+        - {protocol: TCP, port: {{ .Values.api.port }}}
+    {{- if and .Values.ingress.enabled .Values.ingress.api.enabled }}
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              {{- toYaml .Values.ingress.controllerNamespaceLabels | nindent 14 }}
+      ports:
+        - {protocol: TCP, port: {{ .Values.api.port }}}
+    {{- end }}
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ $db.namespace }}
+          podSelector:
+            matchLabels:
+              cnpg.io/poolerName: {{ $db.w.poolerName }}
+      ports:
+        - {protocol: TCP, port: {{ $db.w.port }}}
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ $db.namespace }}
+          podSelector:
+            matchLabels:
+              cnpg.io/poolerName: {{ $db.r.poolerName }}
+      ports:
+        - {protocol: TCP, port: {{ $db.r.port }}}
+---
+# frontend: reachable from the ingress controller; egress to the api and to the OIDC issuer.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ $fullname }}-frontend
+  labels:
+    {{- include "recon.labels" (dict "root" . "component" "frontend") | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "recon.selectorLabels" (dict "root" . "component" "frontend") | nindent 6 }}
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              {{- toYaml .Values.ingress.controllerNamespaceLabels | nindent 14 }}
+      ports:
+        - {protocol: TCP, port: {{ .Values.frontend.port }}}
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              {{- include "recon.selectorLabels" (dict "root" . "component" "api") | nindent 14 }}
+      ports:
+        - {protocol: TCP, port: {{ .Values.api.port }}}
+    - to:
+        {{- toYaml $idp | nindent 8 }}
+      ports:
+        - {protocol: TCP, port: {{ .Values.frontend.idpPort }}}
+---
+# migrate Job: direct (non-pooled) read-write Services of both clusters, nothing else. The Job pod has no ingress.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ $fullname }}-migrate
+  labels:
+    {{- include "recon.labels" (dict "root" . "component" "migrate") | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "recon.selectorLabels" (dict "root" . "component" "migrate") | nindent 6 }}
+  policyTypes: [Ingress, Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ $db.namespace }}
+          podSelector:
+            matchLabels:
+              cnpg.io/cluster: {{ $db.w.cluster }}
+      ports:
+        - {protocol: TCP, port: {{ $db.w.port }}}
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ $db.namespace }}
+          podSelector:
+            matchLabels:
+              cnpg.io/cluster: {{ $db.r.cluster }}
+      ports:
+        - {protocol: TCP, port: {{ $db.r.port }}}
+{{- end }}

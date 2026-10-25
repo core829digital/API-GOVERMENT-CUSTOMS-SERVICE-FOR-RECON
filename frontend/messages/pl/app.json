@@ -1,0 +1,133 @@
+{
+  "common": {
+    "close": "Zamknij",
+    "loading": "Ładowanie",
+    "retry": "Spróbuj ponownie",
+    "signIn": "Zaloguj się",
+    "signOut": "Wyloguj się",
+    "none": "Nie ustawiono"
+  },
+  "metadata": {
+    "title": "Recon",
+    "description": "Uzgadnianie ksiąg firmy z kopią danych posiadaną przez każdy organ, z podaniem podstawy prawnej."
+  },
+  "shell": {
+    "appName": "Recon",
+    "console": "Konsola",
+    "skipToContent": "Przejdź do treści głównej",
+    "sidebarTitle": "Nawigacja",
+    "sidebarDescription": "Główne odnośniki nawigacji.",
+    "toggleSidebar": "Przełącz nawigację",
+    "navLabel": "Główna",
+    "nav": {
+      "overview": "Przegląd",
+      "findings": "Rozbieżności"
+    },
+    "language": {
+      "label": "Język",
+      "en": "English",
+      "ro": "Română",
+      "it": "Italiano",
+      "es": "Español",
+      "fr": "Français",
+      "de": "Deutsch",
+      "nl": "Nederlands",
+      "pl": "Polski"
+    },
+    "theme": {
+      "label": "Motyw",
+      "light": "Jasny",
+      "dark": "Ciemny",
+      "system": "Systemowy"
+    },
+    "session": {
+      "checking": "Sprawdzanie sesji"
+    }
+  },
+  "overview": {
+    "title": "Przegląd",
+    "intro": "Recon porównuje księgi firmy z kopią danych posiadaną przez każdy organ i wskazuje, gdzie źródła różnią się w świetle przytoczonej reguły.",
+    "notice": "Rozbieżności stwierdzają jedynie, że źródła różnią się w świetle przytoczonej reguły. Nie stanowią porady podatkowej.",
+    "findingsCard": {
+      "title": "Rozbieżności",
+      "description": "Niezgodności między księgami a kopią organu, każda z regułą, według której ją sprawdzono.",
+      "action": "Otwórz rozbieżności"
+    },
+    "batchCard": {
+      "title": "Status partii",
+      "description": "Sprawdź status przetwarzania przesłanej partii na podstawie jej identyfikatora.",
+      "label": "Identyfikator partii",
+      "placeholder": "00000000-0000-7000-8000-000000000000",
+      "submit": "Pokaż status",
+      "invalid": "Wprowadź prawidłowy identyfikator partii (UUID)."
+    }
+  },
+  "findings": {
+    "title": "Rozbieżności",
+    "description": "Miejsca, w których księgi i kopia organu różnią się w świetle przytoczonej reguły. To nie jest porada podatkowa.",
+    "tableLabel": "Lista rozbieżności",
+    "columns": {
+      "check": "Kontrola",
+      "severity": "Waga",
+      "jurisdiction": "Jurysdykcja",
+      "summary": "Opis",
+      "citation": "Przytoczona reguła",
+      "created": "Zgłoszono"
+    },
+    "severity": {
+      "info": "Info",
+      "low": "Niska",
+      "medium": "Średnia",
+      "high": "Wysoka"
+    },
+    "empty": {
+      "title": "Brak rozbieżności",
+      "description": "Usługa nie zwróciła żadnych rozbieżności."
+    }
+  },
+  "batch": {
+    "title": "Status partii",
+    "back": "Wróć do przeglądu",
+    "fields": {
+      "id": "Identyfikator partii",
+      "status": "Status",
+      "sourceType": "Typ źródła",
+      "period": "Okres",
+      "created": "Zarejestrowano",
+      "failureReason": "Przyczyna niepowodzenia"
+    },
+    "periodRange": "{start} – {end}",
+    "status": {
+      "registered": "Zarejestrowana",
+      "parsing": "Analizowanie",
+      "parsed": "Przeanalizowana",
+      "failed": "Niepowodzenie"
+    }
+  },
+  "errors": {
+    "unauthenticated": {
+      "title": "Wymagane logowanie",
+      "description": "Sesja nie istnieje lub wygasła. Zaloguj się, aby kontynuować."
+    },
+    "notFound": {
+      "title": "Nie znaleziono",
+      "description": "Usługa nie ma rekordu o tym identyfikatorze."
+    },
+    "replicaLag": {
+      "title": "Dane są jeszcze synchronizowane",
+      "description": "Kopia do odczytu nie jest jeszcze aktualna. Spróbuj ponownie za chwilę."
+    },
+    "unavailable": {
+      "title": "Usługa niedostępna",
+      "description": "Nie udało się połączyć z usługą lub zwróciła ona błąd. Spróbuj ponownie później."
+    },
+    "invalidResponse": {
+      "title": "Nieoczekiwana odpowiedź",
+      "description": "Usługa odpowiedziała w formacie, którego ta aplikacja nie rozpoznaje."
+    },
+    "network": {
+      "title": "Problem z połączeniem",
+      "description": "Żądanie nie zostało zakończone. Sprawdź połączenie i spróbuj ponownie."
+    }
+  }
+}

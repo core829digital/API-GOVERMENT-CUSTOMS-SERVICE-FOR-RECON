@@ -1,0 +1,21 @@
+{
+  "site": {
+    "nav": {
+      "label": "Primär",
+      "platform": "Plattform",
+      "checks": "Prüfungen",
+      "trust": "Vertrauen",
+      "console": "Konsole",
+      "openMenu": "Menü öffnen",
+      "menuTitle": "Menü",
+      "menuDescription": "Navigation der Website."
+    },
+    "footer": {
+      "tagline": "Abgleich der Unternehmensbücher mit der Kopie, die jede Behörde führt.",
+      "explore": "Entdecken",
+      "access": "Zugang",
+      "notice": "Abweichungen halten fest, dass Quellen nach einer zitierten Regel voneinander abweichen. Sie sind keine Steuerberatung.",
+      "status": "Frühe Entwicklung. Diese Website beschreibt das beabsichtigte Produkt; jede Funktion ist mit ihrem Status gekennzeichnet."
+    }
+  }
+}

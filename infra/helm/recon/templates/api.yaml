@@ -1,0 +1,163 @@
+{{- $root := . -}}
+{{- $fullname := include "recon.fullname" . -}}
+{{- $w := .Values.database.w -}}
+{{- $r := .Values.database.r -}}
+{{- $nsDomain := printf "%s.svc" .Values.database.namespace -}}
+{{- if lt (int .Values.api.replicas) 3 -}}
+{{- fail "api.replicas must be >= 3 (Architecture §8)" -}}
+{{- end -}}
+{{- if and .Values.api.hpa.enabled (lt (int .Values.api.hpa.minReplicas) 3) -}}
+{{- fail "api.hpa.minReplicas must be >= 3 (Architecture §8)" -}}
+{{- end -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullname }}-api
+  labels:
+    {{- include "recon.labels" (dict "root" . "component" "api") | nindent 4 }}
+spec:
+  {{- if not .Values.api.hpa.enabled }}
+  replicas: {{ .Values.api.replicas }}
+  {{- end }}
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      {{- include "recon.selectorLabels" (dict "root" . "component" "api") | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "recon.labels" (dict "root" . "component" "api") | nindent 8 }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ $fullname }}-api
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: {{ .Values.api.terminationGracePeriodSeconds }}
+      securityContext:
+        {{- include "recon.podSecurityContext" . | nindent 8 }}
+      {{- include "recon.pullSecrets" . | nindent 6 }}
+      {{- include "recon.topologySpread" (dict "root" . "component" "api" "spread" .Values.api.topologySpread) | nindent 6 }}
+      containers:
+        - name: api
+          image: {{ include "recon.image" (dict "root" . "image" .Values.api.image) | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- include "recon.containerSecurityContext" . | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.api.port }}
+              protocol: TCP
+          env:
+            - name: RECON_BIND
+              valueFrom: {configMapKeyRef: {name: {{ $fullname }}-config, key: RECON_BIND}}
+            - name: RECON_BRIDGE_WAIT_MS
+              valueFrom: {configMapKeyRef: {name: {{ $fullname }}-config, key: RECON_BRIDGE_WAIT_MS}}
+            # W: command role through the W pooler. $(VAR) references only variables defined above them.
+            - name: W_DB_USER
+              valueFrom: {secretKeyRef: {name: {{ $w.apiCredentialsSecret }}, key: username}}
+            - name: W_DB_PASSWORD
+              valueFrom: {secretKeyRef: {name: {{ $w.apiCredentialsSecret }}, key: password}}
+            - name: RECON_W_URL
+              value: {{ printf "postgres://$(W_DB_USER):$(W_DB_PASSWORD)@%s.%s:%v/%s?%s" $w.poolerService $nsDomain $w.port $w.database (include "recon.dbParams" (dict "caPath" "/etc/recon/db-ca/w/ca.crt")) | quote }}
+            # R: query role through the R pooler.
+            - name: R_DB_USER
+              valueFrom: {secretKeyRef: {name: {{ $r.apiCredentialsSecret }}, key: username}}
+            - name: R_DB_PASSWORD
+              valueFrom: {secretKeyRef: {name: {{ $r.apiCredentialsSecret }}, key: password}}
+            - name: RECON_R_URL
+              value: {{ printf "postgres://$(R_DB_USER):$(R_DB_PASSWORD)@%s.%s:%v/%s?%s" $r.poolerService $nsDomain $r.port $r.database (include "recon.dbParams" (dict "caPath" "/etc/recon/db-ca/r/ca.crt")) | quote }}
+          startupProbe:
+            httpGet: {path: /healthz, port: http}
+            periodSeconds: 2
+            failureThreshold: 30
+          livenessProbe:
+            httpGet: {path: /healthz, port: http}
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          readinessProbe:
+            httpGet: {path: /readyz, port: http}
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 2
+          lifecycle:
+            preStop:
+              sleep:
+                seconds: {{ .Values.api.preStopSleepSeconds }}
+          resources:
+            {{- toYaml .Values.api.resources | nindent 12 }}
+          volumeMounts:
+            - {name: db-ca-w, mountPath: /etc/recon/db-ca/w, readOnly: true}
+            - {name: db-ca-r, mountPath: /etc/recon/db-ca/r, readOnly: true}
+            - {name: tmp, mountPath: /tmp}
+      volumes:
+        # Only the public CA certificate is projected; the CNPG <cluster>-ca Secret also holds the CA private key.
+        - name: db-ca-w
+          secret:
+            secretName: {{ $w.caSecret }}
+            items: [{key: ca.crt, path: ca.crt}]
+        - name: db-ca-r
+          secret:
+            secretName: {{ $r.caSecret }}
+            items: [{key: ca.crt, path: ca.crt}]
+        - name: tmp
+          emptyDir: {medium: Memory, sizeLimit: 16Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullname }}-api
+  labels:
+    {{- include "recon.labels" (dict "root" . "component" "api") | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "recon.selectorLabels" (dict "root" . "component" "api") | nindent 4 }}
+  ports:
+    - name: http
+      port: {{ .Values.api.port }}
+      targetPort: http
+      protocol: TCP
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ $fullname }}-api
+  labels:
+    {{- include "recon.labels" (dict "root" . "component" "api") | nindent 4 }}
+spec:
+  minAvailable: {{ .Values.api.pdb.minAvailable }}
+  selector:
+    matchLabels:
+      {{- include "recon.selectorLabels" (dict "root" . "component" "api") | nindent 6 }}
+{{- if .Values.api.hpa.enabled }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ $fullname }}-api
+  labels:
+    {{- include "recon.labels" (dict "root" . "component" "api") | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ $fullname }}-api
+  minReplicas: {{ .Values.api.hpa.minReplicas }}
+  maxReplicas: {{ .Values.api.hpa.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.api.hpa.targetCPUUtilizationPercentage }}
+{{- end }}

@@ -1,0 +1,287 @@
+# DRAFT rule pack. Not approved. Not legal advice. Disabled until a human compliance approver signs off (Rules.md R-RULES-2, Progress.md D-5).
+# Source text read on 2026-10-23: consolidated text of Directive 2006/112/EC dated 2025-04-14 (EUR-Lex CELEX:02006L0112-20250414, labelled
+# "no legal effect" by EUR-Lex) plus the amending acts named per rule. The authentic text is the Official Journal version.
+# `valid_from` = application date of the amending act that produced the wording read (Directive 2006/112/EC itself: 2007-01-01, its Art. 413;
+# Directive 2010/45/EU: 2013-01-01, its Art. 2(1)). Retention PERIODS are national (Art. 247(1)) and are deliberately NOT encoded here.
+# Titles describe what the provision says; they are not conclusions about any invoice (R-ENG-3).
+pack: vat-invoice-core
+jurisdiction: EU
+version: 0.1.0
+valid_from: 2007-01-01
+valid_to:
+last_reviewed: 2026-10-23
+reviewed_by: "UNREVIEWED agent draft (awaiting @compliance, Progress.md D-5)"
+enabled: false
+rules:
+  - code: INV-001
+    title: "Definition of 'electronic invoice': an invoice containing the information required by the Directive, issued and received in any electronic format"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 217"
+    accessed_on: 2026-10-23
+    valid_from: 2013-01-01
+    valid_to:
+    pending_change: "Replaced from 2030-07-01 (Directive (EU) 2025/516 Art. 5 point (4), Art. 6(5)): definition refers to a structured electronic format allowing automated processing. See pack vida, rule VIDA-007."
+  - code: INV-002
+    title: "Member States accept documents or messages on paper or in electronic form as invoices if they meet the conditions of Chapter 3"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 218, first paragraph"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change: "Replaced from 2030-07-01 (Directive (EU) 2025/516 Art. 5 point (5)); Member States with a domestic real-time reporting obligation in place on 2024-01-01 may apply it by 2035-01-01 (Art. 6(5), second subparagraph). See pack vida, rule VIDA-008."
+  - code: INV-003
+    title: "Member State option to require taxable persons established in its territory to issue electronic invoices for domestic supplies of goods and services other than those referred to in Art. 262"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 1 point (2) (second paragraph added to Art. 218 of Directive 2006/112/EC); Art. 6(1)"
+    accessed_on: 2026-10-23
+    valid_from: 2025-04-14
+    valid_to:
+    pending_change:
+  - code: INV-004
+    title: "Document or message that amends and refers specifically and unambiguously to the initial invoice is treated as an invoice"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 219"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-005
+    title: "Art. 220(1) lists the supplies and payments for which a taxable person ensures an invoice is issued: supplies to another taxable person or non-taxable legal person, Art. 33(a) supplies of goods (with the stated exception for the Title XII Chapter 6 Section 3 scheme), Art. 138 supplies, and payments on account"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 220(1)"
+    accessed_on: 2026-10-23
+    valid_from: 2013-01-01
+    valid_to:
+    pending_change:
+  - code: INV-006
+    title: "Time limit: invoice for Art. 138 supplies and for services with customer-liable VAT under Art. 196 issued no later than the fifteenth day of the month following the chargeable event"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 222, first paragraph"
+    accessed_on: 2026-10-23
+    valid_from: 2013-01-01
+    valid_to:
+    pending_change: "Replaced from 2030-07-01 (Directive (EU) 2025/516 Art. 5 point (6)): 10 days following the chargeable event, extended to supplies of goods or services with customer-liable VAT under Arts. 194 to 197. See pack vida, rule VIDA-009."
+  - code: INV-007
+    title: "Chapeau of the invoice content list: only the details listed are required for VAT purposes on invoices issued pursuant to Arts. 220 and 221"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 (introductory wording)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change: "Points (16) and (17) added and point (11a) replaced from 2030-07-01 (Directive (EU) 2025/516 Art. 5 point (8)). See pack vida, rule VIDA-011."
+  - code: INV-010
+    title: "Invoice detail listed in Art. 226(1): the date of issue"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 point (1)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-011
+    title: "Invoice detail listed in Art. 226(2): a sequential number, based on one or more series, which uniquely identifies the invoice"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 point (2)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-012
+    title: "Invoice detail listed in Art. 226(3): the VAT identification number under which the taxable person supplied the goods or services"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 point (3)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-013
+    title: "Invoice detail listed in Art. 226(4): the customer's VAT identification number where the customer is liable for VAT or received an Art. 138 supply of goods"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 point (4)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-014
+    title: "Invoice detail listed in Art. 226(5): the full name and address of the taxable person and of the customer"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 point (5)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-015
+    title: "Invoice detail listed in Art. 226(6): the quantity and nature of the goods supplied or the extent and nature of the services rendered"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 point (6)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-016
+    title: "Invoice detail listed in Art. 226(7): the date on which the supply was made or completed, or the payment on account date, in so far as it can be determined and differs from the date of issue"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 point (7)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-017
+    title: "Invoice detail listed in Art. 226(7a): the mention 'Cash accounting' where VAT becomes chargeable on receipt of payment under Art. 66(b) and the right of deduction arises when the deductible tax becomes chargeable"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 point (7a)"
+    accessed_on: 2026-10-23
+    valid_from: 2013-01-01
+    valid_to:
+    pending_change:
+  - code: INV-018
+    title: "Invoice detail listed in Art. 226(8): the taxable amount per rate or exemption, the unit price exclusive of VAT and any discounts or rebates not included in the unit price"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 point (8)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-019
+    title: "Invoice detail listed in Art. 226(9): the VAT rate applied"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 point (9)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-020
+    title: "Invoice detail listed in Art. 226(10): the VAT amount payable, except where a special arrangement excludes that detail"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 point (10)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-021
+    title: "Invoice detail listed in Art. 226(10a): the mention 'Self-billing' where the customer issues the invoice instead of the supplier"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 point (10a)"
+    accessed_on: 2026-10-23
+    valid_from: 2013-01-01
+    valid_to:
+    pending_change:
+  - code: INV-022
+    title: "Invoice detail listed in Art. 226(11): in the case of an exemption, reference to the applicable provision of the Directive or corresponding national provision, or any other reference indicating the supply is exempt"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 point (11)"
+    accessed_on: 2026-10-23
+    valid_from: 2013-01-01
+    valid_to:
+    pending_change:
+  - code: INV-023
+    title: "Invoice detail listed in Art. 226(11a): the mention 'Reverse charge' where the customer is liable for the payment of the VAT"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 point (11a)"
+    accessed_on: 2026-10-23
+    valid_from: 2013-01-01
+    valid_to:
+    pending_change: "Replaced from 2030-07-01 (Directive (EU) 2025/516 Art. 5 point (8)(a)): additionally the mention 'triangular transaction' for Art. 197 supplies of goods. See pack vida, rule VIDA-011."
+  - code: INV-024
+    title: "Invoice detail listed in Art. 226(12): for a new means of transport supplied under Art. 138(1) and (2)(a), the characteristics identified in point (b) of Art. 2(2)"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 point (12)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-025
+    title: "Invoice details listed in Art. 226(13) and (14): the mentions for the margin scheme for travel agents and for the second-hand goods, works of art, collectors' items and antiques arrangements"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 points (13) and (14)"
+    accessed_on: 2026-10-23
+    valid_from: 2013-01-01
+    valid_to:
+    pending_change:
+  - code: INV-026
+    title: "Invoice detail listed in Art. 226(15): where the person liable for payment of VAT is a tax representative under Art. 204, that representative's VAT identification number, full name and address"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226 point (15)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-030
+    title: "Member States must allow simplified invoices where the amount is not higher than EUR 100 or the equivalent, or where the document is treated as an invoice under Art. 219"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 220a(1)(a) and (b)"
+    accessed_on: 2026-10-23
+    valid_from: 2013-01-01
+    valid_to:
+    pending_change:
+  - code: INV-031
+    title: "Minimum details Member States require on simplified invoices: date of issue, identification of the supplier, type of goods or services, VAT amount or information needed to calculate it, and the reference to the initial invoice for Art. 219 documents"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 226b"
+    accessed_on: 2026-10-23
+    valid_from: 2013-01-01
+    valid_to:
+    pending_change:
+  - code: INV-032
+    title: "Member States shall not require invoices to be signed"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 229"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-033
+    title: "Invoice amounts may be expressed in any currency, with the VAT amount payable or to be adjusted expressed in the national currency of the Member State using the Art. 91 conversion mechanism"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 230"
+    accessed_on: 2026-10-23
+    valid_from: 2013-01-01
+    valid_to:
+    pending_change:
+  - code: INV-034
+    title: "Authenticity of origin, integrity of content and legibility of an invoice to be ensured from the point of issue until the end of the storage period; each taxable person determines how"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 233(1)"
+    accessed_on: 2026-10-23
+    valid_from: 2013-01-01
+    valid_to:
+    pending_change:
+  - code: INV-040
+    title: "Every taxable person stores copies of invoices issued by or for him and all invoices he has received"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 244"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-041
+    title: "Taxable person may decide the place of storage provided stored invoices or information are made available to the competent authorities without undue delay on request"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 245(1)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-042
+    title: "Each Member State determines the period of invoice storage for supplies in its territory and invoices received by taxable persons established there (period is national; no EU-wide value is stated)"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 247(1)"
+    accessed_on: 2026-10-23
+    valid_from: 2007-01-01
+    valid_to:
+    pending_change:
+  - code: INV-043
+    title: "Member State option to require storage in the original form (paper or electronic) and storage of the data guaranteeing authenticity of origin and integrity of content"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 247(2)"
+    accessed_on: 2026-10-23
+    valid_from: 2013-01-01
+    valid_to:
+    pending_change:
+  - code: INV-044
+    title: "Competent authorities' right to access, download and use invoices stored by electronic means guaranteeing online access, for control purposes"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 249"
+    accessed_on: 2026-10-23
+    valid_from: 2013-01-01
+    valid_to:
+    pending_change:

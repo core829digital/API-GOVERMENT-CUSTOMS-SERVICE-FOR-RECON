@@ -1,0 +1,155 @@
+{
+  "platform": {
+    "metadata": {
+      "title": "Plateforme",
+      "description": "Comment le service fait passer les données de votre comptabilité à un constat : ingestion, normalisation, rapprochement, projection et preuve, avec l'état de chaque élément."
+    },
+    "status": {
+      "building": "En construction",
+      "planned": "Prévu",
+      "later": "Plus tard",
+      "buildingHint": "Existe et fonctionne. Données synthétiques uniquement.",
+      "plannedHint": "Conçu et documenté. Pas encore construit.",
+      "laterHint": "Volontairement après les premières versions."
+    },
+    "hero": {
+      "eyebrow": "Plateforme",
+      "title": "Comment fonctionne le service",
+      "lead": "La comptabilité entre. Un moteur déterministe la compare à la copie détenue par une autorité. Chaque divergence ressort sous forme de constat, avec sa règle citée et sa preuve. Chaque élément ci-dessous indique son état."
+    },
+    "flow": {
+      "eyebrow": "Flux de données",
+      "title": "D'un fichier à un constat, en cinq étapes",
+      "lead": "Chaque étape remplit une seule mission et passe le relais à la suivante. Rien de tout cela n'a encore fonctionné sur des données réelles de clients.",
+      "steps": {
+        "ingest": {
+          "name": "Ingestion",
+          "body": "Un client enregistre un fichier téléversé auprès de l'API par son SHA-256, son type de source et sa période. L'enregistrement et un événement du registre sont écrits dans une même transaction. Seules ces métadonnées sont acceptées aujourd'hui ; aucun adaptateur ne lit encore le contenu des fichiers."
+        },
+        "normalise": {
+          "name": "Normalisation",
+          "body": "Un worker analyse chaque source pour la ramener à une forme d'enregistrement canonique unique, afin que des enregistrements issus de systèmes différents puissent être comparés. Les factures sont ramenées à un modèle commun inspiré de la norme de facture électronique EN 16931, avec un adaptateur par pays."
+        },
+        "reconcile": {
+          "name": "Rapprochement",
+          "body": "Le moteur lit les enregistrements normalisés, applique une version figée du lot de règles, puis écrit l'exécution et ses constats. Le résultat ne dépend que des enregistrements d'entrée et de cette version. Aujourd'hui, il s'agit du contrôle C1, sur des données synthétiques."
+        },
+        "project": {
+          "name": "Projection",
+          "body": "Un projecteur transforme les constats répliqués et les entrées du registre en vues rapides à consulter et, plus tard, en index sur les textes juridiques publics. Il n'écrit que dans la copie en lecture."
+        },
+        "evidence": {
+          "name": "Preuve",
+          "body": "Chaque modification laisse un événement dans un registre à chaîne de hachage. La tête de chaîne doit être horodatée de temps à autre, et des dossiers de preuve doivent pouvoir être générés sur demande. Le registre et un vérificateur de chaîne existent ; l'horodatage et les dossiers sont prévus."
+        }
+      }
+    },
+    "stores": {
+      "eyebrow": "Stockage",
+      "title": "Deux bases de données, une seule vérité",
+      "lead": "Les données des clients résident dans deux clusters PostgreSQL aux rôles distincts. Le code est typé de sorte qu'une requête ne puisse pas atteindre le côté écriture et qu'une commande ne puisse pas lire depuis le mauvais côté.",
+      "w": {
+        "name": "W : le magasin de référence",
+        "body": "Seules les commandes écrivent ici : enregistrer un lot, lancer une exécution, émettre un constat. Chaque commande ajoute un événement au registre dans la même transaction que sa modification. W est le seul endroit où un fait est arrêté."
+      },
+      "r": {
+        "name": "R : la copie en lecture",
+        "body": "La réplication logique alimente R depuis W. L'API n'interroge jamais que R. R contient aussi des données dérivées, comme les projections, que W ne voit jamais. Si R est indisponible, une requête reçoit une erreur ; elle n'est jamais servie discrètement depuis W."
+      },
+      "ryw": {
+        "title": "Voir ce que vous venez d'écrire",
+        "body": "La réplication prend un instant : une lecture juste après une écriture peut donc ne pas la voir. Un client qui vient d'écrire peut demander à l'API d'attendre que la copie en lecture soit à jour. Chaque écriture renvoie le numéro de séquence du registre qu'elle a produit, et l'envoi de ce numéro avec la lecture suivante constitue tout le mécanisme. Si la copie en lecture n'est pas à jour dans le délai imparti, le client reçoit une réponse 503 explicite, jamais un repli silencieux vers le côté écriture.",
+        "detail": "Éprouvé uniquement sur une paire de bases de données locale. Aucun test de basculement ni de charge n'a été réalisé."
+      },
+      "diagram": {
+        "label": "Schéma du côté écriture W et de la copie en lecture R",
+        "caption": "Schéma illustratif. Vos systèmes appellent l'API. L'API envoie des commandes à W et interroge R. W réplique vers R. Le moteur lit R et écrit dans W.",
+        "nodes": {
+          "clients": {
+            "name": "Clients",
+            "note": "Vos systèmes"
+          },
+          "api": {
+            "name": "API",
+            "note": "Point d'entrée"
+          },
+          "w": {
+            "name": "W",
+            "note": "Référence"
+          },
+          "r": {
+            "name": "R",
+            "note": "Copie en lecture"
+          },
+          "engine": {
+            "name": "Moteur",
+            "note": "Règles"
+          }
+        },
+        "flows": {
+          "writes": "écritures",
+          "reads": "lectures",
+          "replication": "réplication"
+        }
+      }
+    },
+    "api": {
+      "eyebrow": "API",
+      "title": "Surface de l'API",
+      "lead": "Cinq points d'accès existent aujourd'hui. Le reste de la surface esquissée est prévu et peut évoluer.",
+      "side": {
+        "write": "Écrit dans W",
+        "read": "Lit depuis R",
+        "push": "Vous notifie"
+      },
+      "webhooksName": "Webhooks",
+      "items": {
+        "batchesCreate": "Enregistrer un fichier téléversé par son SHA-256, son type de source et sa période. Idempotent. Renvoie le numéro de séquence du registre pour l'écriture.",
+        "batchesGet": "État de traitement d'un lot enregistré.",
+        "runsCreate": "Lancer une exécution de rapprochement figée sur une version du lot de règles. Asynchrone.",
+        "runsGet": "État d'une exécution de rapprochement.",
+        "findingsList": "Lister les constats émis par les exécutions.",
+        "evidence": "Le dossier de preuve d'un constat, remis sous forme de lien signé.",
+        "rulesSearch": "Rechercher dans le corpus juridique cité, par mot-clé et par sens.",
+        "erasure": "Demander l'effacement de données personnelles. Les règles de conservation peuvent différer une demande ; cette décision est consignée.",
+        "export": "Exporter des données personnelles dans un format lisible par machine.",
+        "webhooks": "Rappels signés lorsqu'une exécution se termine ou qu'un constat est émis."
+      },
+      "headers": "Chaque écriture exige un en-tête <code>Idempotency-Key</code>, de sorte qu'une requête rejouée ne puisse pas créer un second lot ou une seconde exécution. Chaque écriture répond avec un en-tête <code>X-Commit-Seq</code> portant le numéro de séquence du registre qu'elle a produit. Chaque lecture répond avec <code>X-Data-Watermark</code> et respecte <code>X-Min-Seq</code>, l'attente décrite plus haut."
+    },
+    "evidence": {
+      "eyebrow": "Preuve",
+      "title": "Une preuve vérifiable hors ligne",
+      "lead": "L'objectif est qu'un constat soit accompagné d'une preuve que vous pouvez vérifier sans faire confiance au service. Une partie existe. Le reste est prévu, et chaque élément est étiqueté.",
+      "items": {
+        "ledger": {
+          "title": "Registre en ajout seul, à chaîne de hachage",
+          "body": "Chaque commande ajoute un événement au registre de son client. Le hachage d'un événement couvre le hachage de l'événement précédent et une forme canonique de son contenu ; modifier l'historique rompt donc tous les hachages suivants. Les modifications, suppressions et troncatures sont bloquées par des privilèges et par des déclencheurs.",
+          "detail": "Sur une paire de test locale, la modification privilégiée d'une ligne a été détectée par la vérification de la chaîne."
+        },
+        "verifier": {
+          "title": "Vérificateur de chaîne hors ligne",
+          "body": "Un outil en ligne de commande lit une chaîne exportée et indique si elle est cohérente en elle-même. Il ne partage aucun code avec la base de données. Une chaîne de hachage ne permet pas de montrer que ses événements les plus récents ont été retirés ; l'outil peut donc aussi recevoir le hachage de tête attendu."
+        },
+        "token": {
+          "title": "Vérification des jetons d'horodatage",
+          "body": "Du code existe qui vérifie un jeton d'horodatage RFC 3161 par rapport à un hachage de tête du registre et à un ensemble de certificats de confiance."
+        },
+        "anchoring": {
+          "title": "Ancrage par horodatage",
+          "body": "Un worker planifié doit obtenir un jeton d'horodatage pour la tête du registre de chaque client. Aucun prestataire d'horodatage qualifié n'a encore été choisi."
+        },
+        "pack": {
+          "title": "Dossier de preuve",
+          "body": "Sur demande, un dossier pour un constat : un manifeste avec les citations et les hachages d'entrée, des extraits des enregistrements sources, le segment de chaîne, les jetons d'horodatage et un script de vérification."
+        }
+      },
+      "chain": {
+        "label": "Illustration d'une chaîne de hachage",
+        "caption": "Illustration, pas de données réelles. Chaque événement conserve le hachage du précédent.",
+        "event": "Événement {n}",
+        "prev": "hachage préc."
+      }
+    }
+  }
+}

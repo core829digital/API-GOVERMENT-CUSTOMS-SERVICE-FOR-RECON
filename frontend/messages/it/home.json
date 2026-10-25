@@ -1,0 +1,155 @@
+{
+  "home": {
+    "metaTitle": "La contabilità a confronto con la copia dell'autorità",
+    "metaDescription": "Recon confronta la contabilità aziendale con i dati detenuti dalle autorità fiscali e doganali ed elenca ogni discordanza con la regola secondo cui è stata verificata. Sviluppo iniziale, solo dati sintetici.",
+    "status": {
+      "building": "In sviluppo · dati sintetici",
+      "planned": "Pianificato"
+    },
+    "hero": {
+      "eyebrow": "Riconciliazione contabile con i dati delle autorità",
+      "title": "Dove la vostra contabilità e la copia dell'autorità non concordano.",
+      "lead": "Recon confronta la contabilità aziendale con i dati detenuti da ciascuna autorità fiscale e doganale ed elenca ogni discordanza con la regola secondo cui è stata verificata.",
+      "secondary": "Scopri come funziona",
+      "note": "Sviluppo iniziale. Tutto ciò che è mostrato qui funziona solo con dati sintetici."
+    },
+    "field": {
+      "books": "Contabilità",
+      "authority": "Copia dell'autorità",
+      "mismatch": "Discordanza",
+      "rule": "Regola",
+      "status": {
+        "cleared": "Validata",
+        "rejected": "Rifiutata"
+      },
+      "caption": "Solo a scopo illustrativo. Registrazioni sintetiche, non dati reali.",
+      "description": "Illustrazione: due registri affiancati, Contabilità e Copia dell'autorità. La maggior parte delle righe coincide ed è collegata da una linea. Una riga differisce ed è segnalata come discordanza secondo una regola citata."
+    },
+    "gap": {
+      "eyebrow": "Il divario",
+      "title": "La contabilità dice una cosa. La copia dell'autorità può dirne un'altra.",
+      "lead": "La contabilità di un'azienda e la copia detenuta da un'autorità fiscale o doganale sono tenute separate. Quando divergono, la differenza può passare inosservata fino a una comunicazione, a un controllo o a una revisione di chiusura, e a quel punto il motivo è difficile da ricostruire.",
+      "inputsLabel": "Che cosa legge Recon",
+      "items": {
+        "erp": {
+          "title": "Esportazioni contabili dall'ERP",
+          "body": "Il lato dell'azienda: fatture e scritture contabili esportate dal suo sistema di contabilità o ERP."
+        },
+        "clearance": {
+          "title": "Stato lato autorità",
+          "body": "Il lato dell'autorità, ad esempio lo stato di autorizzazione di una fattura elettronica in un sistema come KSeF, e-Factura o SdI. Oggi questo tipo di record è letto solo da lotti sintetici; nulla è collegato a un sistema reale di un'autorità."
+        },
+        "returns": {
+          "title": "Dati di dichiarazioni e dogane",
+          "body": "Dichiarazioni presentate e dichiarazioni doganali, confrontate con la contabilità. Per questi dati non esiste ancora alcun controllo."
+        }
+      }
+    },
+    "pipeline": {
+      "eyebrow": "Flusso",
+      "title": "Da un'esportazione a qualcosa di verificabile.",
+      "lead": "Quattro fasi. Ciascuna indica che cosa esiste oggi.",
+      "steps": {
+        "ingest": {
+          "name": "Acquisizione",
+          "body": "Legge esportazioni e dati lato autorità in lotti immutabili con hash. Oggi esiste solo l'API dei lotti; gli adattatori per le fonti ERP e delle autorità sono pianificati."
+        },
+        "normalise": {
+          "name": "Normalizzazione",
+          "body": "Riporta ogni fonte a un'unica struttura canonica di record, così che la stessa regola possa leggere entrambi i lati."
+        },
+        "reconcile": {
+          "name": "Riconciliazione",
+          "body": "Applica regole citate a entrambi i lati e registra ogni discordanza. Il controllo C1, fattura rispetto allo stato di autorizzazione, funziona su dati sintetici."
+        },
+        "evidence": {
+          "name": "Evidenze",
+          "body": "Le rilevazioni confluiscono in un registro eventi append-only a catena di hash. Esistono il verificatore della catena e il codice di verifica del token di marcatura temporale; i pacchetti di evidenze sono pianificati."
+        }
+      }
+    },
+    "anatomy": {
+      "eyebrow": "Una rilevazione",
+      "title": "Anatomia di una rilevazione.",
+      "lead": "Ogni rilevazione ha le stesse parti, così da poter essere letta, contestata e riprodotta. Quella qui sotto è sintetica.",
+      "cardLabel": "Rilevazione illustrativa",
+      "cardNote": "Dati sintetici. Nessuna azienda o autorità reale.",
+      "calloutsLabel": "Perché esiste ogni parte",
+      "fields": {
+        "check": "Controllo",
+        "severity": "Gravità",
+        "summary": "Sintesi",
+        "rule": "Regola citata",
+        "inputs": "Input"
+      },
+      "values": {
+        "checkName": "Fattura rispetto allo stato di autorizzazione",
+        "severity": "Media",
+        "summary": "La fattura {invoice} risulta in contabilità come emessa. La copia lato autorità riporta uno stato di autorizzazione diverso per la stessa fattura.",
+        "booksInput": "Record contabile",
+        "authorityInput": "Record dell'autorità"
+      },
+      "callouts": {
+        "reproducible": {
+          "title": "Controllo e gravità",
+          "body": "Indica il controllo deterministico eseguito. Gli stessi input con la stessa versione del pacchetto di regole producono la stessa rilevazione, e nessun modello la decide."
+        },
+        "neutral": {
+          "title": "Sintesi",
+          "body": "Afferma soltanto che due fonti non concordano. Recon non è un consulente fiscale: che cosa fare di una discordanza spetta all'azienda e ai suoi consulenti."
+        },
+        "cited": {
+          "title": "Regola citata",
+          "body": "Indica la regola secondo cui è stato fatto il confronto. Le regole sono dati versionati che citano la propria fonte e sono approvate da un responsabile della conformità."
+        },
+        "evidence": {
+          "title": "Input",
+          "body": "Rimanda ai record esatti tramite hash, così che la rilevazione possa essere ricondotta alla fonte e verificata rispetto al registro a prova di manomissione."
+        }
+      }
+    },
+    "principles": {
+      "eyebrow": "Principi",
+      "title": "Ciò che non cambia.",
+      "lead": "I vincoli attorno ai quali è costruito il prodotto. Quando uno è una decisione di progetto e non ancora qualcosa che funziona, lo dichiara.",
+      "kind": {
+        "exists": "Presente · dati sintetici",
+        "rule": "Regola di progetto",
+        "decision": "Decisione di progetto"
+      },
+      "items": {
+        "determinism": {
+          "title": "Stessi input, stesse rilevazioni",
+          "body": "Una rilevazione è una funzione pura degli hash dei record di input e della versione del pacchetto di regole. Rieseguirla la riproduce. Nessun modello decide una rilevazione."
+        },
+        "isolation": {
+          "title": "Ogni tenant è isolato",
+          "body": "La sicurezza a livello di riga in entrambi i database tiene i record di un tenant fuori dalle interrogazioni di un altro tenant."
+        },
+        "ledger": {
+          "title": "Registro eventi append-only",
+          "body": "Gli eventi sono concatenati con hash per ciascun tenant e non possono essere modificati né eliminati. Un verificatore ricalcola la catena."
+        },
+        "privacy": {
+          "title": "Nessun dato personale nei log",
+          "body": "Log, tracce e contenuti del registro eventi devono restare privi di dati personali."
+        },
+        "rules": {
+          "title": "Le regole sono dati citati",
+          "body": "Date, soglie e aliquote risiedono in pacchetti di regole versionati con un riferimento alla fonte, mai nel codice. Un responsabile della conformità approva ogni modifica."
+        },
+        "residency": {
+          "title": "Residenza solo nell'UE",
+          "body": "I dati dei tenant devono restare presso responsabili del trattamento con sede nell'UE. Si tratta di una decisione di progetto; il fornitore di hosting non è ancora stato scelto."
+        }
+      },
+      "trustLink": "Leggi le note sulla fiducia"
+    },
+    "closing": {
+      "eyebrow": "Avanti",
+      "title": "Vedere dove le due copie non concordano.",
+      "body": "Recon è in sviluppo iniziale e oggi funziona con dati sintetici. Accedete per consultare la versione attuale oppure leggete quali controlli esistono e quali sono pianificati.",
+      "checksLink": "Consulta i controlli"
+    }
+  }
+}

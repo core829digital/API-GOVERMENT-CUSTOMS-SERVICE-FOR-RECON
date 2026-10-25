@@ -1,0 +1,21 @@
+{
+  "site": {
+    "nav": {
+      "label": "Primary",
+      "platform": "Platform",
+      "checks": "Checks",
+      "trust": "Trust",
+      "console": "Console",
+      "openMenu": "Open menu",
+      "menuTitle": "Menu",
+      "menuDescription": "Site navigation."
+    },
+    "footer": {
+      "tagline": "Reconciliation of company books against the copy each authority holds.",
+      "explore": "Explore",
+      "access": "Access",
+      "notice": "Findings state that sources disagree under a cited rule. They are not tax advice.",
+      "status": "Early development. This site describes the intended product; every capability is marked with its status."
+    }
+  }
+}

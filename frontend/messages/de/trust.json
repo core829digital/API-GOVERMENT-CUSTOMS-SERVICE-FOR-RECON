@@ -1,0 +1,123 @@
+{
+  "trust": {
+    "metadata": {
+      "title": "Vertrauen",
+      "description": "Sicherheit, Datenschutz und die rechtliche Stellung des Dienstes in klaren Worten, einschließlich allem, was noch offen ist."
+    },
+    "status": {
+      "building": "Im Aufbau",
+      "planned": "Geplant",
+      "later": "Später",
+      "buildingHint": "Vorhanden und lauffähig. Nur synthetische Daten.",
+      "plannedHint": "Entworfen und dokumentiert. Noch nicht gebaut.",
+      "laterHint": "Bewusst nach den ersten Versionen."
+    },
+    "hero": {
+      "eyebrow": "Vertrauen",
+      "title": "Sicherheit, Datenschutz und rechtliche Stellung",
+      "lead": "Wofür der Dienst gebaut ist, was er nicht ist und was noch offen ist, in klaren Worten. Er befindet sich in früher Entwicklung und ist nicht mit echten Kundendaten gelaufen."
+    },
+    "principles": {
+      "eyebrow": "Wie er gebaut ist",
+      "title": "Sieben Dinge, auf denen der Entwurf besteht",
+      "lead": "Dies sind Entwurfsregeln, gegen die der Code geschrieben wird. Jede ist mit dem tatsächlichen Stand gekennzeichnet.",
+      "items": {
+        "isolation": {
+          "title": "Mandantentrennung",
+          "body": "Jede Tabelle mit Kundendaten trägt eine Mandanten-ID, und zeilenbasierte Sicherheit in beiden Datenbanken beschränkt jede Sitzung auf die Zeilen des eigenen Mandanten. Ist kein Mandant gesetzt, schlägt eine Abfrage mit einem Fehler fehl, statt Zeilen zurückzugeben: Sie schlägt geschlossen fehl.",
+          "detail": "Geprüft auf einem lokalen Datenbankpaar mit einer gewöhnlichen Rolle ohne Superuser-Rechte. Noch nicht auf produktionsähnlicher Infrastruktur geprüft."
+        },
+        "ledger": {
+          "title": "Ein manipulationssicheres Ereignisprotokoll",
+          "body": "Jeder Kunde hat ein nur anfügbares Ereignisprotokoll. Jedes Ereignis speichert einen Hash, der das vorherige Ereignis umfasst, sodass eine Änderung der Historie die Kette bricht. Änderungen und Löschungen sind durch Berechtigungen und Trigger gesperrt. Das Abschneiden der neuesten Ereignisse zu bemerken, erfordert einen Zeitstempelanker, der geplant ist.",
+          "detail": "Eine privilegierte Änderung einer Zeile auf einem lokalen Testpaar wurde durch die Kettenprüfung erkannt."
+        },
+        "privacy": {
+          "title": "Keine personenbezogenen Daten in Logs, Protokoll oder Embeddings",
+          "body": "Protokoll-Nutzdaten enthalten undurchsichtige Verweise, keine Namen oder Steuernummern. Kennungsfelder werden verschlüsselt gespeichert, und die Löschung soll durch Vernichtung des Schlüssels erfolgen, sodass die Kette nach dem Verschwinden der Daten prüfbar bleibt. Logs, Traces und der Suchindex über Rechtstexte dürfen keine Kundendatensätze oder personenbezogenen Daten enthalten.",
+          "detail": "Verschlüsselte Kennungsspalten und Schlüsselvernichtung wurden auf einem lokalen Testpaar erprobt. Dies ist eine Entwurfsregel, keine Zertifizierung."
+        },
+        "residency": {
+          "title": "Datenhaltung nur in der EU, als Entwurfsentscheidung",
+          "body": "Der Entwurf hält Kundendaten in EU-Regionen und sendet keine an Auftragsverarbeiter außerhalb der EU oder an gehostete Sprachmodell-APIs. Das ist eine Entwurfsentscheidung, keine Aussage über einen laufenden Dienst: Der Hosting-Anbieter ist nicht gewählt, und es gibt keinen Produktivbetrieb.",
+          "detail": "Eine Datenschutz-Folgenabschätzung und ein Verzeichnis der Verarbeitungstätigkeiten liegen als Entwürfe für den Datenschutzbeauftragten und Rechtsbeistand vor. Kein Mensch hat sie geprüft, und sie sind keine Rechtsberatung. Die Liste der Unterauftragsverarbeiter ist noch nicht geschrieben."
+        },
+        "deterministic": {
+          "title": "Deterministische Abweichungen; kein Modell entscheidet",
+          "body": "Eine Abweichung ist eine reine Funktion der Hashwerte der Eingabedatensätze und der Version des Regelpakets. In der Regelauswertung gibt es keine Uhr, keinen Zufall, keinen Netzwerkaufruf und kein Sprachmodell, sodass ein erneuter Lauf dasselbe Ergebnis liefert. Wird je ein Sprachmodell eingesetzt, ist es beratend und kann weder eine Abweichung noch ein Zitat erzeugen.",
+          "detail": "Umgesetzt für Prüfung C1, mit synthetischen Daten."
+        },
+        "rules": {
+          "title": "Regeln sind zitierte Daten und brauchen menschliche Freigabe",
+          "body": "Jede Regel, Aufbewahrungsfrist und jedes landesspezifische Datum wird als Datum mit einem Zitat der Primärquelle gespeichert, nie als Konstante im Code. Ein Regelpaket soll vor dem Einschalten die Freigabe einer verantwortlichen Compliance-Person benötigen. Es ist keine Compliance-Person benannt, und jedes bisher geschriebene Regelpaket ist ein ungeprüfter, ausgeschalteter Entwurf."
+        },
+        "keys": {
+          "title": "API-Schlüssel",
+          "body": "API-Schlüssel werden nur als Argon2id-Hashes gespeichert, bei der Erstellung einmalig angezeigt und auf bestimmte Aktionen beschränkt. In der Web-Konsole hält der Browser nur ein versiegeltes HttpOnly-Sitzungscookie, nie ein Zugriffstoken."
+        }
+      }
+    },
+    "legal": {
+      "eyebrow": "Recht",
+      "title": "Die rechtliche Stellung",
+      "lead": "Was der Dienst nicht tut, ist ebenso wichtig wie das, was er tut.",
+      "items": {
+        "adviser": {
+          "title": "Kein Steuerberater",
+          "body": "{app} ist ein Software-Dienst, der Quellen vergleicht. Er ist kein Steuerberater, und nichts, was er erzeugt, ist Steuer-, Rechts- oder Buchhaltungsberatung."
+        },
+        "conclusions": {
+          "title": "Abweichungen nennen nie rechtliche Schlussfolgerungen",
+          "body": "Eine Abweichung hält fest, dass zwei Quellen nach einer zitierten Regel voneinander abweichen. Sie sagt nicht, ob etwas rechtmäßig, geschuldet oder regelkonform ist, und empfiehlt keine Maßnahme. Die Vorlagen für Abweichungen sind nach dieser Regel geschrieben."
+        },
+        "review": {
+          "title": "Die Positionierung wird noch geprüft",
+          "body": "Ob Abweichungen mit zitierten Regeln in den angestrebten Ländern als regulierte Beratung gelten, ist eine Frage für Rechtsbeistand und noch nicht beantwortet. Der Wortlaut der Abweichungen und dieser Website kann sich ändern, sobald sie beantwortet ist."
+        }
+      }
+    },
+    "open": {
+      "eyebrow": "Offene Punkte",
+      "title": "Was noch offen ist",
+      "lead": "Nicht entschieden, nicht gebaut oder nicht gemessen. Es wird keine Sicherheits- oder Compliance-Zertifizierung gehalten oder beansprucht.",
+      "items": {
+        "failover": {
+          "title": "Failover",
+          "body": "Das Umschalten der Schreibdatenbank, während die Lesekopie weiter repliziert, wurde nicht verifiziert. Ein Spike ist in der Grundlagenphase geplant."
+        },
+        "load": {
+          "title": "Last und Verfügbarkeit",
+          "body": "Nichts wurde unter Last getestet. Jede Verfügbarkeits- und Wiederherstellungszahl im Entwurf ist ein Entwurfsziel, keine Messung."
+        },
+        "penTest": {
+          "title": "Unabhängiger Penetrationstest",
+          "body": "Es wurde kein Penetrationstest durchgeführt. Er ist für eine Härtungsphase geplant."
+        },
+        "timestamp": {
+          "title": "Qualifizierter Zeitstempeldienst",
+          "body": "Es wurde kein qualifizierter Zeitstempeldienst gewählt. Die Zeitstempelverankerung wartet auf diese Entscheidung."
+        },
+        "owner": {
+          "title": "Verantwortliche Compliance-Person",
+          "body": "Es wurde keine Compliance-Person benannt. Regelpakete können erst freigegeben werden, wenn es eine gibt."
+        },
+        "counsel": {
+          "title": "Rechtsbeistand und Datenschutzbeauftragter",
+          "body": "Ein Rechtsbeistand hat die rechtliche Positionierung nicht geprüft, und es wurde kein Datenschutzbeauftragter bestellt."
+        },
+        "hosting": {
+          "title": "Hosting-Anbieter",
+          "body": "Der EU-Hosting-Anbieter und die Regionen sind nicht gewählt. Bis dahin gibt es keinen Produktivbetrieb."
+        },
+        "identity": {
+          "title": "Identitätsanbieter für Kunden",
+          "body": "Der Identitätsanbieter für die Kundenanmeldung wurde nicht gewählt."
+        },
+        "certification": {
+          "title": "Zertifizierungen",
+          "body": "Es wird keine Sicherheits- oder Compliance-Zertifizierung gehalten oder beansprucht. Eine Reifegradbewertung ist für eine spätere Phase geplant."
+        }
+      }
+    }
+  }
+}

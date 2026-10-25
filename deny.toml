@@ -1,0 +1,75 @@
+# cargo-deny policy (Workflow.md §4.2 L1 licences, L2 advisories; Rules.md R-SEC-7).
+# Run: cargo deny --locked check          (CI: tools/legal-audit gates L1/L2 call it; also `supply-chain` job)
+# Owner of changes to this file: engineering; a change re-runs L1/L2 (plan filter).
+# Tested with cargo-deny 0.20.2 against the committed Cargo.lock (2026-10-23).
+
+[graph]
+# All targets: a licence or advisory that only applies on one platform still ships in some build.
+all-features = true
+
+[output]
+feature-depth = 1
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Licences. The allowlist is the same SPDX set as the npm allowlist in tools/legal-audit/policy (S1). Dual-licensed
+# crates ("MIT OR Apache-2.0", "Unlicense OR MIT", "... OR LGPL-2.1-or-later") pass when ANY alternative is allowed, so
+# Unlicense and LGPL-2.1-or-later are deliberately NOT on the list: the crates that carry them (byteorder, memchr,
+# r-efi) all offer MIT / Apache-2.0 as an alternative. `Apache-2.0 WITH LLVM-exception` (wasi) is dual-licensed with
+# plain Apache-2.0 too. If a future dependency is ONLY available under a licence outside this list, the check fails
+# and a human decides (never add an id here just to make CI green).
+[licenses]
+confidence-threshold = 0.93
+allow = [
+  "MIT",
+  "Apache-2.0",
+  "BSD-2-Clause",
+  "BSD-3-Clause",
+  "ISC",
+  "0BSD",
+  "Zlib",
+  "Unicode-3.0",
+  "MPL-2.0",
+  "CC0-1.0",
+  "BSL-1.0",
+  "CDLA-Permissive-2.0",
+]
+unused-allowed-license = "allow"
+
+# The workspace crates are `license = "UNLICENSED"` (Cargo.toml) and `publish = false`: private crates are not checked.
+[licenses.private]
+ignore = true
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Advisories (RustSec). Known vulnerabilities and unsound advisories are always errors in cargo-deny >= 0.16 (there is no
+# "warn" level for them). `unmaintained` has no warn level either: "workspace" fails only for unmaintained crates that
+# a workspace crate depends on directly; unmaintained transitive crates are then not reported by cargo-deny and are
+# surfaced by osv-scanner/cargo-audit in L2 instead. Waivers go in docs/waivers.yml (dated, <= 90 days), not here: an
+# `ignore` entry in this file would bypass the dated-waiver rule (Workflow.md §4.2).
+[advisories]
+version = 2
+yanked = "deny"
+unmaintained = "workspace"
+unsound = "all"
+ignore = []
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Bans. TLS stays rustls (sqlx `tls-rustls`): the committed lock file contains no openssl/openssl-sys/native-tls, and
+# this keeps it that way (C TLS stack, system-library coupling, extra advisory surface).
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+allow-wildcard-paths = true
+highlight = "all"
+deny = [
+  { crate = "openssl", reason = "TLS is rustls only (CLAUDE.md stack); openssl pulls a C library into the image" },
+  { crate = "openssl-sys", reason = "TLS is rustls only (CLAUDE.md stack)" },
+  { crate = "native-tls", reason = "TLS is rustls only (CLAUDE.md stack)" },
+]
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Sources: crates.io only (no git or alternative-registry dependencies).
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []

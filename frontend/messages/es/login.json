@@ -1,0 +1,56 @@
+{
+  "login": {
+    "metaTitle": "Iniciar sesión",
+    "eyebrow": "Acceso a la consola",
+    "title": "Iniciar sesión",
+    "redirectNote": "Será redirigido al proveedor de identidad de su organización para iniciar sesión.",
+    "backToSite": "Volver al sitio",
+    "retry": "Reintentar",
+    "notice": {
+      "idp_unreachable": {
+        "title": "No se pudo acceder a su proveedor de identidad",
+        "description": "El servicio de inicio de sesión no respondió y no se modificó nada. Vuelva a intentarlo en un momento."
+      },
+      "invalid_callback": {
+        "title": "No se pudo completar el inicio de sesión",
+        "description": "La respuesta del proveedor de identidad faltaba, había caducado o no coincidía con la solicitud que la originó. Empiece de nuevo."
+      },
+      "not_configured": {
+        "title": "El inicio de sesión no está disponible",
+        "description": "Este despliegue aún no tiene configurado ningún proveedor de identidad, así que no hay nada que hacer desde esta página."
+      },
+      "session_expired": {
+        "title": "Su sesión ha terminado",
+        "description": "Inicie sesión de nuevo para continuar donde lo dejó."
+      },
+      "signed_out": {
+        "title": "Ha cerrado la sesión",
+        "description": "Se ha cerrado la sesión en este navegador."
+      },
+      "unknown": {
+        "title": "El inicio de sesión no se completó",
+        "description": "Algo salió mal. Vuelva a intentarlo."
+      }
+    },
+    "panel": {
+      "eyebrow": "Desarrollo temprano",
+      "statement": "Los puntos en que su contabilidad y la copia de una autoridad discrepan, con la regla bajo la que se comprobaron.",
+      "status": "La consola funciona solo con datos sintéticos.",
+      "guaranteesTitle": "Qué esperar",
+      "guarantees": {
+        "advice": {
+          "title": "No es asesoramiento fiscal",
+          "description": "Un hallazgo indica que dos fuentes discrepan según una regla citada. Nunca indica qué debe usted ni si algo es lícito."
+        },
+        "citation": {
+          "title": "Cada hallazgo cita una regla",
+          "description": "Cada hallazgo nombra la regla bajo la que se evaluó, de modo que el razonamiento pueda comprobarse."
+        },
+        "credentials": {
+          "title": "El navegador nunca guarda sus credenciales",
+          "description": "El inicio de sesión se realiza en su proveedor de identidad. Su sesión es una cookie cifrada y solo HTTP, y el token de acceso que contiene solo puede abrirse en el servidor."
+        }
+      }
+    }
+  }
+}

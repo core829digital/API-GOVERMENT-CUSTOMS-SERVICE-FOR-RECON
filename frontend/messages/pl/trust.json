@@ -1,0 +1,123 @@
+{
+  "trust": {
+    "metadata": {
+      "title": "Zaufanie",
+      "description": "Bezpieczeństwo, prywatność i pozycja prawna usługi prostymi słowami, wraz ze wszystkim, co nadal pozostaje otwarte."
+    },
+    "status": {
+      "building": "W budowie",
+      "planned": "Planowane",
+      "later": "Później",
+      "buildingHint": "Istnieje i działa. Wyłącznie dane syntetyczne.",
+      "plannedHint": "Zaprojektowane i opisane. Jeszcze niezbudowane.",
+      "laterHint": "Celowo po pierwszych wersjach."
+    },
+    "hero": {
+      "eyebrow": "Zaufanie",
+      "title": "Bezpieczeństwo, prywatność i pozycja prawna",
+      "lead": "Do czego usługa została zbudowana, czym nie jest i co nadal pozostaje otwarte, prostymi słowami. Jest we wczesnej fazie rozwoju i nie działała na rzeczywistych danych klientów."
+    },
+    "principles": {
+      "eyebrow": "Jak to zbudowano",
+      "title": "Siedem rzeczy, na których opiera się projekt",
+      "lead": "To reguły projektowe, według których pisany jest kod. Każda jest oznaczona tym, jak daleko faktycznie zaszła.",
+      "items": {
+        "isolation": {
+          "title": "Izolacja najemców",
+          "body": "Każda tabela z danymi klientów ma identyfikator najemcy, a zabezpieczenia na poziomie wierszy w obu bazach ograniczają każdą sesję do wierszy jej najemcy. Jeśli nie ustawiono najemcy, zapytanie kończy się błędem zamiast zwracać wiersze: zawodzi w sposób zamknięty.",
+          "detail": "Sprawdzono na lokalnej parze baz danych ze zwykłą rolą bez uprawnień superużytkownika. Jeszcze nie sprawdzono na infrastrukturze zbliżonej do produkcyjnej."
+        },
+        "ledger": {
+          "title": "Rejestr odporny na manipulacje",
+          "body": "Każdy klient ma rejestr tylko do dopisywania. Każde zdarzenie przechowuje hasz obejmujący poprzednie zdarzenie, więc zmiana historii psuje łańcuch. Aktualizacje i usunięcia są blokowane przez uprawnienia i wyzwalacze. Zauważenie, że najnowsze zdarzenia zostały odcięte, wymaga kotwicy znacznika czasu, która jest planowana.",
+          "detail": "Uprzywilejowana edycja jednego wiersza na lokalnej parze testowej została wykryta przez weryfikację łańcucha."
+        },
+        "privacy": {
+          "title": "Brak danych osobowych w logach, rejestrze ani osadzeniach",
+          "body": "Ładunki rejestru zawierają nieprzejrzyste odniesienia, a nie nazwiska ani identyfikatory podatkowe. Pola identyfikatorów są przechowywane w postaci zaszyfrowanej, a usuwanie ma polegać na zniszczeniu klucza, dzięki czemu łańcuch pozostaje weryfikowalny po zniknięciu danych. Logi, ślady i indeks wyszukiwania tekstów prawnych nie mogą zawierać rekordów klientów ani danych osobowych.",
+          "detail": "Zaszyfrowane kolumny identyfikatorów i niszczenie kluczy sprawdzono na lokalnej parze testowej. To reguła projektowa, a nie certyfikacja."
+        },
+        "residency": {
+          "title": "Dane wyłącznie w UE, jako decyzja projektowa",
+          "body": "Projekt zakłada przechowywanie danych klientów w regionach UE i nieprzekazywanie ich podmiotom przetwarzającym spoza UE ani hostowanym API modeli językowych. To decyzja projektowa, a nie stwierdzenie o działającej usłudze: dostawca hostingu nie został wybrany i nie ma wdrożenia produkcyjnego.",
+          "detail": "Ocena skutków dla ochrony danych i rejestr czynności przetwarzania istnieją jako wersje robocze dla inspektora ochrony danych i radcy prawnego. Żaden człowiek ich nie sprawdził i nie stanowią porady prawnej. Lista podprocesorów nie została jeszcze sporządzona."
+        },
+        "deterministic": {
+          "title": "Deterministyczne rozbieżności; żaden model nie decyduje",
+          "body": "Rozbieżność jest czystą funkcją haszy rekordów wejściowych i wersji pakietu reguł. W ocenie reguł nie ma zegara, losowości, wywołań sieciowych ani modelu językowego, więc ponowne uruchomienie daje ten sam wynik. Jeśli kiedykolwiek użyty zostanie model językowy, będzie doradczy i nie może utworzyć rozbieżności ani przytoczenia.",
+          "detail": "Zaimplementowano dla kontroli C1, na danych syntetycznych."
+        },
+        "rules": {
+          "title": "Reguły to dane z przytoczeniem i wymagają zatwierdzenia przez człowieka",
+          "body": "Każda reguła, okres przechowywania i data krajowa jest zapisana jako dane z przytoczeniem źródła pierwotnego, nigdy jako stała w kodzie. Pakiet reguł ma wymagać zatwierdzenia przez osobę odpowiedzialną za zgodność przed włączeniem. Nie wyznaczono takiej osoby, a każdy dotychczas napisany pakiet reguł jest niesprawdzoną wersją roboczą, która jest wyłączona."
+        },
+        "keys": {
+          "title": "Klucze API",
+          "body": "Klucze API są przechowywane wyłącznie jako hasze Argon2id, wyświetlane jednorazowo przy tworzeniu i ograniczone do określonych działań. W konsoli internetowej przeglądarka przechowuje wyłącznie zapieczętowany plik cookie sesji HttpOnly, nigdy token dostępu."
+        }
+      }
+    },
+    "legal": {
+      "eyebrow": "Prawo",
+      "title": "Pozycja prawna",
+      "lead": "To, czego usługa nie robi, jest tak samo ważne jak to, co robi.",
+      "items": {
+        "adviser": {
+          "title": "Nie jest doradcą podatkowym",
+          "body": "{app} jest usługą programową, która porównuje źródła. Nie jest doradcą podatkowym, a nic, co wytwarza, nie stanowi porady podatkowej, prawnej ani księgowej."
+        },
+        "conclusions": {
+          "title": "Rozbieżności nigdy nie formułują wniosków prawnych",
+          "body": "Rozbieżność mówi, że dwa źródła różnią się w świetle przytoczonej reguły. Nie mówi, czy cokolwiek jest zgodne z prawem, należne lub zgodne z przepisami, i nie zaleca żadnego działania. Szablony rozbieżności są pisane zgodnie z tą zasadą."
+        },
+        "review": {
+          "title": "Pozycjonowanie nadal jest weryfikowane",
+          "body": "To, czy rozbieżności z przytoczonymi regułami są uznawane za regulowane doradztwo w krajach, na które się nastawiamy, jest pytaniem do radcy prawnego i nie uzyskano jeszcze odpowiedzi. Sformułowania rozbieżności i tej witryny mogą się zmienić po jej uzyskaniu."
+        }
+      }
+    },
+    "open": {
+      "eyebrow": "Otwarte kwestie",
+      "title": "Co nadal jest otwarte",
+      "lead": "Nierozstrzygnięte, niezbudowane lub niezmierzone. Nie posiadamy ani nie deklarujemy żadnej certyfikacji bezpieczeństwa ani zgodności.",
+      "items": {
+        "failover": {
+          "title": "Przełączenie awaryjne",
+          "body": "Nie zweryfikowano przełączenia awaryjnego bazy zapisu przy ciągłej replikacji kopii do odczytu. W fazie fundamentów zaplanowano próbę rozpoznawczą."
+        },
+        "load": {
+          "title": "Obciążenie i dostępność",
+          "body": "Niczego nie testowano pod obciążeniem. Każda wartość dostępności i odtwarzania w projekcie jest celem projektowym, a nie pomiarem."
+        },
+        "penTest": {
+          "title": "Niezależny test penetracyjny",
+          "body": "Nie przeprowadzono testu penetracyjnego. Jest planowany na fazę utwardzania."
+        },
+        "timestamp": {
+          "title": "Kwalifikowany dostawca znaczników czasu",
+          "body": "Nie wybrano kwalifikowanego dostawcy znaczników czasu. Zakotwiczanie znaczników czasu czeka na tę decyzję."
+        },
+        "owner": {
+          "title": "Osoba odpowiedzialna za zgodność",
+          "body": "Nie wyznaczono osoby odpowiedzialnej za zgodność. Pakiety reguł nie mogą być zatwierdzone, dopóki jej nie będzie."
+        },
+        "counsel": {
+          "title": "Radca prawny i inspektor ochrony danych",
+          "body": "Radca prawny nie sprawdził pozycjonowania prawnego i nie powołano inspektora ochrony danych."
+        },
+        "hosting": {
+          "title": "Dostawca hostingu",
+          "body": "Dostawca hostingu w UE i regiony nie zostały wybrane. Dopóki ich nie wybrano, nie ma wdrożenia produkcyjnego."
+        },
+        "identity": {
+          "title": "Dostawca tożsamości klientów",
+          "body": "Dostawca tożsamości do logowania klientów nie został wybrany."
+        },
+        "certification": {
+          "title": "Certyfikacje",
+          "body": "Nie posiadamy ani nie deklarujemy żadnej certyfikacji bezpieczeństwa ani zgodności. Ocena gotowości jest planowana na późniejszą fazę."
+        }
+      }
+    }
+  }
+}

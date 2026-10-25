@@ -1,0 +1,123 @@
+{
+  "trust": {
+    "metadata": {
+      "title": "Trust",
+      "description": "Security, privacy and the legal position of the service in plain words, including everything that is still open."
+    },
+    "status": {
+      "building": "Building",
+      "planned": "Planned",
+      "later": "Later",
+      "buildingHint": "Exists and runs. Synthetic data only.",
+      "plannedHint": "Designed and written down. Not built yet.",
+      "laterHint": "Deliberately after the first versions."
+    },
+    "hero": {
+      "eyebrow": "Trust",
+      "title": "Security, privacy and the legal position",
+      "lead": "What the service is built to do, what it is not, and what is still open, in plain words. It is in early development and has not run on real customer data."
+    },
+    "principles": {
+      "eyebrow": "How it is built",
+      "title": "Seven things the design insists on",
+      "lead": "These are design rules the code is written against. Each one is tagged with how far it has actually got.",
+      "items": {
+        "isolation": {
+          "title": "Tenant isolation",
+          "body": "Every table that holds customer data carries a tenant id, and row-level security in both databases limits each session to its own tenant's rows. If no tenant is set, a query fails with an error instead of returning rows: it fails closed.",
+          "detail": "Checked on a local pair of databases with an ordinary, non-superuser role. Not yet checked on production-like infrastructure."
+        },
+        "ledger": {
+          "title": "A tamper-evident ledger",
+          "body": "Each customer has an append-only ledger. Every event stores a hash that covers the event before it, so changing history breaks the chain. Updates and deletes are blocked by privileges and by triggers. Noticing that the newest events were cut off needs a timestamp anchor, which is planned.",
+          "detail": "A privileged edit of one row on a local test pair was caught by chain verification."
+        },
+        "privacy": {
+          "title": "No personal data in logs, the ledger or embeddings",
+          "body": "Ledger payloads carry opaque references, not names or tax identifiers. Identifier fields are stored encrypted, and erasure is meant to work by destroying the key, so the chain stays verifiable after the data is gone. Logs, traces and the search index over legal text must not contain customer records or personal data.",
+          "detail": "Encrypted identifier columns and key destruction were exercised on a local test pair. This is a design rule, not a certification."
+        },
+        "residency": {
+          "title": "EU-only residency, as a design decision",
+          "body": "The design keeps customer data in EU regions and sends none to non-EU processors or to hosted language-model APIs. This is a design decision, not a statement about a running service: the hosting provider has not been chosen and there is no production deployment.",
+          "detail": "A data protection impact assessment and a record of processing exist as drafts for the data protection officer and counsel. No human has reviewed them and they are not legal advice. The sub-processor list is not written yet."
+        },
+        "deterministic": {
+          "title": "Deterministic findings; no model decides",
+          "body": "A finding is a pure function of the input record hashes and the rule-pack version. There is no clock, randomness, network call or language model inside rule evaluation, so a rerun gives the same result. If a language model is ever used, it is advisory and cannot create a finding or a citation.",
+          "detail": "Implemented for check C1, on synthetic data."
+        },
+        "rules": {
+          "title": "Rules are cited data and need human approval",
+          "body": "Each rule, retention period and country date is stored as data with a citation to its primary source, never as a constant in code. A rule pack is meant to need approval from a compliance owner before it is switched on. No compliance owner has been named, and every rule pack written so far is an unreviewed draft that is switched off."
+        },
+        "keys": {
+          "title": "API keys",
+          "body": "API keys are stored only as Argon2id hashes, shown once when they are created, and scoped to specific actions. In the web console the browser holds only a sealed, HttpOnly session cookie, never an access token."
+        }
+      }
+    },
+    "legal": {
+      "eyebrow": "Legal",
+      "title": "The legal position",
+      "lead": "What the service does not do matters as much as what it does.",
+      "items": {
+        "adviser": {
+          "title": "Not a tax adviser",
+          "body": "{app} is a software service that compares sources. It is not a tax adviser, and nothing it produces is tax, legal or accounting advice."
+        },
+        "conclusions": {
+          "title": "Findings never state legal conclusions",
+          "body": "A finding says that two sources disagree under a cited rule. It does not say whether anything is lawful, owed or compliant, and it does not recommend an action. Finding templates are written to that rule."
+        },
+        "review": {
+          "title": "The positioning is still under review",
+          "body": "Whether findings with cited rules count as regulated advice in the countries we aim at is a question for counsel, and it has not been answered. The wording of findings and of this site may change when it is."
+        }
+      }
+    },
+    "open": {
+      "eyebrow": "Open items",
+      "title": "What is still open",
+      "lead": "Not decided, not built or not measured. No security or compliance certification is held or claimed.",
+      "items": {
+        "failover": {
+          "title": "Failover",
+          "body": "Failing over the write database while the read copy keeps replicating has not been verified. A spike is planned in the foundations phase."
+        },
+        "load": {
+          "title": "Load and availability",
+          "body": "Nothing has been load-tested. Every availability and recovery figure in the design is a design target, not a measurement."
+        },
+        "penTest": {
+          "title": "Independent penetration test",
+          "body": "No penetration test has been carried out. It is planned for a hardening phase."
+        },
+        "timestamp": {
+          "title": "Qualified timestamp provider",
+          "body": "No qualified timestamp provider has been chosen. Timestamp anchoring waits for that decision."
+        },
+        "owner": {
+          "title": "Compliance owner",
+          "body": "No compliance owner has been named. Rule packs cannot be approved until one is."
+        },
+        "counsel": {
+          "title": "Counsel and data protection officer",
+          "body": "Counsel has not reviewed the legal positioning, and no data protection officer has been appointed."
+        },
+        "hosting": {
+          "title": "Hosting provider",
+          "body": "The EU hosting provider and regions are not chosen. Until they are, there is no production deployment."
+        },
+        "identity": {
+          "title": "Customer identity provider",
+          "body": "The identity provider for customer sign-in has not been chosen."
+        },
+        "certification": {
+          "title": "Certifications",
+          "body": "No security or compliance certification is held or claimed. A readiness assessment is planned for a later phase."
+        }
+      }
+    }
+  }
+}

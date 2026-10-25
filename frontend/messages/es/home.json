@@ -1,0 +1,155 @@
+{
+  "home": {
+    "metaTitle": "La contabilidad frente a la copia de la autoridad",
+    "metaDescription": "Recon compara los libros contables de una empresa con los datos que conservan las autoridades tributarias y aduaneras, y enumera cada discrepancia con la regla bajo la que se comprobó. Desarrollo temprano, solo datos sintéticos.",
+    "status": {
+      "building": "En construcción · datos sintéticos",
+      "planned": "Planificado"
+    },
+    "hero": {
+      "eyebrow": "Conciliación contable con datos de autoridades",
+      "title": "Donde su contabilidad y la copia de la autoridad discrepan.",
+      "lead": "Recon compara los libros contables de una empresa con los datos que conserva cada autoridad tributaria y aduanera, y enumera cada discrepancia con la regla bajo la que se comprobó.",
+      "secondary": "Ver cómo funciona",
+      "note": "Desarrollo temprano. Todo lo que se muestra aquí funciona únicamente con datos sintéticos."
+    },
+    "field": {
+      "books": "Contabilidad",
+      "authority": "Copia de la autoridad",
+      "mismatch": "Discrepancia",
+      "rule": "Regla",
+      "status": {
+        "cleared": "Validada",
+        "rejected": "Rechazada"
+      },
+      "caption": "Solo ilustrativo. Registros sintéticos, no datos reales.",
+      "description": "Ilustración: dos libros contables lado a lado, Contabilidad y Copia de la autoridad. La mayoría de las filas coinciden y están unidas por una línea. Una fila difiere y se marca como discrepancia según una regla citada."
+    },
+    "gap": {
+      "eyebrow": "La brecha",
+      "title": "La contabilidad dice una cosa. La copia de la autoridad puede decir otra.",
+      "lead": "El libro contable de una empresa y la copia que conserva una autoridad tributaria o aduanera se mantienen por separado. Cuando se desajustan, la diferencia puede pasar inadvertida hasta que un requerimiento, una inspección o una revisión de cierre la saca a la luz, y para entonces cuesta reconstruir el motivo.",
+      "inputsLabel": "Qué lee Recon",
+      "items": {
+        "erp": {
+          "title": "Exportaciones del libro contable del ERP",
+          "body": "La parte de la empresa: facturas y asientos exportados de su sistema contable o ERP."
+        },
+        "clearance": {
+          "title": "Estado en la autoridad",
+          "body": "La parte de la autoridad, por ejemplo el estado de validación de una factura electrónica en un sistema como KSeF, e-Factura o SdI. Hoy este tipo de registro se lee solo de lotes sintéticos; no hay nada conectado a un sistema real de una autoridad."
+        },
+        "returns": {
+          "title": "Datos de declaraciones y aduanas",
+          "body": "Declaraciones presentadas y declaraciones aduaneras, comparadas con la contabilidad. Todavía no existe ninguna comprobación para ellas."
+        }
+      }
+    },
+    "pipeline": {
+      "eyebrow": "Flujo",
+      "title": "De una exportación a algo verificable.",
+      "lead": "Cuatro etapas. Cada una indica lo que existe hoy.",
+      "steps": {
+        "ingest": {
+          "name": "Ingesta",
+          "body": "Lee exportaciones y datos de la autoridad en lotes inmutables con hash. Hoy solo existe la API de lotes; los adaptadores para fuentes de ERP y de autoridades están planificados."
+        },
+        "normalise": {
+          "name": "Normalización",
+          "body": "Convierte cada fuente a una única forma canónica de registro, de modo que la misma regla pueda leer ambas partes."
+        },
+        "reconcile": {
+          "name": "Conciliación",
+          "body": "Aplica reglas citadas a ambas partes y registra cada discrepancia. La comprobación C1, factura frente a estado de validación, funciona con datos sintéticos."
+        },
+        "evidence": {
+          "name": "Evidencia",
+          "body": "Los hallazgos se escriben en un registro de eventos de solo adición, encadenado por hash. El verificador de la cadena y el código de verificación de tokens de sello de tiempo existen; los paquetes de evidencia están planificados."
+        }
+      }
+    },
+    "anatomy": {
+      "eyebrow": "Un hallazgo",
+      "title": "Anatomía de un hallazgo.",
+      "lead": "Todo hallazgo tiene las mismas partes, de modo que puede leerse, impugnarse y reproducirse. El siguiente es sintético.",
+      "cardLabel": "Hallazgo ilustrativo",
+      "cardNote": "Datos sintéticos. Ninguna empresa ni autoridad reales.",
+      "calloutsLabel": "Por qué existe cada parte",
+      "fields": {
+        "check": "Comprobación",
+        "severity": "Gravedad",
+        "summary": "Resumen",
+        "rule": "Regla citada",
+        "inputs": "Entradas"
+      },
+      "values": {
+        "checkName": "Factura frente a estado de validación",
+        "severity": "Media",
+        "summary": "La factura {invoice} figura en la contabilidad como emitida. La copia de la autoridad contiene un estado de validación distinto para la misma factura.",
+        "booksInput": "Registro contable",
+        "authorityInput": "Registro de la autoridad"
+      },
+      "callouts": {
+        "reproducible": {
+          "title": "Comprobación y gravedad",
+          "body": "Nombra la comprobación determinista que se ejecutó. Las mismas entradas con la misma versión del paquete de reglas dan el mismo hallazgo, y ningún modelo lo decide."
+        },
+        "neutral": {
+          "title": "Resumen",
+          "body": "Indica únicamente que dos fuentes discrepan. Recon no es un asesor fiscal: qué hacer ante una discrepancia corresponde a la empresa y a sus asesores."
+        },
+        "cited": {
+          "title": "Regla citada",
+          "body": "Nombra la regla bajo la que se hizo la comparación. Las reglas son datos versionados que citan su fuente, y un responsable de cumplimiento humano las aprueba."
+        },
+        "evidence": {
+          "title": "Entradas",
+          "body": "Señala los registros exactos mediante su hash, de modo que el hallazgo pueda rastrearse y contrastarse con el registro de eventos a prueba de manipulaciones."
+        }
+      }
+    },
+    "principles": {
+      "eyebrow": "Principios",
+      "title": "Lo que no cambia.",
+      "lead": "Restricciones en torno a las que se construye el producto. Cuando una es una decisión de diseño y aún no algo que funcione, así se indica.",
+      "kind": {
+        "exists": "Implantado · datos sintéticos",
+        "rule": "Regla de diseño",
+        "decision": "Decisión de diseño"
+      },
+      "items": {
+        "determinism": {
+          "title": "Mismas entradas, mismos hallazgos",
+          "body": "Un hallazgo es una función pura de los hashes de los registros de entrada y de la versión del paquete de reglas. Al ejecutarlo de nuevo se reproduce. Ningún modelo decide un hallazgo."
+        },
+        "isolation": {
+          "title": "Cada inquilino aislado",
+          "body": "La seguridad a nivel de fila en ambas bases de datos mantiene los registros de un inquilino fuera de las consultas de otro."
+        },
+        "ledger": {
+          "title": "Registro de eventos de solo adición",
+          "body": "Los eventos se encadenan por hash para cada inquilino y no pueden modificarse ni eliminarse. Un verificador recalcula la cadena."
+        },
+        "privacy": {
+          "title": "Sin datos personales en los registros",
+          "body": "Los registros de actividad, las trazas y los contenidos del registro de eventos deben mantenerse libres de datos personales."
+        },
+        "rules": {
+          "title": "Las reglas son datos citados",
+          "body": "Las fechas, los umbrales y los tipos residen en paquetes de reglas versionados con una referencia a su fuente, nunca en el código. Un responsable de cumplimiento humano aprueba cada cambio."
+        },
+        "residency": {
+          "title": "Residencia exclusivamente en la UE",
+          "body": "Los datos de los inquilinos deben permanecer con encargados del tratamiento establecidos en la UE. Es una decisión de diseño; aún no se ha elegido el proveedor de alojamiento."
+        }
+      },
+      "trustLink": "Leer las notas de confianza"
+    },
+    "closing": {
+      "eyebrow": "Siguiente",
+      "title": "Vea dónde discrepan las dos copias.",
+      "body": "Recon está en desarrollo temprano y hoy funciona con datos sintéticos. Inicie sesión para ver la versión actual o consulte qué comprobaciones existen y cuáles están planificadas.",
+      "checksLink": "Ver las comprobaciones"
+    }
+  }
+}

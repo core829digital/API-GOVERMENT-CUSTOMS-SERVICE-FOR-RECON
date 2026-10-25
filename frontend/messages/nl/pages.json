@@ -1,0 +1,13 @@
+{
+  "pages": {
+    "notFound": {
+      "title": "Pagina niet gevonden",
+      "description": "De gevraagde pagina bestaat niet of is verplaatst.",
+      "back": "Terug naar de site"
+    },
+    "error": {
+      "title": "Er is iets misgegaan",
+      "description": "De pagina kon niet worden getoond. Probeer het opnieuw; blijft het probleem bestaan, laad de pagina dan opnieuw."
+    }
+  }
+}

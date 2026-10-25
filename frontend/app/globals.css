@@ -1,0 +1,349 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-signal: var(--signal);
+  --color-sev-info: var(--sev-info);
+  --color-sev-low: var(--sev-low);
+  --color-sev-medium: var(--sev-medium);
+  --color-sev-high: var(--sev-high);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) - 1px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 1px);
+  --radius-xl: calc(var(--radius) + 2px);
+  --font-sans: "IBM Plex Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+
+/*
+ * Palette. Two themes on one idea: near-black "ink" and warm "paper", one cold steel-blue signal colour, hairline
+ * borders and square corners. Severity colours are the only other hues and are used for data, never decoration.
+ */
+:root {
+  --radius: 0.125rem;
+  --background: oklch(0.975 0.004 95);
+  --foreground: oklch(0.16 0.01 260);
+  --card: oklch(0.99 0.003 95);
+  --card-foreground: oklch(0.16 0.01 260);
+  --popover: oklch(0.99 0.003 95);
+  --popover-foreground: oklch(0.16 0.01 260);
+  --primary: oklch(0.16 0.01 260);
+  --primary-foreground: oklch(0.975 0.004 95);
+  --secondary: oklch(0.94 0.005 95);
+  --secondary-foreground: oklch(0.16 0.01 260);
+  --muted: oklch(0.94 0.005 95);
+  --muted-foreground: oklch(0.45 0.012 260);
+  --accent: oklch(0.93 0.006 95);
+  --accent-foreground: oklch(0.16 0.01 260);
+  --destructive: oklch(0.5 0.2 27);
+  --border: oklch(0.16 0.01 260 / 16%);
+  --input: oklch(0.16 0.01 260 / 24%);
+  --ring: oklch(0.45 0.13 250);
+  --signal: oklch(0.45 0.13 250);
+  --sev-info: oklch(0.45 0.07 235);
+  --sev-low: oklch(0.42 0.02 95);
+  --sev-medium: oklch(0.5 0.12 65);
+  --sev-high: oklch(0.5 0.2 27);
+  --sidebar: oklch(0.96 0.005 95);
+  --sidebar-foreground: oklch(0.16 0.01 260);
+  --sidebar-primary: oklch(0.16 0.01 260);
+  --sidebar-primary-foreground: oklch(0.975 0.004 95);
+  --sidebar-accent: oklch(0.92 0.006 95);
+  --sidebar-accent-foreground: oklch(0.16 0.01 260);
+  --sidebar-border: oklch(0.16 0.01 260 / 16%);
+  --sidebar-ring: oklch(0.45 0.13 250);
+}
+
+.dark {
+  --background: oklch(0.13 0.004 260);
+  --foreground: oklch(0.95 0.006 95);
+  --card: oklch(0.17 0.005 260);
+  --card-foreground: oklch(0.95 0.006 95);
+  --popover: oklch(0.17 0.005 260);
+  --popover-foreground: oklch(0.95 0.006 95);
+  --primary: oklch(0.95 0.006 95);
+  --primary-foreground: oklch(0.13 0.004 260);
+  --secondary: oklch(0.22 0.006 260);
+  --secondary-foreground: oklch(0.95 0.006 95);
+  --muted: oklch(0.22 0.006 260);
+  --muted-foreground: oklch(0.72 0.01 260);
+  --accent: oklch(0.24 0.007 260);
+  --accent-foreground: oklch(0.95 0.006 95);
+  --destructive: oklch(0.72 0.17 25);
+  --border: oklch(1 0 0 / 13%);
+  --input: oklch(1 0 0 / 18%);
+  --ring: oklch(0.82 0.09 235);
+  --signal: oklch(0.82 0.09 235);
+  --sev-info: oklch(0.8 0.07 235);
+  --sev-low: oklch(0.82 0.02 95);
+  --sev-medium: oklch(0.83 0.13 75);
+  --sev-high: oklch(0.73 0.17 25);
+  --sidebar: oklch(0.15 0.004 260);
+  --sidebar-foreground: oklch(0.95 0.006 95);
+  --sidebar-primary: oklch(0.95 0.006 95);
+  --sidebar-primary-foreground: oklch(0.13 0.004 260);
+  --sidebar-accent: oklch(0.22 0.006 260);
+  --sidebar-accent-foreground: oklch(0.95 0.006 95);
+  --sidebar-border: oklch(1 0 0 / 13%);
+  --sidebar-ring: oklch(0.82 0.09 235);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-padding-top: 5rem;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    background: var(--foreground);
+    color: var(--background);
+  }
+}
+
+/* ------------------------------------------------------------------ typography */
+
+@layer components {
+  /* Small uppercase label in mono: the recurring "data plate" voice of the site. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+  .display {
+    font-size: clamp(2.6rem, 7.2vw, 6.25rem);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+  .headline {
+    font-size: clamp(1.9rem, 4vw, 3.25rem);
+    font-weight: 500;
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+  .lead {
+    font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+    line-height: 1.55;
+    color: var(--muted-foreground);
+    text-wrap: pretty;
+  }
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------------------------------------------------------------- patterns
+   * Three flat patterns shared by the logo, cards and panels. They draw with `currentColor` at low alpha, so they
+   * follow the theme. Apply to an element that has `position: relative`; content must sit above (`isolate`).
+   */
+  .pat-hatch {
+    background-image: repeating-linear-gradient(
+      135deg,
+      color-mix(in oklch, currentColor 22%, transparent) 0 1px,
+      transparent 1px 7px
+    );
+  }
+  .pat-dots {
+    background-image: radial-gradient(color-mix(in oklch, currentColor 30%, transparent) 1px, transparent 1.5px);
+    background-size: 10px 10px;
+  }
+  .pat-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in oklch, currentColor 10%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklch, currentColor 10%, transparent) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* Card whose corners "register" and whose face fills with a pattern on hover or keyboard focus. */
+  .plate {
+    position: relative;
+    isolation: isolate;
+    border: 1px solid var(--border);
+    background: var(--card);
+    transition: border-color 0.25s ease;
+  }
+  .plate::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    background-image: repeating-linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--foreground) 9%, transparent) 0 1px,
+      transparent 1px 8px
+    );
+    mask-image: linear-gradient(to bottom right, black, transparent 70%);
+  }
+  .plate::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    --c: var(--foreground);
+    background:
+      linear-gradient(var(--c), var(--c)) top left / 12px 1px no-repeat,
+      linear-gradient(var(--c), var(--c)) top left / 1px 12px no-repeat,
+      linear-gradient(var(--c), var(--c)) top right / 12px 1px no-repeat,
+      linear-gradient(var(--c), var(--c)) top right / 1px 12px no-repeat,
+      linear-gradient(var(--c), var(--c)) bottom left / 12px 1px no-repeat,
+      linear-gradient(var(--c), var(--c)) bottom left / 1px 12px no-repeat,
+      linear-gradient(var(--c), var(--c)) bottom right / 12px 1px no-repeat,
+      linear-gradient(var(--c), var(--c)) bottom right / 1px 12px no-repeat;
+  }
+  .plate:is(:hover, :focus-within) {
+    border-color: color-mix(in oklch, var(--foreground) 45%, transparent);
+  }
+  .plate:is(:hover, :focus-within)::before,
+  .plate:is(:hover, :focus-within)::after {
+    opacity: 1;
+  }
+
+  /* Animated hairline link underline. */
+  .link-sweep {
+    background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat;
+    transition: background-size 0.3s ease;
+    padding-bottom: 2px;
+  }
+  .link-sweep:is(:hover, :focus-visible),
+  .link-sweep[aria-current="page"] {
+    background-size: 100% 1px;
+  }
+
+  /* ---------------------------------------------------------------- logo */
+  .logo__pattern {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .logo-host:is(:hover, :focus-visible) .logo__pattern,
+  .logo[data-active="true"] .logo__pattern {
+    opacity: 1;
+  }
+  .logo__drift {
+    animation: logo-drift 2.4s linear infinite;
+    animation-play-state: paused;
+  }
+  .logo-host:is(:hover, :focus-visible) .logo__drift,
+  .logo[data-active="true"] .logo__drift {
+    animation-play-state: running;
+  }
+  @keyframes logo-drift {
+    to {
+      transform: translate(-4px, 4px);
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ motion
+ * Content is visible by default. It is only hidden when scripting is available AND the visitor has not asked for
+ * reduced motion; `Reveal` then flips `data-inview`. Nothing here can leave content stuck invisible without JS.
+ */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-reveal]:not([data-inview]) {
+    opacity: 0;
+  }
+  [data-reveal="up"]:not([data-inview]) {
+    transform: translateY(18px);
+  }
+  [data-reveal="line"]:not([data-inview]) {
+    transform: scaleX(0);
+  }
+  [data-reveal="clip"]:not([data-inview]) {
+    opacity: 1;
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(0.4em);
+  }
+  [data-reveal] {
+    transition:
+      opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
+      transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
+      clip-path 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms);
+  }
+  [data-reveal="line"] {
+    transform-origin: left center;
+  }
+
+  /* Scroll-linked effects, where the engine supports them. Purely decorative. */
+  @supports (animation-timeline: view()) {
+    .scroll-drift {
+      animation: scroll-drift linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+    .scroll-grow {
+      transform-origin: left center;
+      animation: scroll-grow linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+
+@keyframes scroll-drift {
+  from {
+    transform: translateY(-4%);
+  }
+  to {
+    transform: translateY(8%);
+  }
+}
+
+@keyframes scroll-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo__drift {
+    animation: none;
+  }
+  .plate::before,
+  .plate::after,
+  .link-sweep {
+    transition: none;
+  }
+}

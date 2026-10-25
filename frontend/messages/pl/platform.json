@@ -1,0 +1,140 @@
+{
+  "platform": {
+    "metadata": {
+      "title": "Platforma",
+      "description": "Jak usługa przenosi dane z ksiąg do rozbieżności: pobranie, normalizacja, uzgodnienie, projekcja i dowody, ze statusem każdej części."
+    },
+    "status": {
+      "building": "W budowie",
+      "planned": "Planowane",
+      "later": "Później",
+      "buildingHint": "Istnieje i działa. Wyłącznie dane syntetyczne.",
+      "plannedHint": "Zaprojektowane i opisane. Jeszcze niezbudowane.",
+      "laterHint": "Celowo po pierwszych wersjach."
+    },
+    "hero": {
+      "eyebrow": "Platforma",
+      "title": "Jak działa usługa",
+      "lead": "Księgi wchodzą. Deterministyczny silnik porównuje je z kopią posiadaną przez organ. Każda niezgodność wychodzi jako rozbieżność z przytoczoną regułą i dowodami. Każda część poniżej ma swój status."
+    },
+    "flow": {
+      "eyebrow": "Przepływ danych",
+      "title": "Od pliku do rozbieżności w pięciu krokach",
+      "lead": "Każdy krok wykonuje jedno zadanie i przekazuje wynik dalej. Nic z tego nie działało na rzeczywistych danych klientów.",
+      "steps": {
+        "ingest": {
+          "name": "Pobranie",
+          "body": "Klient rejestruje w API przesłany plik, podając jego SHA-256, typ źródła i okres. Rejestracja i zdarzenie rejestru są zapisywane w jednej transakcji. Obecnie przyjmowane są tylko te metadane; żaden adapter nie czyta jeszcze zawartości plików."
+        },
+        "normalise": {
+          "name": "Normalizacja",
+          "body": "Worker analizuje każde źródło do jednego kanonicznego kształtu rekordu, aby można było porównywać rekordy z różnych systemów. Faktury są mapowane na wspólny model oparty na standardzie e-faktury EN 16931, z adapterem dla każdego kraju."
+        },
+        "reconcile": {
+          "name": "Uzgodnienie",
+          "body": "Silnik odczytuje znormalizowane rekordy, stosuje jedną przypiętą wersję pakietu reguł i zapisuje przebieg oraz jego rozbieżności. Wynik zależy wyłącznie od rekordów wejściowych i tej wersji. Obecnie jest to kontrola C1, na danych syntetycznych."
+        },
+        "project": {
+          "name": "Projekcja",
+          "body": "Projektor zamienia zreplikowane rozbieżności i wpisy rejestru w widoki, które szybko się czyta, a później w indeks publicznych tekstów prawnych. Zapisuje wyłącznie do kopii do odczytu."
+        },
+        "evidence": {
+          "name": "Dowody",
+          "body": "Każda zmiana zostawia zdarzenie w rejestrze z łańcuchem haszy. Początek łańcucha ma być co jakiś czas opatrywany znacznikiem czasu, a pakiety dowodowe mają być generowane na żądanie. Rejestr i weryfikator łańcucha istnieją; znakowanie czasem i pakiety są planowane."
+        }
+      }
+    },
+    "stores": {
+      "eyebrow": "Przechowywanie",
+      "title": "Dwie bazy danych, jedna prawda",
+      "lead": "Dane klientów znajdują się w dwóch klastrach PostgreSQL o odrębnych zadaniach. Kod jest otypowany tak, że zapytanie nie może dotrzeć do strony zapisu, a polecenie nie może czytać z niewłaściwej bazy.",
+      "w": {
+        "name": "W: magazyn autorytatywny",
+        "body": "Zapisują tu wyłącznie polecenia: rejestracja partii, uruchomienie przebiegu, zgłoszenie rozbieżności. Każde polecenie dopisuje zdarzenie rejestru w tej samej transakcji co jego zmiana. W to jedyne miejsce, gdzie rozstrzyga się fakt."
+      },
+      "r": {
+        "name": "R: kopia do odczytu",
+        "body": "Replikacja logiczna zasila R z W. API zawsze odpytuje wyłącznie R. R przechowuje też dane pochodne, takie jak projekcje, których W nigdy nie widzi. Jeśli R jest niedostępne, zapytanie kończy się błędem; nigdy nie jest po cichu obsługiwane z W."
+      },
+      "ryw": {
+        "title": "Zobaczyć to, co właśnie zapisano",
+        "body": "Replikacja zajmuje chwilę, więc odczyt zaraz po zapisie może go nie uwzględnić. Klient, który właśnie zapisał dane, może poprosić API o odczekanie, aż kopia do odczytu nadrobi zaległości. Każdy zapis zwraca numer kolejny rejestru, który wygenerował, a przesłanie tego numeru przy następnym odczycie to cały mechanizm. Jeśli kopia do odczytu nie nadrobi zaległości w limicie czasu, klient otrzymuje wyraźną odpowiedź 503, nigdy cichy powrót do strony zapisu.",
+        "detail": "Sprawdzono wyłącznie na lokalnej parze baz danych. Nie przeprowadzono testu przełączenia awaryjnego ani testu obciążeniowego."
+      },
+      "diagram": {
+        "label": "Diagram strony zapisu W i kopii do odczytu R",
+        "caption": "Diagram poglądowy. Państwa systemy wywołują API. API wysyła polecenia do W i odpytuje R. W replikuje do R. Silnik czyta z R i zapisuje do W.",
+        "nodes": {
+          "clients": { "name": "Klienci", "note": "Państwa systemy" },
+          "api": { "name": "API", "note": "Punkt wejścia" },
+          "w": { "name": "W", "note": "Autorytatywny" },
+          "r": { "name": "R", "note": "Kopia do odczytu" },
+          "engine": { "name": "Silnik", "note": "Reguły" }
+        },
+        "flows": {
+          "writes": "zapisy",
+          "reads": "odczyty",
+          "replication": "replikacja"
+        }
+      }
+    },
+    "api": {
+      "eyebrow": "API",
+      "title": "Powierzchnia API",
+      "lead": "Obecnie istnieje pięć punktów końcowych. Reszta naszkicowanej powierzchni jest planowana i może ulec zmianie.",
+      "side": {
+        "write": "Zapisuje do W",
+        "read": "Czyta z R",
+        "push": "Wysyła do Państwa"
+      },
+      "webhooksName": "Webhooki",
+      "items": {
+        "batchesCreate": "Rejestruje przesłany plik według jego SHA-256, typu źródła i okresu. Idempotentne. Zwraca numer kolejny rejestru dla zapisu.",
+        "batchesGet": "Status przetwarzania zarejestrowanej partii.",
+        "runsCreate": "Uruchamia przebieg uzgadniania przypięty do jednej wersji pakietu reguł. Asynchronicznie.",
+        "runsGet": "Status przebiegu uzgadniania.",
+        "findingsList": "Wyświetla rozbieżności zgłoszone przez przebiegi.",
+        "evidence": "Pakiet dowodowy dla jednej rozbieżności, dostarczany jako podpisany odnośnik.",
+        "rulesSearch": "Przeszukuje korpus przepisów prawnych z przytoczeniami według słów kluczowych i znaczenia.",
+        "erasure": "Żądanie usunięcia danych osobowych. Zasady przechowywania mogą odroczyć żądanie; decyzja jest rejestrowana.",
+        "export": "Eksport danych osobowych w formacie czytelnym maszynowo.",
+        "webhooks": "Podpisane wywołania zwrotne po zakończeniu przebiegu lub zgłoszeniu rozbieżności."
+      },
+      "headers": "Każdy zapis wymaga nagłówka <code>Idempotency-Key</code>, aby ponowione żądanie nie mogło utworzyć drugiej partii ani przebiegu. Każdy zapis odpowiada nagłówkiem <code>X-Commit-Seq</code> z numerem kolejnym rejestru, który wygenerował. Każdy odczyt odpowiada nagłówkiem <code>X-Data-Watermark</code> i respektuje <code>X-Min-Seq</code>, czyli opisane wyżej oczekiwanie."
+    },
+    "evidence": {
+      "eyebrow": "Dowody",
+      "title": "Dowody, które można sprawdzić offline",
+      "lead": "Celem jest, aby rozbieżności towarzyszył dowód, który można sprawdzić bez zaufania do usługi. Część z tego istnieje. Reszta jest planowana, a każda pozycja jest oznaczona.",
+      "items": {
+        "ledger": {
+          "title": "Rejestr append-only z łańcuchem haszy",
+          "body": "Każde polecenie dopisuje zdarzenie do rejestru swojego klienta. Hasz zdarzenia obejmuje hasz poprzedniego zdarzenia i kanoniczną postać jego ładunku, więc zmiana historii psuje każdy kolejny hasz. Aktualizacje, usunięcia i obcięcie są blokowane przez uprawnienia i wyzwalacze.",
+          "detail": "Na lokalnej parze testowej uprzywilejowana edycja jednego wiersza została wykryta przez weryfikację łańcucha."
+        },
+        "verifier": {
+          "title": "Weryfikator łańcucha offline",
+          "body": "Narzędzie wiersza poleceń odczytuje wyeksportowany łańcuch i raportuje, czy jest wewnętrznie spójny. Nie współdzieli kodu z bazą danych. Łańcuch haszy nie pokaże, że jego najnowsze zdarzenia zostały odcięte, więc narzędziu można też podać oczekiwany hasz początku łańcucha."
+        },
+        "token": {
+          "title": "Weryfikacja tokenu znacznika czasu",
+          "body": "Istnieje kod, który sprawdza token znacznika czasu RFC 3161 względem hasza początku rejestru i zestawu zaufanych certyfikatów."
+        },
+        "anchoring": {
+          "title": "Zakotwiczanie znacznika czasu",
+          "body": "Zaplanowany worker ma pozyskiwać token znacznika czasu dla początku rejestru każdego klienta. Nie wybrano jeszcze kwalifikowanego dostawcy znaczników czasu."
+        },
+        "pack": {
+          "title": "Pakiet dowodowy",
+          "body": "Na żądanie pakiet dla jednej rozbieżności: manifest z przytoczeniami i haszami danych wejściowych, wyciągi z rekordów źródłowych, fragment łańcucha, tokeny znacznika czasu i skrypt weryfikacyjny."
+        }
+      },
+      "chain": {
+        "label": "Ilustracja łańcucha haszy",
+        "caption": "Ilustracja, nie rzeczywiste dane. Każde zdarzenie przechowuje hasz poprzedniego.",
+        "event": "Zdarzenie {n}",
+        "prev": "poprzedni hasz"
+      }
+    }
+  }
+}

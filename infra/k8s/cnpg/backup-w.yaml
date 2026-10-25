@@ -1,0 +1,59 @@
+# Backup of cluster W through the Barman Cloud plugin (CNPG-I). The native `spec.backup.barmanObjectStore` is deprecated
+# since CloudNativePG 1.26 (https://cloudnative-pg.io/docs/current/backup/, read 2026-10-23), so the plugin is used.
+# Plugin v0.15.1 requires CloudNativePG >= 1.26 and cert-manager (plugin docs "Installation", read 2026-10-23).
+#
+# DEPLOYMENT INPUTS NOT DECIDED HERE (Progress.md D-2): the S3 endpoint. `object-store.recon-backup.svc` is the in-cluster
+# S3-compatible store used for the operator spike (e.g. the RustFS image of infra/compose). A production endpoint must
+# be an EU object store with Object Lock (compliance mode) + versioning ENABLED ON THE BUCKET; no manifest here can enforce
+# that (see infra/policies/README.md), and an external host has to be added to infra/policies/data/allowed_endpoints.json.
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: recon-w-backup
+  namespace: recon-db
+  labels:
+    app.kubernetes.io/part-of: recon
+    recon.core829.eu/region: eu
+  annotations:
+    recon.core829.eu/encrypted: "true"
+spec:
+  # "30d" is a STARTING VALUE (recovery window); no document fixes it. Object Lock retention on the bucket must be
+  # >= this window or barman-cloud-backup-delete will fail on locked objects.
+  retentionPolicy: "30d"
+  configuration:
+    destinationPath: s3://recon-w-backup/
+    endpointURL: https://object-store.recon-backup.svc:9000
+    endpointCA:
+      name: object-store-ca
+      key: ca.crt
+    s3Credentials:
+      accessKeyId:
+        name: object-store
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: object-store
+        key: ACCESS_SECRET_KEY
+    data:
+      compression: gzip
+      encryption: AES256
+    wal:
+      compression: gzip
+      encryption: AES256
+---
+# Daily base backup (DatabaseInfo.md §9). Six-field cron WITH seconds: 02:00:00 every day.
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: recon-w-daily
+  namespace: recon-db
+  labels:
+    app.kubernetes.io/part-of: recon
+    recon.core829.eu/region: eu
+spec:
+  schedule: "0 0 2 * * *"
+  backupOwnerReference: self
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+  cluster:
+    name: recon-w

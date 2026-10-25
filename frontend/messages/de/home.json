@@ -1,0 +1,155 @@
+{
+  "home": {
+    "metaTitle": "Bücher gegen die Kopie der Behörde",
+    "metaDescription": "Recon vergleicht Unternehmensbücher mit den Daten, die Steuer- und Zollbehörden führen, und listet jede Unstimmigkeit mit der Regel auf, nach der geprüft wurde. Frühe Entwicklung, ausschließlich synthetische Daten.",
+    "status": {
+      "building": "Im Aufbau · synthetische Daten",
+      "planned": "Geplant"
+    },
+    "hero": {
+      "eyebrow": "Hauptbuchabgleich mit Behördendaten",
+      "title": "Wo Ihre Bücher und die Kopie der Behörde voneinander abweichen.",
+      "lead": "Recon vergleicht Unternehmensbücher mit den Daten, die jede Steuer- und Zollbehörde führt, und listet jede Unstimmigkeit mit der Regel auf, nach der geprüft wurde.",
+      "secondary": "So funktioniert es",
+      "note": "Frühe Entwicklung. Alles hier Gezeigte läuft ausschließlich mit synthetischen Daten."
+    },
+    "field": {
+      "books": "Bücher",
+      "authority": "Behördenkopie",
+      "mismatch": "Differenz",
+      "rule": "Regel",
+      "status": {
+        "cleared": "Freigegeben",
+        "rejected": "Abgelehnt"
+      },
+      "caption": "Nur zur Veranschaulichung. Synthetische Datensätze, keine echten Daten.",
+      "description": "Illustration: zwei Hauptbücher nebeneinander, Bücher und Behördenkopie. Die meisten Zeilen stimmen überein und sind durch eine Linie verbunden. Eine Zeile weicht ab und ist als Differenz nach einer zitierten Regel markiert."
+    },
+    "gap": {
+      "eyebrow": "Die Lücke",
+      "title": "Die Bücher sagen das eine. Die Kopie der Behörde sagt womöglich etwas anderes.",
+      "lead": "Das Hauptbuch eines Unternehmens und die Kopie einer Steuer- oder Zollbehörde werden getrennt geführt. Driften sie auseinander, kann der Unterschied unbemerkt bleiben, bis ein Bescheid, eine Prüfung oder ein Abschlussreview ihn aufbringt, und dann lässt sich der Grund kaum noch nachvollziehen.",
+      "inputsLabel": "Was Recon liest",
+      "items": {
+        "erp": {
+          "title": "Hauptbuch-Exporte aus dem ERP",
+          "body": "Die Seite des Unternehmens: Rechnungen und Buchungen, exportiert aus dem Buchhaltungs- oder ERP-System."
+        },
+        "clearance": {
+          "title": "Status auf Behördenseite",
+          "body": "Die Seite der Behörde, zum Beispiel der Clearance-Status einer E-Rechnung in einem System wie KSeF, e-Factura oder SdI. Diese Datensatzart wird derzeit nur aus synthetischen Stapeln gelesen; nichts ist mit einem echten Behördensystem verbunden."
+        },
+        "returns": {
+          "title": "Erklärungs- und Zolldaten",
+          "body": "Eingereichte Erklärungen und Zollanmeldungen, verglichen mit den Büchern. Eine Prüfung dafür gibt es noch nicht."
+        }
+      }
+    },
+    "pipeline": {
+      "eyebrow": "Ablauf",
+      "title": "Vom Export zu etwas, das Sie nachprüfen können.",
+      "lead": "Vier Stufen. Jede ist mit dem gekennzeichnet, was heute existiert.",
+      "steps": {
+        "ingest": {
+          "name": "Einlesen",
+          "body": "Liest Exporte und Daten der Behördenseite in unveränderliche Stapel mit Hashwert ein. Heute existiert nur die Stapel-API; die Adapter für ERP- und Behördenquellen sind geplant."
+        },
+        "normalise": {
+          "name": "Normalisieren",
+          "body": "Bildet jede Quelle auf eine kanonische Datensatzform ab, damit dieselbe Regel beide Seiten lesen kann."
+        },
+        "reconcile": {
+          "name": "Abgleichen",
+          "body": "Wendet zitierte Regeln auf beide Seiten an und hält jede Unstimmigkeit fest. Prüfung C1, Rechnung gegen Clearance-Status, läuft mit synthetischen Daten."
+        },
+        "evidence": {
+          "name": "Nachweis",
+          "body": "Abweichungen gehen in ein nur anfügbares Ereignisprotokoll mit Hashkette. Der Ketten-Verifizierer und der Code zur Prüfung von Zeitstempeltoken existieren; Nachweispakete sind geplant."
+        }
+      }
+    },
+    "anatomy": {
+      "eyebrow": "Eine Abweichung",
+      "title": "Aufbau einer Abweichung.",
+      "lead": "Jede Abweichung besteht aus denselben Teilen, damit sie gelesen, hinterfragt und reproduziert werden kann. Die untenstehende ist synthetisch.",
+      "cardLabel": "Beispielhafte Abweichung",
+      "cardNote": "Synthetische Daten. Kein reales Unternehmen, keine reale Behörde.",
+      "calloutsLabel": "Wozu jeder Teil dient",
+      "fields": {
+        "check": "Prüfung",
+        "severity": "Schweregrad",
+        "summary": "Zusammenfassung",
+        "rule": "Zitierte Regel",
+        "inputs": "Eingaben"
+      },
+      "values": {
+        "checkName": "Rechnung gegen Clearance-Status",
+        "severity": "Mittel",
+        "summary": "Die Rechnung {invoice} ist in den Büchern als ausgestellt erfasst. Die Kopie auf Behördenseite enthält für dieselbe Rechnung einen anderen Clearance-Status.",
+        "booksInput": "Buchungssatz",
+        "authorityInput": "Behördendatensatz"
+      },
+      "callouts": {
+        "reproducible": {
+          "title": "Prüfung und Schweregrad",
+          "body": "Nennt die deterministische Prüfung, die gelaufen ist. Dieselben Eingaben ergeben mit derselben Version des Regelpakets dieselbe Abweichung, und kein Modell entscheidet darüber."
+        },
+        "neutral": {
+          "title": "Zusammenfassung",
+          "body": "Hält nur fest, dass zwei Quellen voneinander abweichen. Recon ist kein Steuerberater: Was mit einer Abweichung geschieht, entscheiden das Unternehmen und seine Berater."
+        },
+        "cited": {
+          "title": "Zitierte Regel",
+          "body": "Nennt die Regel, nach der verglichen wurde. Regeln sind versionierte Daten, die ihre Quelle zitieren, und werden von einer verantwortlichen Compliance-Person freigegeben."
+        },
+        "evidence": {
+          "title": "Eingaben",
+          "body": "Verweist per Hash auf die genauen Datensätze, sodass die Abweichung zurückverfolgt und anhand des manipulationssicheren Ereignisprotokolls geprüft werden kann."
+        }
+      }
+    },
+    "principles": {
+      "eyebrow": "Grundsätze",
+      "title": "Was sich nicht ändert.",
+      "lead": "Rahmenbedingungen, um die das Produkt herum gebaut ist. Ist eine davon eine Entwurfsentscheidung und noch nichts, was läuft, steht das dabei.",
+      "kind": {
+        "exists": "Vorhanden · synthetische Daten",
+        "rule": "Entwurfsregel",
+        "decision": "Entwurfsentscheidung"
+      },
+      "items": {
+        "determinism": {
+          "title": "Gleiche Eingaben, gleiche Abweichungen",
+          "body": "Eine Abweichung ist eine reine Funktion der Hashwerte der Eingabedatensätze und der Version des Regelpakets. Ein erneuter Lauf reproduziert sie. Kein Modell entscheidet über eine Abweichung."
+        },
+        "isolation": {
+          "title": "Jeder Mandant isoliert",
+          "body": "Zeilenbasierte Sicherheit in beiden Datenbanken hält die Datensätze eines Mandanten aus den Abfragen anderer Mandanten heraus."
+        },
+        "ledger": {
+          "title": "Nur anfügbares Ereignisprotokoll",
+          "body": "Ereignisse werden je Mandant per Hash verkettet und können weder geändert noch gelöscht werden. Ein Verifizierer berechnet die Kette neu."
+        },
+        "privacy": {
+          "title": "Keine personenbezogenen Daten in Logs",
+          "body": "Logs, Traces und Protokollnutzdaten sollen frei von personenbezogenen Daten bleiben."
+        },
+        "rules": {
+          "title": "Regeln sind zitierte Daten",
+          "body": "Daten, Schwellenwerte und Sätze liegen in versionierten Regelpaketen mit Quellenangabe, nie im Code. Jede Änderung wird von einer verantwortlichen Compliance-Person freigegeben."
+        },
+        "residency": {
+          "title": "Datenhaltung nur in der EU",
+          "body": "Mandantendaten sollen bei Auftragsverarbeitern in der EU bleiben. Das ist eine Entwurfsentscheidung; der Hosting-Anbieter ist noch nicht gewählt."
+        }
+      },
+      "trustLink": "Hinweise zum Vertrauen lesen"
+    },
+    "closing": {
+      "eyebrow": "Weiter",
+      "title": "Sehen, wo die beiden Kopien voneinander abweichen.",
+      "body": "Recon befindet sich in früher Entwicklung und läuft heute mit synthetischen Daten. Melden Sie sich an, um den aktuellen Stand anzusehen, oder lesen Sie, welche Prüfungen es gibt und welche geplant sind.",
+      "checksLink": "Prüfungen ansehen"
+    }
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "platform": {
+    "metadata": {
+      "title": "Platform",
+      "description": "Hoe de dienst gegevens van uw boekhouding naar een bevinding brengt: inlezen, normaliseren, afstemmen, projecteren en bewijzen, met de status van elk onderdeel."
+    },
+    "status": {
+      "building": "In aanbouw",
+      "planned": "Gepland",
+      "later": "Later",
+      "buildingHint": "Bestaat en draait. Alleen synthetische gegevens.",
+      "plannedHint": "Ontworpen en vastgelegd. Nog niet gebouwd.",
+      "laterHint": "Bewust na de eerste versies."
+    },
+    "hero": {
+      "eyebrow": "Platform",
+      "title": "Hoe de dienst werkt",
+      "lead": "De boeken gaan erin. Een deterministische engine vergelijkt ze met de kopie die een autoriteit bijhoudt. Elk verschil komt eruit als een bevinding met de vermelde regel en het bewijs. Elk onderdeel hieronder toont zijn status."
+    },
+    "flow": {
+      "eyebrow": "Gegevensstroom",
+      "title": "Van een bestand naar een bevinding, in vijf stappen",
+      "lead": "Elke stap doet één taak en draagt over aan de volgende. Niets hiervan is ooit uitgevoerd op echte klantgegevens.",
+      "steps": {
+        "ingest": {
+          "name": "Inlezen",
+          "body": "Een client registreert een geüpload bestand bij de API met de SHA-256, het brontype en de periode. De registratie en een gebeurtenis in het register worden in één transactie weggeschreven. Vandaag worden alleen deze metagegevens geaccepteerd; geen adapter leest nog de inhoud van bestanden."
+        },
+        "normalise": {
+          "name": "Normaliseren",
+          "body": "Een worker leest elke bron in naar één canoniek recordformaat, zodat records uit verschillende systemen vergeleken kunnen worden. Facturen worden afgebeeld op een gemeenschappelijk model naar de e-factuurnorm EN 16931, met een adapter per land."
+        },
+        "reconcile": {
+          "name": "Afstemmen",
+          "body": "De engine leest de genormaliseerde records, past één vastgezette versie van het regelpakket toe en schrijft de run en de bijbehorende bevindingen weg. Het resultaat hangt alleen af van de invoerrecords en die versie. Vandaag is dat controle C1, op synthetische gegevens."
+        },
+        "project": {
+          "name": "Projecteren",
+          "body": "Een projector zet gerepliceerde bevindingen en registerinvoer om in weergaven die snel te lezen zijn en, later, in een index over openbare wetteksten. Hij schrijft alleen naar de leeskopie."
+        },
+        "evidence": {
+          "name": "Bewijs",
+          "body": "Elke wijziging laat een gebeurtenis na in een register met hashketen. De kop van de keten wordt bedoeld om af en toe van een tijdstempel te worden voorzien, en bewijspakketten worden bedoeld om op verzoek te worden samengesteld. Het register en een ketenverificatietool bestaan; tijdstempels en pakketten zijn gepland."
+        }
+      }
+    },
+    "stores": {
+      "eyebrow": "Opslag",
+      "title": "Twee databases, één waarheid",
+      "lead": "Klantgegevens staan in twee PostgreSQL-clusters met aparte taken. De code is zo getypeerd dat een query de schrijfkant niet kan bereiken en een opdracht niet uit de verkeerde kant kan lezen.",
+      "w": {
+        "name": "W: het gezaghebbende archief",
+        "body": "Hier schrijven alleen opdrachten: een batch registreren, een run starten, een bevinding vastleggen. Elke opdracht voegt in dezelfde transactie als haar wijziging een gebeurtenis aan het register toe. W is de enige plek waar een feit wordt vastgesteld."
+      },
+      "r": {
+        "name": "R: de leeskopie",
+        "body": "Logische replicatie voedt R vanuit W. De API bevraagt uitsluitend R. R bevat ook afgeleide gegevens, zoals projecties, die W nooit ziet. Als R niet beschikbaar is, krijgt een query een foutmelding; ze wordt nooit stilzwijgend vanuit W beantwoord."
+      },
+      "ryw": {
+        "title": "Zien wat u net hebt geschreven",
+        "body": "Replicatie kost even tijd, dus een leesopdracht direct na een schrijfopdracht kan het gemist hebben. Een client die net heeft geschreven, kan de API vragen te wachten tot de leeskopie is bijgewerkt. Elke schrijfopdracht geeft het volgnummer van het register terug dat ze heeft opgeleverd, en dat nummer meesturen met de volgende leesopdracht is het hele mechanisme. Is de leeskopie niet bijgewerkt binnen de tijdslimiet, dan krijgt de client een duidelijk 503-antwoord, nooit een stille terugval op de schrijfkant.",
+        "detail": "Alleen beproefd op een lokaal databasepaar. Er is geen failover- of belastingtest uitgevoerd."
+      },
+      "diagram": {
+        "label": "Diagram van de schrijfkant W en de leeskopie R",
+        "caption": "Illustratief diagram. Uw systemen roepen de API aan. De API stuurt opdrachten naar W en bevraagt R. W repliceert naar R. De engine leest R en schrijft W.",
+        "nodes": {
+          "clients": { "name": "Clients", "note": "Uw systemen" },
+          "api": { "name": "API", "note": "Toegangspunt" },
+          "w": { "name": "W", "note": "Gezaghebbend" },
+          "r": { "name": "R", "note": "Leeskopie" },
+          "engine": { "name": "Engine", "note": "Regels" }
+        },
+        "flows": {
+          "writes": "schrijft",
+          "reads": "leest",
+          "replication": "replicatie"
+        }
+      }
+    },
+    "api": {
+      "eyebrow": "API",
+      "title": "API-oppervlak",
+      "lead": "Vandaag bestaan vijf endpoints. De rest van het geschetste oppervlak is gepland en kan veranderen.",
+      "side": {
+        "write": "Schrijft naar W",
+        "read": "Leest uit R",
+        "push": "Pusht naar u"
+      },
+      "webhooksName": "Webhooks",
+      "items": {
+        "batchesCreate": "Registreer een geüpload bestand met de SHA-256, het brontype en de periode. Idempotent. Geeft het volgnummer van het register van de schrijfactie terug.",
+        "batchesGet": "Verwerkingsstatus van een geregistreerde batch.",
+        "runsCreate": "Start een afstemmingsrun, vastgezet op één versie van het regelpakket. Asynchroon.",
+        "runsGet": "Status van een afstemmingsrun.",
+        "findingsList": "Toon de bevindingen die runs hebben opgeleverd.",
+        "evidence": "Het bewijspakket voor één bevinding, geleverd als ondertekende link.",
+        "rulesSearch": "Doorzoek het juridische corpus met bronvermelding op trefwoord en op betekenis.",
+        "erasure": "Vraag om verwijdering van persoonsgegevens. Bewaarregels kunnen een verzoek uitstellen; die beslissing wordt vastgelegd.",
+        "export": "Exporteer persoonsgegevens in een machineleesbaar formaat.",
+        "webhooks": "Ondertekende callbacks wanneer een run is voltooid of een bevinding is vastgelegd."
+      },
+      "headers": "Elke schrijfopdracht vereist een <code>Idempotency-Key</code>-header, zodat een herhaald verzoek geen tweede batch of run kan aanmaken. Elke schrijfopdracht antwoordt met een <code>X-Commit-Seq</code>-header met het volgnummer van het register dat ze heeft opgeleverd. Elke leesopdracht antwoordt met <code>X-Data-Watermark</code> en honoreert <code>X-Min-Seq</code>, het hierboven beschreven wachten."
+    },
+    "evidence": {
+      "eyebrow": "Bewijs",
+      "title": "Bewijs dat offline te controleren is",
+      "lead": "Het doel is dat een bevinding vergezeld gaat van bewijs dat u kunt controleren zonder de dienst te vertrouwen. Een deel daarvan bestaat. Andere delen zijn gepland, en elk is gemarkeerd.",
+      "items": {
+        "ledger": {
+          "title": "Append-only register met hashketen",
+          "body": "Elke opdracht voegt een gebeurtenis toe aan het register van haar klant. De hash van een gebeurtenis omvat de hash van de vorige gebeurtenis en een canonieke vorm van haar payload, dus het wijzigen van de historie breekt elke hash daarna. Updates, verwijderingen en afkappen worden geblokkeerd door rechten en door triggers.",
+          "detail": "Op een lokaal testpaar werd een bewerking met bevoegdheden van één rij ontdekt door ketenverificatie."
+        },
+        "verifier": {
+          "title": "Offline ketenverificatie",
+          "body": "Een opdrachtregeltool leest een geëxporteerde keten en meldt of die intern consistent is. Hij deelt geen code met de database. Een hashketen kan niet aantonen dat de nieuwste gebeurtenissen zijn weggeknipt, dus de tool kan ook de verwachte kophash meekrijgen."
+        },
+        "token": {
+          "title": "Verificatie van tijdstempeltoken",
+          "body": "Er bestaat code die een RFC 3161-tijdstempeltoken controleert aan de hand van een kophash van het register en een set vertrouwde certificaten."
+        },
+        "anchoring": {
+          "title": "Verankering met tijdstempel",
+          "body": "Een geplande worker is bedoeld om voor de kop van het register van elke klant een tijdstempeltoken te verkrijgen. Er is nog geen gekwalificeerde tijdstempelaanbieder gekozen."
+        },
+        "pack": {
+          "title": "Bewijspakket",
+          "body": "Op verzoek een pakket voor één bevinding: een manifest met de bronvermeldingen en invoerhashes, uittreksels van de bronrecords, het ketensegment, de tijdstempeltokens en een verificatiescript."
+        }
+      },
+      "chain": {
+        "label": "Illustratie van een hashketen",
+        "caption": "Illustratie, geen echte gegevens. Elke gebeurtenis bewaart de hash van de vorige.",
+        "event": "Gebeurtenis {n}",
+        "prev": "vorige hash"
+      }
+    }
+  }
+}

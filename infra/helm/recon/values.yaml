@@ -1,0 +1,167 @@
+# Default values for the recon chart. Everything here is a production-shaped default; nothing is a secret.
+# Secrets are ALWAYS referenced by name (Kubernetes Secret), never given as values.
+#
+# Status: rendered and policy-checked offline (helm template + conftest). NOT yet installed on a cluster.
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Data residency (R-PRIV-4). The only accepted value is "eu"; the chart refuses anything else.
+# Every resource gets the label recon.core829.eu/region: <region>; infra/policies (gate L10) denies workloads without it.
+region: eu
+
+image:
+  # ASSUMPTION (Progress.md D-5 organisation slug unanswered): images are published under ghcr.io/core829srl.
+  registry: ghcr.io/core829srl
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+api:
+  image:
+    repository: recon-api
+    # Empty tag = Chart.appVersion. "latest" is rejected by policy L10-06 and by this chart.
+    tag: ""
+    # Optional sha256:… digest; when set the image reference is repository:tag@digest.
+    digest: ""
+  # Architecture §8: >= 3 replicas across AZs. With HPA enabled this is the Deployment's initial value only
+  # (the field is omitted from the manifest so Helm upgrades do not fight the autoscaler).
+  replicas: 3
+  bridgeWaitMs: 1500        # RECON_BRIDGE_WAIT_MS: max wait for X-Min-Seq reads before 503 replica_lag
+  port: 8080
+  terminationGracePeriodSeconds: 45
+  # Seconds the pod keeps serving after it is removed from endpoints (native `sleep` preStop, needs no shell).
+  preStopSleepSeconds: 10
+  resources:
+    requests: {cpu: 250m, memory: 128Mi}
+    limits: {memory: 512Mi}
+  hpa:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 12
+    targetCPUUtilizationPercentage: 70
+  pdb:
+    minAvailable: 2
+  topologySpread:
+    zoneMaxSkew: 1
+    nodeMaxSkew: 1
+
+frontend:
+  image:
+    repository: recon-frontend
+    tag: ""
+    digest: ""
+  replicas: 3
+  port: 3000
+  terminationGracePeriodSeconds: 30
+  preStopSleepSeconds: 10
+  resources:
+    requests: {cpu: 100m, memory: 128Mi}
+    limits: {memory: 512Mi}
+  hpa:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+  pdb:
+    minAvailable: 2
+  topologySpread:
+    zoneMaxSkew: 1
+    nodeMaxSkew: 1
+  # Name of an existing Secret with key SESSION_SECRET (base64url of 32 random bytes) and, optionally,
+  # OIDC_CLIENT_SECRET (empty/absent = public client; PKCE is always used).
+  secretName: recon-frontend
+  # Egress from the frontend pods to the identity provider. Raw NetworkPolicy `to:` peers, REQUIRED (non-empty):
+  # the BFF fetches OIDC discovery/JWKS/token endpoints server-side. An ipBlock peer must be in
+  # infra/policies/data/allowed_endpoints.json (gate L10-08). Port is below.
+  idpEgress: []
+  idpPort: 443
+
+oidc:
+  # OIDC_ISSUER: https only (the BFF refuses plain http discovery). Example in values-ci.yaml.
+  issuer: ""
+  clientId: recon-web
+  scope: openid
+  # Third-party processor that receives user identities (D-3: undecided). Empty = IdP is operated by us, no annotation.
+  # When set, BOTH values are rendered as annotations on the frontend Deployment and checked by policy L10-11:
+  #   recon.core829.eu/subprocessor: <name>        recon.core829.eu/processor-region: <EU/EEA region token>
+  subprocessor: ""
+  subprocessorRegion: ""
+
+# Public origin of the frontend (APP_BASE_URL); the IdP redirect URI is ${origin}/api/auth/callback.
+appBaseUrl: ""
+
+ingress:
+  enabled: true
+  className: ""
+  # Namespace labels of the ingress controller, for NetworkPolicy ingress rules.
+  controllerNamespaceLabels:
+    kubernetes.io/metadata.name: ingress-nginx
+  annotations: {}
+  # TLS is mandatory (no http-only Ingress can be rendered): every host below needs a TLS secret.
+  frontend:
+    host: ""
+    tlsSecretName: ""
+  # Exposing the API publicly is optional; the frontend BFF reaches it in-cluster.
+  api:
+    enabled: false
+    host: ""
+    tlsSecretName: ""
+
+database:
+  # Namespace of the CloudNativePG clusters and poolers (infra/k8s/cnpg).
+  namespace: recon-db
+  w:
+    cluster: recon-w
+    # Pooler Service (CNPG Pooler `recon-w-pooler-rw`; the Service carries the Pooler's name) used by the API.
+    poolerService: recon-w-pooler-rw
+    poolerName: recon-w-pooler-rw       # value of pod label cnpg.io/poolerName
+    # Direct read-write Service, used ONLY by the migration Job (session advisory lock + DDL cannot go through
+    # a transaction pooler).
+    directService: recon-w-rw
+    database: recon_w
+    port: 5432
+    # Secrets (kubernetes.io/basic-auth shape: keys `username`, `password`; password MUST be URL-safe).
+    apiCredentialsSecret: recon-w-api         # login role recon_api_w, member of w_cmd
+    ownerCredentialsSecret: recon-w-app       # CNPG-generated <cluster>-app: database owner, runs DDL
+    replicationCredentialsSecret: recon-w-repl  # login role repl_r (REPLICATION), used by R's subscription
+    # Secret holding the cluster CA as key `ca.crt` (CNPG: <cluster>-ca). Only ca.crt is projected into pods.
+    caSecret: recon-w-ca
+  r:
+    cluster: recon-r
+    poolerService: recon-r-pooler-rw
+    poolerName: recon-r-pooler-rw
+    directService: recon-r-rw
+    database: recon_r
+    port: 5432
+    apiCredentialsSecret: recon-r-api         # login role recon_api_r, member of r_api
+    ownerCredentialsSecret: recon-r-app
+    caSecret: recon-r-ca
+  subscription:
+    name: recon_r_sub
+    publication: recon_pub
+    # sslrootcert for the subscription connection R -> W. The path is resolved INSIDE the R PostgreSQL pod
+    # (CREATE SUBSCRIPTION connects from the R server), see infra/k8s/cnpg/r-cluster.yaml projectedVolumeTemplate.
+    wCaPathOnR: /projected/w-ca/ca.crt
+
+migrate:
+  image:
+    repository: recon-migrate
+    tag: ""
+    digest: ""
+  # psql used by the grants step (`repl_r` SELECT on the published tables; DatabaseInfo.md §6).
+  psqlImage: docker.io/library/postgres:18.6-trixie@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6
+  backoffLimit: 1
+  activeDeadlineSeconds: 900
+  resources:
+    requests: {cpu: 100m, memory: 64Mi}
+    limits: {memory: 256Mi}
+
+networkPolicy:
+  enabled: true
+  # Kubernetes DNS pods (egress for every workload on port 53).
+  dnsNamespaceLabels:
+    kubernetes.io/metadata.name: kube-system
+  dnsPodLabels:
+    k8s-app: kube-dns
+
+podAnnotations: {}

@@ -1,0 +1,115 @@
+# DRAFT rule pack. Not approved. Not legal advice. Disabled until a human compliance approver signs off (Rules.md R-RULES-2, Progress.md D-5).
+# Scope: Directive 2006/112/EC Title XII Chapter 6 Section 3, Arts. 369a-369k (special scheme for intra-Community distance sales of goods,
+# for domestic supplies of goods by electronic interfaces under Art. 14a(2), and for services supplied by taxable persons established in the
+# Community but not in the Member State of consumption - "Union OSS").
+# NOT covered: Section 2 non-Union scheme (Arts. 358a-369), Section 4 import scheme IOSS (Arts. 369l-369x) - not analysed.
+# Source text read on 2026-10-23: consolidated text dated 2025-04-14 (EUR-Lex CELEX:02006L0112-20250414) plus the amending acts below.
+# `valid_from` = application date of the amending act that produced the wording read:
+#   Directive 2008/8/EC Art. 5 -> 2015-01-01 (Arts. 369d, 369k(2) as introduced);
+#   Directive (EU) 2017/2455 Art. 2 and Directive (EU) 2019/1995 -> 2021-07-01, as set by Council Decision (EU) 2020/1109 (CELEX:32020D1109) Arts. 1 and 2.
+# Directive (EU) 2025/516 adds a further section for transfers of own goods from 2028-07-01 (see pack vida); it does not change Arts. 369a-369k text read here.
+pack: oss
+jurisdiction: EU
+version: 0.1.0
+valid_from: 2015-01-01
+valid_to:
+last_reviewed: 2026-10-23
+reviewed_by: "UNREVIEWED agent draft (awaiting @compliance, Progress.md D-5)"
+enabled: false
+rules:
+  - code: OSS-001
+    title: "Definitions for the Union scheme: taxable person not established in the Member State of consumption; Member State of identification; Member State of consumption (services, intra-Community distance sales, Art. 14a(2) domestic supplies)"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 369a"
+    accessed_on: 2026-10-23
+    valid_from: 2021-07-01
+    valid_to:
+    pending_change:
+  - code: OSS-002
+    title: "Member States permit use of the scheme by taxable persons making intra-Community distance sales of goods, facilitating Art. 14a(2) domestic supplies, or supplying services to non-taxable persons from another Member State; the scheme applies to all such supplies in the Community by that person"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 369b"
+    accessed_on: 2026-10-23
+    valid_from: 2021-07-01
+    valid_to:
+    pending_change:
+  - code: OSS-003
+    title: "Taxable person informs the Member State of identification electronically when commencing, ceasing or changing activities covered by the scheme"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 369c"
+    accessed_on: 2026-10-23
+    valid_from: 2021-07-01
+    valid_to:
+    pending_change:
+  - code: OSS-004
+    title: "Taxable person using the scheme is identified for VAT in the Member State of identification only, using the individual VAT identification number already allocated"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 369d"
+    accessed_on: 2026-10-23
+    valid_from: 2015-01-01
+    valid_to:
+    pending_change:
+  - code: OSS-005
+    title: "Cases listed in Art. 369e in which the Member State of identification excludes a taxable person from the scheme: notification that covered supplies ceased, activities otherwise assumed ceased, conditions for use no longer met, taxable person persistently fails to comply with the scheme rules"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 369e"
+    accessed_on: 2026-10-23
+    valid_from: 2021-07-01
+    valid_to:
+    pending_change:
+  - code: OSS-006
+    title: "A VAT return is submitted electronically to the Member State of identification for each calendar quarter, whether or not covered supplies were made, by the end of the month following the end of the tax period"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 369f"
+    accessed_on: 2026-10-23
+    valid_from: 2021-07-01
+    valid_to:
+    pending_change:
+  - code: OSS-007
+    title: "Scheme VAT return content: VAT identification number and, for each Member State of consumption in which VAT is due, total value exclusive of VAT, applicable rates, total VAT per rate and total VAT due, by category of supply; breakdowns for Member States of dispatch and for fixed establishments; amendments to earlier periods included in a later return within three years"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 369g"
+    accessed_on: 2026-10-23
+    valid_from: 2021-07-01
+    valid_to:
+    pending_change:
+  - code: OSS-008
+    title: "VAT return made out in euro (national currency may be required where the euro is not adopted); other currencies converted at the exchange rate on the last date of the tax period using ECB-published rates (next publication day if none that day)"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 369h"
+    accessed_on: 2026-10-23
+    valid_from: 2021-07-01
+    valid_to:
+    pending_change:
+  - code: OSS-009
+    title: "VAT paid, referencing the return, at the latest at the expiry of the return deadline, to a euro-denominated bank account designated by the Member State of identification"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 369i"
+    accessed_on: 2026-10-23
+    valid_from: 2021-07-01
+    valid_to:
+    pending_change:
+  - code: OSS-010
+    title: "A taxable person using the scheme may not, for covered activities, deduct VAT incurred in the Member State of consumption under Art. 168; refund is under Directive 2008/9/EC as provided; VAT in a Member State where registered for other activities is deducted in the Art. 250 return"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 369j"
+    accessed_on: 2026-10-23
+    valid_from: 2021-07-01
+    valid_to:
+    pending_change:
+  - code: OSS-011
+    title: "Taxable person keeps records of covered transactions, sufficiently detailed for the tax authorities of the Member State of consumption to verify the VAT return"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 369k(1)"
+    accessed_on: 2026-10-23
+    valid_from: 2021-07-01
+    valid_to:
+    pending_change:
+  - code: OSS-012
+    title: "Records made available electronically on request to the Member State of consumption and the Member State of identification, and kept for a period of 10 years from 31 December of the year in which the transaction was carried out"
+    source_ref: "CELEX:32006L0112"
+    article: "Art. 369k(2)"
+    accessed_on: 2026-10-23
+    valid_from: 2015-01-01
+    valid_to:
+    pending_change:

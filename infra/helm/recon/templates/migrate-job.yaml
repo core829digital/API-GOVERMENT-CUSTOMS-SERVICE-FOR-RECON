@@ -1,0 +1,155 @@
+{{- $fullname := include "recon.fullname" . -}}
+{{- $w := .Values.database.w -}}
+{{- $r := .Values.database.r -}}
+{{- $nsDomain := printf "%s.svc" .Values.database.namespace -}}
+{{- $sub := .Values.database.subscription -}}
+{{- $migrateImage := include "recon.image" (dict "root" . "image" .Values.migrate.image) -}}
+{{- $wUrl := printf "postgres://$(OWNER_USER):$(OWNER_PASSWORD)@%s.%s:%v/%s?%s" $w.directService $nsDomain $w.port $w.database (include "recon.dbParams" (dict "caPath" "/etc/recon/db-ca/w/ca.crt")) -}}
+{{- $rUrl := printf "postgres://$(OWNER_USER):$(OWNER_PASSWORD)@%s.%s:%v/%s?%s" $r.directService $nsDomain $r.port $r.database (include "recon.dbParams" (dict "caPath" "/etc/recon/db-ca/r/ca.crt")) -}}
+# Grants SQL is a hook ConfigMap: the Job (pre-install) runs before regular resources exist.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullname }}-migrate-sql
+  labels:
+    {{- include "recon.labels" (dict "root" . "component" "migrate") | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": before-hook-creation
+data:
+  grants-w.sql: |
+    {{- .Files.Get "files/grants-w.sql" | nindent 4 }}
+---
+# Schema changes are expand/contract with a strict order (Architecture §5.3): additive changes go to R FIRST, then W,
+# then the subscription is created/refreshed. initContainers run in order and each must succeed; a failure aborts the
+# Helm install/upgrade before any workload is rolled. All steps are idempotent.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $fullname }}-migrate
+  labels:
+    {{- include "recon.labels" (dict "root" . "component" "migrate") | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: {{ .Values.migrate.backoffLimit }}
+  activeDeadlineSeconds: {{ .Values.migrate.activeDeadlineSeconds }}
+  template:
+    metadata:
+      labels:
+        {{- include "recon.labels" (dict "root" . "component" "migrate") | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      serviceAccountName: {{ $fullname }}-migrate
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        {{- include "recon.podSecurityContext" . | nindent 8 }}
+      {{- include "recon.pullSecrets" . | nindent 6 }}
+      initContainers:
+        - name: migrate-r
+          image: {{ $migrateImage | quote }}
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          args: ["up", "--target", "r"]
+          securityContext:
+            {{- include "recon.containerSecurityContext" . | nindent 12 }}
+          env:
+            - name: OWNER_USER
+              valueFrom: {secretKeyRef: {name: {{ $r.ownerCredentialsSecret }}, key: username}}
+            - name: OWNER_PASSWORD
+              valueFrom: {secretKeyRef: {name: {{ $r.ownerCredentialsSecret }}, key: password}}
+            - name: RECON_DB_URL
+              value: {{ $rUrl | quote }}
+          resources:
+            {{- toYaml .Values.migrate.resources | nindent 12 }}
+          volumeMounts:
+            - {name: db-ca-r, mountPath: /etc/recon/db-ca/r, readOnly: true}
+        - name: migrate-w
+          image: {{ $migrateImage | quote }}
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          args: ["up", "--target", "w"]
+          securityContext:
+            {{- include "recon.containerSecurityContext" . | nindent 12 }}
+          env:
+            - name: OWNER_USER
+              valueFrom: {secretKeyRef: {name: {{ $w.ownerCredentialsSecret }}, key: username}}
+            - name: OWNER_PASSWORD
+              valueFrom: {secretKeyRef: {name: {{ $w.ownerCredentialsSecret }}, key: password}}
+            - name: RECON_DB_URL
+              value: {{ $wUrl | quote }}
+          resources:
+            {{- toYaml .Values.migrate.resources | nindent 12 }}
+          volumeMounts:
+            - {name: db-ca-w, mountPath: /etc/recon/db-ca/w, readOnly: true}
+        - name: grants-w
+          image: {{ .Values.migrate.psqlImage | quote }}
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          command: ["psql"]
+          args: ["-X", "-v", "ON_ERROR_STOP=1", "-f", "/sql/grants-w.sql"]
+          securityContext:
+            {{- include "recon.containerSecurityContext" . | nindent 12 }}
+          env:
+            - name: PGHOST
+              value: {{ printf "%s.%s" $w.directService $nsDomain | quote }}
+            - name: PGPORT
+              value: {{ $w.port | quote }}
+            - name: PGDATABASE
+              value: {{ $w.database | quote }}
+            - name: PGUSER
+              valueFrom: {secretKeyRef: {name: {{ $w.ownerCredentialsSecret }}, key: username}}
+            - name: PGPASSWORD
+              valueFrom: {secretKeyRef: {name: {{ $w.ownerCredentialsSecret }}, key: password}}
+            - name: PGSSLMODE
+              value: verify-full
+            - name: PGSSLROOTCERT
+              value: /etc/recon/db-ca/w/ca.crt
+            - name: HOME
+              value: /tmp
+          resources:
+            {{- toYaml .Values.migrate.resources | nindent 12 }}
+          volumeMounts:
+            - {name: db-ca-w, mountPath: /etc/recon/db-ca/w, readOnly: true}
+            - {name: sql, mountPath: /sql, readOnly: true}
+            - {name: tmp, mountPath: /tmp}
+      containers:
+        - name: subscribe
+          image: {{ $migrateImage | quote }}
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          args: ["subscribe", "--name", {{ $sub.name | quote }}, "--publication", {{ $sub.publication | quote }}]
+          securityContext:
+            {{- include "recon.containerSecurityContext" . | nindent 12 }}
+          env:
+            - name: OWNER_USER
+              valueFrom: {secretKeyRef: {name: {{ $r.ownerCredentialsSecret }}, key: username}}
+            - name: OWNER_PASSWORD
+              valueFrom: {secretKeyRef: {name: {{ $r.ownerCredentialsSecret }}, key: password}}
+            - name: REPL_USER
+              valueFrom: {secretKeyRef: {name: {{ $w.replicationCredentialsSecret }}, key: username}}
+            - name: REPL_PASSWORD
+              valueFrom: {secretKeyRef: {name: {{ $w.replicationCredentialsSecret }}, key: password}}
+            - name: RECON_R_URL
+              value: {{ $rUrl | quote }}
+            # libpq conninfo evaluated by the R SERVER when it connects to W: sslrootcert is a path inside the R pod.
+            - name: RECON_W_CONNINFO
+              value: {{ printf "host=%s.%s port=%v dbname=%s user=$(REPL_USER) password=$(REPL_PASSWORD) sslmode=verify-full sslrootcert=%s" $w.directService $nsDomain $w.port $w.database $sub.wCaPathOnR | quote }}
+          resources:
+            {{- toYaml .Values.migrate.resources | nindent 12 }}
+          volumeMounts:
+            - {name: db-ca-r, mountPath: /etc/recon/db-ca/r, readOnly: true}
+      volumes:
+        - name: db-ca-w
+          secret:
+            secretName: {{ $w.caSecret }}
+            items: [{key: ca.crt, path: ca.crt}]
+        - name: db-ca-r
+          secret:
+            secretName: {{ $r.caSecret }}
+            items: [{key: ca.crt, path: ca.crt}]
+        - name: sql
+          configMap:
+            name: {{ $fullname }}-migrate-sql
+        - name: tmp
+          emptyDir: {medium: Memory, sizeLimit: 16Mi}

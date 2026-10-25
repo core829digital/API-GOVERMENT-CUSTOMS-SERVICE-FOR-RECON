@@ -1,0 +1,123 @@
+{
+  "trust": {
+    "metadata": {
+      "title": "Fiducia",
+      "description": "Sicurezza, privacy e posizione giuridica del servizio in parole semplici, compreso tutto ciò che è ancora aperto."
+    },
+    "status": {
+      "building": "In sviluppo",
+      "planned": "Pianificato",
+      "later": "Più avanti",
+      "buildingHint": "Esiste e funziona. Solo dati sintetici.",
+      "plannedHint": "Progettato e documentato. Non ancora realizzato.",
+      "laterHint": "Volutamente dopo le prime versioni."
+    },
+    "hero": {
+      "eyebrow": "Fiducia",
+      "title": "Sicurezza, privacy e posizione giuridica",
+      "lead": "Che cosa il servizio è costruito per fare, che cosa non è e che cosa è ancora aperto, in parole semplici. È in sviluppo iniziale e non ha mai funzionato su dati reali di clienti."
+    },
+    "principles": {
+      "eyebrow": "Com'è costruito",
+      "title": "Sette punti fermi del progetto",
+      "lead": "Sono regole di progetto rispetto alle quali è scritto il codice. Ciascuna indica a che punto è effettivamente arrivata.",
+      "items": {
+        "isolation": {
+          "title": "Isolamento dei tenant",
+          "body": "Ogni tabella che contiene dati dei clienti riporta un identificativo del tenant, e la sicurezza a livello di riga in entrambi i database limita ogni sessione alle righe del proprio tenant. Se non è impostato alcun tenant, una query fallisce con un errore invece di restituire righe: si blocca per sicurezza.",
+          "detail": "Verificato su una coppia locale di database con un ruolo ordinario, non superutente. Non ancora verificato su un'infrastruttura simile a quella di produzione."
+        },
+        "ledger": {
+          "title": "Un registro a prova di manomissione",
+          "body": "Ogni cliente ha un registro eventi append-only. Ogni evento memorizza un hash che comprende l'evento precedente, quindi modificare la cronologia spezza la catena. Aggiornamenti ed eliminazioni sono bloccati da privilegi e trigger. Accorgersi che gli eventi più recenti sono stati tagliati richiede un ancoraggio di marcatura temporale, che è pianificato.",
+          "detail": "La modifica privilegiata di una riga su una coppia di test locale è stata individuata dalla verifica della catena."
+        },
+        "privacy": {
+          "title": "Nessun dato personale nei log, nel registro eventi o negli embedding",
+          "body": "I contenuti del registro eventi riportano riferimenti opachi, non nomi né identificativi fiscali. I campi identificativi sono memorizzati cifrati, e la cancellazione deve avvenire distruggendo la chiave, così che la catena resti verificabile dopo la scomparsa dei dati. Log, tracce e indice di ricerca sul testo giuridico non devono contenere record dei clienti né dati personali.",
+          "detail": "Colonne identificative cifrate e distruzione delle chiavi sono state provate su una coppia di test locale. È una regola di progetto, non una certificazione."
+        },
+        "residency": {
+          "title": "Residenza solo nell'UE, come decisione di progetto",
+          "body": "Il progetto mantiene i dati dei clienti in regioni UE e non ne invia a responsabili del trattamento extra-UE né ad API di modelli linguistici ospitate. È una decisione di progetto, non un'affermazione su un servizio in funzione: il fornitore di hosting non è stato scelto e non esiste alcuna distribuzione in produzione.",
+          "detail": "Una valutazione d'impatto sulla protezione dei dati e un registro dei trattamenti esistono come bozze per il responsabile della protezione dei dati e per i legali. Nessuna persona li ha rivisti e non costituiscono consulenza legale. L'elenco dei sub-responsabili non è ancora stato redatto."
+        },
+        "deterministic": {
+          "title": "Rilevazioni deterministiche; nessun modello decide",
+          "body": "Una rilevazione è una funzione pura degli hash dei record di input e della versione del pacchetto di regole. Nella valutazione delle regole non ci sono orologio, casualità, chiamate di rete né modelli linguistici, quindi una nuova esecuzione dà lo stesso risultato. Se mai si usasse un modello linguistico, sarebbe solo di supporto e non potrebbe creare una rilevazione né una citazione.",
+          "detail": "Implementato per il controllo C1, su dati sintetici."
+        },
+        "rules": {
+          "title": "Le regole sono dati citati e richiedono approvazione umana",
+          "body": "Ogni regola, periodo di conservazione e data per paese è memorizzato come dato con la citazione della fonte primaria, mai come costante nel codice. Un pacchetto di regole deve richiedere l'approvazione di un responsabile della conformità prima di essere attivato. Non è stato nominato alcun responsabile della conformità, e ogni pacchetto di regole scritto finora è una bozza non rivista e disattivata."
+        },
+        "keys": {
+          "title": "Chiavi API",
+          "body": "Le chiavi API sono memorizzate solo come hash Argon2id, mostrate una sola volta al momento della creazione e limitate ad azioni specifiche. Nella console web il browser conserva solo un cookie di sessione sigillato e HttpOnly, mai un token di accesso."
+        }
+      }
+    },
+    "legal": {
+      "eyebrow": "Aspetti legali",
+      "title": "La posizione giuridica",
+      "lead": "Ciò che il servizio non fa conta quanto ciò che fa.",
+      "items": {
+        "adviser": {
+          "title": "Non è un consulente fiscale",
+          "body": "{app} è un servizio software che confronta fonti. Non è un consulente fiscale, e nulla di ciò che produce costituisce consulenza fiscale, legale o contabile."
+        },
+        "conclusions": {
+          "title": "Le rilevazioni non esprimono mai conclusioni giuridiche",
+          "body": "Una rilevazione dice che due fonti non concordano secondo una regola citata. Non dice se qualcosa sia lecito, dovuto o conforme e non raccomanda alcuna azione. I modelli delle rilevazioni sono scritti secondo questa regola."
+        },
+        "review": {
+          "title": "L'inquadramento è ancora in esame",
+          "body": "Se le rilevazioni con regole citate configurino una consulenza regolamentata nei paesi a cui puntiamo è una questione per i legali, e non ha ancora trovato risposta. La formulazione delle rilevazioni e di questo sito potrà cambiare quando l'avrà trovata."
+        }
+      }
+    },
+    "open": {
+      "eyebrow": "Punti aperti",
+      "title": "Che cosa è ancora aperto",
+      "lead": "Non deciso, non realizzato o non misurato. Non si detiene né si dichiara alcuna certificazione di sicurezza o di conformità.",
+      "items": {
+        "failover": {
+          "title": "Failover",
+          "body": "Il failover del database di scrittura mentre la copia di lettura continua a replicare non è stato verificato. Una prova esplorativa è pianificata nella fase delle fondamenta."
+        },
+        "load": {
+          "title": "Carico e disponibilità",
+          "body": "Non è stato eseguito alcun test di carico. Ogni valore di disponibilità e ripristino nel progetto è un obiettivo di progetto, non una misurazione."
+        },
+        "penTest": {
+          "title": "Penetration test indipendente",
+          "body": "Non è stato eseguito alcun penetration test. È pianificato per una fase di consolidamento."
+        },
+        "timestamp": {
+          "title": "Fornitore di marcatura temporale qualificata",
+          "body": "Non è stato scelto alcun fornitore di marcatura temporale qualificata. L'ancoraggio con marcatura temporale attende questa decisione."
+        },
+        "owner": {
+          "title": "Responsabile della conformità",
+          "body": "Non è stato nominato alcun responsabile della conformità. I pacchetti di regole non possono essere approvati finché non lo sarà."
+        },
+        "counsel": {
+          "title": "Legali e responsabile della protezione dei dati",
+          "body": "I legali non hanno rivisto l'inquadramento giuridico e non è stato nominato alcun responsabile della protezione dei dati."
+        },
+        "hosting": {
+          "title": "Fornitore di hosting",
+          "body": "Il fornitore di hosting UE e le regioni non sono stati scelti. Finché non lo saranno, non esiste alcuna distribuzione in produzione."
+        },
+        "identity": {
+          "title": "Identity provider dei clienti",
+          "body": "L'identity provider per l'accesso dei clienti non è stato scelto."
+        },
+        "certification": {
+          "title": "Certificazioni",
+          "body": "Non si detiene né si dichiara alcuna certificazione di sicurezza o di conformità. Una valutazione di prontezza è pianificata per una fase successiva."
+        }
+      }
+    }
+  }
+}

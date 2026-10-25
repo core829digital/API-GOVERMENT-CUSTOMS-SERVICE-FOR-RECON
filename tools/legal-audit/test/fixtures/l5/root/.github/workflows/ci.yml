@@ -1,0 +1,8 @@
+name: ci
+# annotation key recon.core829.eu/subprocessor: <name> is documented in docs/privacy
+on: [push]
+jobs:
+  noop:
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo ok

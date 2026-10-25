@@ -1,0 +1,156 @@
+{{- $fullname := include "recon.fullname" . -}}
+{{- if lt (int .Values.frontend.replicas) 3 -}}
+{{- fail "frontend.replicas must be >= 3 (Architecture §8)" -}}
+{{- end -}}
+{{- if and .Values.frontend.hpa.enabled (lt (int .Values.frontend.hpa.minReplicas) 3) -}}
+{{- fail "frontend.hpa.minReplicas must be >= 3 (Architecture §8)" -}}
+{{- end -}}
+{{- if and .Values.oidc.subprocessor (not .Values.oidc.subprocessorRegion) -}}
+{{- fail "oidc.subprocessorRegion is required when oidc.subprocessor is set (R-PRIV-4)" -}}
+{{- end -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullname }}-frontend
+  labels:
+    {{- include "recon.labels" (dict "root" . "component" "frontend") | nindent 4 }}
+  {{- if .Values.oidc.subprocessor }}
+  annotations:
+    recon.core829.eu/subprocessor: {{ .Values.oidc.subprocessor | quote }}
+    recon.core829.eu/processor-region: {{ .Values.oidc.subprocessorRegion | quote }}
+  {{- end }}
+spec:
+  {{- if not .Values.frontend.hpa.enabled }}
+  replicas: {{ .Values.frontend.replicas }}
+  {{- end }}
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      {{- include "recon.selectorLabels" (dict "root" . "component" "frontend") | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "recon.labels" (dict "root" . "component" "frontend") | nindent 8 }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ $fullname }}-frontend
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: {{ .Values.frontend.terminationGracePeriodSeconds }}
+      securityContext:
+        {{- include "recon.podSecurityContext" . | nindent 8 }}
+      {{- include "recon.pullSecrets" . | nindent 6 }}
+      {{- include "recon.topologySpread" (dict "root" . "component" "frontend" "spread" .Values.frontend.topologySpread) | nindent 6 }}
+      containers:
+        - name: frontend
+          image: {{ include "recon.image" (dict "root" . "image" .Values.frontend.image) | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- include "recon.containerSecurityContext" . | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.frontend.port }}
+              protocol: TCP
+          env:
+            - name: PORT
+              value: {{ .Values.frontend.port | quote }}
+            - name: HOSTNAME
+              value: "0.0.0.0"
+            {{- range $key := list "RECON_API_BASE_URL" "OIDC_ISSUER" "OIDC_CLIENT_ID" "OIDC_SCOPE" "APP_BASE_URL" }}
+            - name: {{ $key }}
+              valueFrom: {configMapKeyRef: {name: {{ $fullname }}-config, key: {{ $key }}}}
+            {{- end }}
+            - name: SESSION_SECRET
+              valueFrom: {secretKeyRef: {name: {{ .Values.frontend.secretName }}, key: SESSION_SECRET}}
+            # Absent/empty OIDC_CLIENT_SECRET = public client (PKCE is always used).
+            - name: OIDC_CLIENT_SECRET
+              valueFrom: {secretKeyRef: {name: {{ .Values.frontend.secretName }}, key: OIDC_CLIENT_SECRET, optional: true}}
+          # The frontend has no dedicated health route. /api/auth/session is cheap, side-effect free, makes no
+          # outbound call and answers 200 once the server is up (frontend/lib/auth/handlers.ts handleSession).
+          startupProbe:
+            tcpSocket: {port: http}
+            periodSeconds: 2
+            failureThreshold: 30
+          livenessProbe:
+            tcpSocket: {port: http}
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          readinessProbe:
+            httpGet: {path: /api/auth/session, port: http}
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 2
+          lifecycle:
+            preStop:
+              sleep:
+                seconds: {{ .Values.frontend.preStopSleepSeconds }}
+          resources:
+            {{- toYaml .Values.frontend.resources | nindent 12 }}
+          volumeMounts:
+            - {name: tmp, mountPath: /tmp}
+            - {name: next-cache, mountPath: /app/.next/cache}
+      volumes:
+        - name: tmp
+          emptyDir: {medium: Memory, sizeLimit: 16Mi}
+        - name: next-cache
+          emptyDir: {sizeLimit: 256Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullname }}-frontend
+  labels:
+    {{- include "recon.labels" (dict "root" . "component" "frontend") | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "recon.selectorLabels" (dict "root" . "component" "frontend") | nindent 4 }}
+  ports:
+    - name: http
+      port: {{ .Values.frontend.port }}
+      targetPort: http
+      protocol: TCP
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ $fullname }}-frontend
+  labels:
+    {{- include "recon.labels" (dict "root" . "component" "frontend") | nindent 4 }}
+spec:
+  minAvailable: {{ .Values.frontend.pdb.minAvailable }}
+  selector:
+    matchLabels:
+      {{- include "recon.selectorLabels" (dict "root" . "component" "frontend") | nindent 6 }}
+{{- if .Values.frontend.hpa.enabled }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ $fullname }}-frontend
+  labels:
+    {{- include "recon.labels" (dict "root" . "component" "frontend") | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ $fullname }}-frontend
+  minReplicas: {{ .Values.frontend.hpa.minReplicas }}
+  maxReplicas: {{ .Values.frontend.hpa.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.frontend.hpa.targetCPUUtilizationPercentage }}
+{{- end }}

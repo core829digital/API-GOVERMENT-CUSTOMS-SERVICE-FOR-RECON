@@ -1,0 +1,13 @@
+# Namespace for the CloudNativePG clusters and poolers. The operator itself and the Barman Cloud plugin live in
+# cnpg-system (install them first, see README.md). Pod Security: `baseline` is enforced, `restricted` only warns/audits
+# until the spike has shown that every pod the operator creates (instances, poolers, plugin sidecar) satisfies it.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: recon-db
+  labels:
+    recon.core829.eu/region: eu
+    app.kubernetes.io/part-of: recon
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/warn: restricted
+    pod-security.kubernetes.io/audit: restricted

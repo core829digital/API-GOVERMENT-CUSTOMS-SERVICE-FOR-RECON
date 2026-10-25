@@ -1,0 +1,48 @@
+# PgBouncer poolers (CloudNativePG Pooler), transaction pooling, prepared-statement support for sqlx.
+# `max_prepared_statements` > 0 needs PgBouncer >= 1.21 (PgBouncer changelog: 1.21.0 "The one with prepared statements");
+# the operator's default PgBouncer image is used unless spec.pgbouncer.image pins one (docs show ghcr.io/cloudnative-pg/pgbouncer:1.25.1).
+# NOT RUN: whether sqlx's prepared statements work through these poolers is part of the operator spike (Progress.md K-8).
+#
+# The Service created for a Pooler carries the Pooler's name; chart values database.*.poolerService/poolerName match these names.
+# The R pooler is type `rw` (always the R primary) on purpose: the read-your-writes bridge polls ledger.chain_head on R and
+# then reads on R; spreading those statements over several R instances would let a lagging standby serve the read
+# (see README.md "Open design risks").
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: recon-w-pooler-rw
+  namespace: recon-db
+  labels:
+    app.kubernetes.io/part-of: recon
+    recon.core829.eu/region: eu
+spec:
+  cluster:
+    name: recon-w
+  instances: 3
+  type: rw
+  pgbouncer:
+    poolMode: transaction
+    parameters:
+      max_client_conn: "1000"
+      default_pool_size: "20"
+      max_prepared_statements: "200"
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: recon-r-pooler-rw
+  namespace: recon-db
+  labels:
+    app.kubernetes.io/part-of: recon
+    recon.core829.eu/region: eu
+spec:
+  cluster:
+    name: recon-r
+  instances: 3
+  type: rw
+  pgbouncer:
+    poolMode: transaction
+    parameters:
+      max_client_conn: "1000"
+      default_pool_size: "20"
+      max_prepared_statements: "200"

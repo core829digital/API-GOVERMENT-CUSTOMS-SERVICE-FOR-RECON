@@ -1,0 +1,21 @@
+{
+  "site": {
+    "nav": {
+      "label": "Hoofdmenu",
+      "platform": "Platform",
+      "checks": "Controles",
+      "trust": "Vertrouwen",
+      "console": "Console",
+      "openMenu": "Menu openen",
+      "menuTitle": "Menu",
+      "menuDescription": "Sitenavigatie."
+    },
+    "footer": {
+      "tagline": "Afstemming van de boekhouding van een bedrijf met de kopie die elke autoriteit bijhoudt.",
+      "explore": "Verkennen",
+      "access": "Toegang",
+      "notice": "Bevindingen stellen vast dat bronnen verschillen volgens een vermelde regel. Het is geen belastingadvies.",
+      "status": "Vroege ontwikkeling. Deze site beschrijft het beoogde product; elke functie is voorzien van haar status."
+    }
+  }
+}

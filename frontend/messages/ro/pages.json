@@ -1,0 +1,13 @@
+{
+  "pages": {
+    "notFound": {
+      "title": "Pagina nu a fost găsită",
+      "description": "Pagina cerută nu există sau a fost mutată.",
+      "back": "Înapoi la site"
+    },
+    "error": {
+      "title": "Ceva nu a funcționat",
+      "description": "Pagina nu a putut fi afișată. Încercați din nou; dacă se repetă, reîncărcați pagina."
+    }
+  }
+}

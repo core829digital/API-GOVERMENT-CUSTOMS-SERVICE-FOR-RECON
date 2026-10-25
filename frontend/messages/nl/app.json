@@ -1,0 +1,133 @@
+{
+  "common": {
+    "close": "Sluiten",
+    "loading": "Laden",
+    "retry": "Opnieuw proberen",
+    "signIn": "Aanmelden",
+    "signOut": "Afmelden",
+    "none": "Niet ingesteld"
+  },
+  "metadata": {
+    "title": "Recon",
+    "description": "Afstemming van de boekhouding van een bedrijf met de kopie die elke autoriteit bijhoudt, met vermelding van de juridische grondslag."
+  },
+  "shell": {
+    "appName": "Recon",
+    "console": "Console",
+    "skipToContent": "Ga naar de hoofdinhoud",
+    "sidebarTitle": "Navigatie",
+    "sidebarDescription": "Links van de hoofdnavigatie.",
+    "toggleSidebar": "Navigatie tonen of verbergen",
+    "navLabel": "Hoofdmenu",
+    "nav": {
+      "overview": "Overzicht",
+      "findings": "Bevindingen"
+    },
+    "language": {
+      "label": "Taal",
+      "en": "English",
+      "ro": "Română",
+      "it": "Italiano",
+      "es": "Español",
+      "fr": "Français",
+      "de": "Deutsch",
+      "nl": "Nederlands",
+      "pl": "Polski"
+    },
+    "theme": {
+      "label": "Thema",
+      "light": "Licht",
+      "dark": "Donker",
+      "system": "Systeem"
+    },
+    "session": {
+      "checking": "Sessie controleren"
+    }
+  },
+  "overview": {
+    "title": "Overzicht",
+    "intro": "Recon vergelijkt uw boekhouding met de kopie die elke autoriteit bijhoudt en toont waar de bronnen verschillen volgens een vermelde regel.",
+    "notice": "Bevindingen stellen vast dat bronnen verschillen volgens een vermelde regel. Het is geen belastingadvies.",
+    "findingsCard": {
+      "title": "Bevindingen",
+      "description": "Verschillen tussen uw boekhouding en de kopie van een autoriteit, elk met de regel waaronder het is gecontroleerd.",
+      "action": "Bevindingen openen"
+    },
+    "batchCard": {
+      "title": "Batchstatus",
+      "description": "Zoek de verwerkingsstatus van een geüploade batch op aan de hand van de identificatiecode.",
+      "label": "Batch-id",
+      "placeholder": "00000000-0000-7000-8000-000000000000",
+      "submit": "Status tonen",
+      "invalid": "Voer een geldige batch-id (UUID) in."
+    }
+  },
+  "findings": {
+    "title": "Bevindingen",
+    "description": "Waar uw boekhouding en de kopie van een autoriteit verschillen volgens een vermelde regel. Het is geen belastingadvies.",
+    "tableLabel": "Lijst met bevindingen",
+    "columns": {
+      "check": "Controle",
+      "severity": "Ernst",
+      "jurisdiction": "Rechtsgebied",
+      "summary": "Samenvatting",
+      "citation": "Regelverwijzing",
+      "created": "Geregistreerd"
+    },
+    "severity": {
+      "info": "Info",
+      "low": "Laag",
+      "medium": "Gemiddeld",
+      "high": "Hoog"
+    },
+    "empty": {
+      "title": "Geen bevindingen",
+      "description": "De dienst heeft geen bevindingen geretourneerd."
+    }
+  },
+  "batch": {
+    "title": "Batchstatus",
+    "back": "Terug naar overzicht",
+    "fields": {
+      "id": "Batch-id",
+      "status": "Status",
+      "sourceType": "Brontype",
+      "period": "Periode",
+      "created": "Geregistreerd",
+      "failureReason": "Reden van mislukking"
+    },
+    "periodRange": "{start} tot {end}",
+    "status": {
+      "registered": "Geregistreerd",
+      "parsing": "Wordt ingelezen",
+      "parsed": "Ingelezen",
+      "failed": "Mislukt"
+    }
+  },
+  "errors": {
+    "unauthenticated": {
+      "title": "Aanmelding vereist",
+      "description": "Uw sessie ontbreekt of is verlopen. Meld u aan om door te gaan."
+    },
+    "notFound": {
+      "title": "Niet gevonden",
+      "description": "De dienst heeft geen record met deze identificatiecode."
+    },
+    "replicaLag": {
+      "title": "Gegevens worden nog gesynchroniseerd",
+      "description": "De leeskopie is nog niet bijgewerkt. Probeer het zo meteen opnieuw."
+    },
+    "unavailable": {
+      "title": "Dienst niet beschikbaar",
+      "description": "De dienst was niet bereikbaar of gaf een fout terug. Probeer het later opnieuw."
+    },
+    "invalidResponse": {
+      "title": "Onverwacht antwoord",
+      "description": "De dienst antwoordde in een indeling die deze toepassing niet herkent."
+    },
+    "network": {
+      "title": "Verbindingsprobleem",
+      "description": "Het verzoek is niet voltooid. Controleer uw verbinding en probeer het opnieuw."
+    }
+  }
+}

@@ -1,0 +1,25 @@
+/*
+ * The W/R diagram draws itself once when its wrapper receives `data-inview` (set by <Reveal>). Everything is visible
+ * by default; the hidden start state exists only when scripting is on and the visitor has not asked for reduced
+ * motion, the same guard as the global `[data-reveal]` rules. Paths use pathLength="1", so one dash covers the line.
+ */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 1.3s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms);
+  }
+
+  .fade {
+    opacity: 0;
+    transition: opacity 0.6s ease var(--d, 0ms);
+  }
+
+  :global([data-inview]) .draw {
+    stroke-dashoffset: 0;
+  }
+
+  :global([data-inview]) .fade {
+    opacity: 1;
+  }
+}

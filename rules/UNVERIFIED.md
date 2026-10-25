@@ -1,0 +1,42 @@
+# rules/UNVERIFIED.md — left out of the packs on purpose
+
+Rules.md R-DOC-1: unverified regulatory statements MUST NOT enter a rule pack. This file lists what was considered for the Phase 1 draft packs (2026-10-23) and **not** encoded, with the reason. Nothing here is a statement of law; each line is a pointer for the next verification pass. "Not analysed" means the text was not read to a standard that allows a rule to be written; it does not mean the provision is irrelevant.
+
+## A. Statements in docs/Research.md checked against primary sources (corrections to report to the owner of Research.md)
+
+| Research.md statement (§1 row 1, §5) | Result of reading Directive (EU) 2025/516 on 2026-10-23 |
+|---|---|
+| "Platform deemed-supplier rules and SVR start 1 Jul 2028" | Art. 3 of the Directive applies from 2028-07-01 (Art. 6(3)). **But** Art. 3 point (1) — the new Art. 28a platform deemed-supplier rule for short-term accommodation rental and road passenger transport — is applied by each Member State **at the earliest 2028-07-01 and at the latest 2030-01-01** (Art. 6(3), second subparagraph). The single date in Research.md is the earliest date, not a uniform date. Encoded in `VIDA-003` with a `pending_change` note. The Art. 14a deemed-supplier text (e-commerce) is replaced from **2027-01-01** (Art. 2 point (1)), a different, earlier change (`VIDA-001`). |
+| "DRR for intra-Community B2B starts 1 Jul 2030" | Confirmed: Art. 5 applies from 2030-07-01 (Art. 6(5)); Arts. 262-264 are replaced and Arts. 265-271 deleted (`VIDA-013` to `VIDA-016`). |
+| "domestic national systems must align by 2035 [K]" | Tag K can be upgraded to verified **with the exact scope**: only Member States that had a domestic digital real-time transaction-based reporting obligation in place on 2024-01-01 (or authorised under Art. 395 / legislated before that date) may apply the Art. 5 point (5) measures related to Art. 218 and the point (19) measures related to Arts. 271a and 271b by 2035-01-01, "in so far as domestic electronic invoicing and reporting are concerned"; the Commission may propose postponement after the Art. 271c interim report (due 2033-03-31) (Art. 6(5), second subparagraph). Not a general "alignment by 2035". |
+| "Member States may mandate domestic e-invoicing since 14 Apr 2025" | Confirmed: Art. 1 point (2) adds a second paragraph to Art. 218, and Art. 6(1) lets Member States apply it from 2025-04-14 (`INV-003`). |
+| "Retention periods are set by Member States (VAT Directive Arts. 244–248 require storage; the period is national) [K]" | Confirmed for invoices: Art. 244 (storage duty), Art. 247(1) (each Member State determines the period). Related: Art. 245(1) (place of storage), Art. 246 (deleted by Directive 2010/45/EU), Art. 248 (option to require storage of invoices received by non-taxable persons). **However** the Directive itself fixes record periods for special schemes: 10 years from 31 December of the year of the transaction for Union-scheme OSS records (Art. 369k(2), `OSS-012`) and, from 2028-07-01, for the own-goods transfer scheme (Art. 369xk(2), `VIDA-005`); and ten years from the end of the year for the non-Union scheme (Art. 369(2), not encoded, section not analysed). "Never a constant" still holds for invoices; those are EU-level data points to cite when filling `privacy.retention_policy`. |
+| "Poland KSeF 1 Feb 2026 (large taxpayers), 1 Apr 2026 (all others)" | Confirmed on the Ministry of Finance KSeF portal; threshold is PLN 200 million of sales including tax **in 2024**; PLN 10 000 monthly carve-out until the end of 2026 (`KSEF-001`, `KSEF-002`, `KSEF-005`). An older MoF news item says "in 2025" (it described a plan); not used. |
+| "A PDF that materially deviates from its XML can be treated as a separate invoice (Art. 203 VAT Directive)" (§3.2, secondary source) | Art. 203 reads, in full: "VAT shall be payable by any person who enters the VAT on an invoice." The claim about PDF versus XML is an interpretation attributed to a secondary source; it is **not** derivable from the text of Art. 203 alone. Do not encode a PDF-vs-XML rule on this basis without counsel. |
+
+## B. Considered, not encoded
+
+### EU VAT Directive (2006/112/EC)
+
+- **Art. 220a(1)(c)** (simplified invoice for the small-enterprise exemption, Art. 284) — amended by Directive (EU) 2020/285; its application date was not verified. `INV-030` covers only points (a) and (b).
+- **Arts. 358a–369** (non-Union scheme) and **Arts. 369l–369x** (import scheme IOSS) — not analysed.
+- **Directive (EU) 2025/516**: Art. 1 point (1) (Art. 143(1a): Commission implementing act linking the unique consignment number with the VAT identification number); the other points of Art. 2 (amendments to Arts. 59c, 66, 359, 368, 369p, deletion of Art. 237); and the points of Art. 3 other than (1) and (2) (amendments to Arts. 135, 138, 194, 242a, 365, 369a, 369b, 369g, 369p, 369t and the new Section 5) — read only as far as needed for `VIDA-001` to `VIDA-019`; the remaining amendments were not analysed and no rule was written. `VIDA-001` records Art. 14a as replaced; a human should compare the old and the new wording word for word before release (the existing text was read in the consolidated version, the new text in the Directive).
+- **Member State national provisions** implementing any of the above (invoice content extras, storage periods, thresholds, quarterly options of Art. 263(1a), time limits): not read. They are per-country data and need their own packs.
+- **EN 16931, Directive 2014/55/EU, national CIUS** — referenced by Directive (EU) 2025/516 Art. 218(3) as replaced; the standards themselves and the Commission Implementing Decision (EU) 2017/1870 list of syntaxes were not read. L9 schema versions (`schema_versions:`) cannot be filled until they are.
+
+### Poland (KSeF)
+
+- **Base obligation provisions of the VAT Act of 2004-03-11** (e.g. Art. 106ga, 106gb, 106e, 106nda(2) next-working-day submission after offline issuance, 106ne failure notices, 106ni penalties relief) and the **consolidated text (tekst jednolity)** — not read; only Dz.U. 2025 poz. 1203 as published was read. The effective date of Art. 106nda was not checked, so it is not in the pack.
+- **Catalogue of exclusions from structured invoices** (non-established taxpayers, buyer a natural person outside business, non-Union OSS, IOSS, SME procedure, toll roads, tickets, self-billing cases, …) — listed on the MoF portal page, which gives **no application date** for them; the regulation under Art. 106s was not read. No rule written; an application date by inference would be an unverified claim.
+- **KSeF assigns a unique number to each issued invoice; invoices with attachments (FA(3)), VAT RR invoices from 2026-04-01, withdrawal of corrective notes on 2026-02-01** — stated on the MoF portal page; they carry no article reference there and the statute provisions behind them were not read.
+- **KSeF API versions and authentication methods** — not verified; needed before any ingestion adapter (Phase 2). (Art. 17b of Dz.U. 2025 poz. 1203 states that the certificate of Art. 106nda(7) can be downloaded from 2025-11-01; that was read but not encoded, being an operational rather than a reconciliation provision.)
+- The state of the law after the portal page's last modification (2026-02-06) was not independently checked.
+
+### Other jurisdictions and instruments listed in Research.md §5 (tags K or S there)
+
+Spain Veri*Factu (RDL 15/2025; announced delay to October 2028 — recorded in Workflow.md §6 as announced, **not** in the BOE as of 2026-10-23 per Research.md; no pack because no primary source was read), France e-invoicing (PA model), Romania e-Factura / SAF-T D406, Italy SdI, Belgium Peppol B2B, Germany e-invoicing phases, DAC7, DAC8, CESOP, EU customs reform / Regulation (EU) 2026/2108, eIDAS Arts. 41–42 and 45k, AI Act and the Digital Omnibus, DORA, NIS2, AMLD6/AMLR. None was verified in this pass.
+
+### Operational claims
+
+- **NIS2 early warning within 24 h** (Rules.md R-OPS-4, Workflow.md §8) — not verified against Directive (EU) 2022/2555 in this pass. The runbook `PersonalDataBreach` treats NIS2 only as an open scope assessment (D-5).
+- **Retention periods per jurisdiction** (RO, PL, DE, IT, …) for `privacy.retention_policy` — not verified. Without those rows the privacy procedures refuse erasure and purge by design (`migrations/w/0007_privacy_procedures.sql`).

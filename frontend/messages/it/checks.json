@@ -1,0 +1,135 @@
+{
+  "checks": {
+    "metadata": {
+      "title": "Controlli",
+      "description": "Il catalogo dei controlli di riconciliazione candidati da C1 a C8: che cosa confronta ciascuno, se un'autorità detiene una delle fonti e a che punto è ognuno."
+    },
+    "status": {
+      "building": "In sviluppo",
+      "planned": "Pianificato",
+      "later": "Più avanti",
+      "buildingHint": "Esiste e funziona. Solo dati sintetici.",
+      "plannedHint": "Progettato e documentato. Non ancora realizzato.",
+      "laterHint": "Volutamente dopo le prime versioni."
+    },
+    "hero": {
+      "eyebrow": "Controlli",
+      "title": "Otto controlli candidati. Uno funziona, su dati sintetici.",
+      "lead": "Un controllo confronta due o più fonti e indica dove non concordano. Questo è il catalogo dei candidati. Esiste solo il primo, e non ha mai visto dati reali."
+    },
+    "catalogue": {
+      "eyebrow": "Catalogo",
+      "title": "Che cosa si confronta con che cosa",
+      "lead": "Lato autorità indica se una delle fonti confrontate è una copia detenuta da un'autorità: sì, in parte o no. Stato mostra a che punto è ciascun controllo. L'elenco è un insieme di candidati e può cambiare.",
+      "caption": "Controlli candidati da C1 a C8, le fonti confrontate da ciascuno, se un'autorità ne detiene una e lo stato di ogni controllo",
+      "columns": {
+        "id": "ID",
+        "check": "Controllo",
+        "sources": "Fonti confrontate",
+        "authority": "Lato autorità",
+        "status": "Stato"
+      },
+      "authority": {
+        "yes": "Sì",
+        "partial": "In parte",
+        "no": "No"
+      },
+      "rows": {
+        "c1": {
+          "check": "Fattura emessa rispetto a stato di autorizzazione e contenuto",
+          "sources": "Contabilità e stato detenuto da un sistema di autorizzazione delle fatture elettroniche (esempi: KSeF, e-Factura, SdI)"
+        },
+        "c2": {
+          "check": "PDF della fattura rispetto al relativo XML strutturato",
+          "sources": "PDF della fattura e XML della fattura"
+        },
+        "c3": {
+          "check": "Campi della dichiarazione IVA rispetto alla contabilità, per periodo",
+          "sources": "Contabilità e dichiarazione presentata"
+        },
+        "c4": {
+          "check": "Dichiarazione OSS o IOSS rispetto alle vendite a consumatori, per Stato di consumo e aliquota",
+          "sources": "Contabilità o dati del marketplace e dichiarazione OSS"
+        },
+        "c5": {
+          "check": "Cessioni intra-UE tra imprese rispetto alla validità della partita IVA al momento della cessione",
+          "sources": "Contabilità e storico dei risultati VIES"
+        },
+        "c6": {
+          "check": "IVA all'importazione detratta rispetto alla bolletta doganale o al documento di importazione",
+          "sources": "Contabilità e pratica doganale"
+        },
+        "c7": {
+          "check": "Report del marketplace rispetto alla contabilità",
+          "sources": "Report del marketplace e contabilità"
+        },
+        "c8": {
+          "check": "Pagamenti rispetto alle fatture",
+          "sources": "Registrazioni di banca o prestatore di servizi di pagamento e contabilità"
+        }
+      }
+    },
+    "c1": {
+      "eyebrow": "Controllo C1",
+      "title": "Che cosa segnala oggi C1",
+      "lead": "Le fatture in contabilità sono confrontate con lo stato di autorizzazione indicato per esse. Per ciascun riferimento di fattura è segnalato al massimo un esito: il primo che corrisponde, in questo ordine. Funziona solo su dati sintetici.",
+      "outcomes": {
+        "noClearance": "Non esiste alcun record di autorizzazione per la fattura.",
+        "notAccepted": "Il record di autorizzazione ha uno stato diverso da accettato.",
+        "amountMismatch": "La valuta o il totale differiscono tra la fattura e il record di autorizzazione.",
+        "orphan": "Esiste un record di autorizzazione senza una fattura."
+      },
+      "note": "Se due record di fattura o due record di autorizzazione condividono un riferimento, l'input è ambiguo. L'esecuzione non riesce, invece di tirare a indovinare."
+    },
+    "produces": {
+      "eyebrow": "Risultato",
+      "title": "Che cosa produce un controllo",
+      "lead": "Ogni risultato è una rilevazione. Una rilevazione è un'affermazione su due fonti, mai su che cosa fare.",
+      "items": {
+        "disagreement": {
+          "title": "Una discordanza",
+          "body": "Due fonti dicono cose diverse sullo stesso elemento. Per esempio: una fattura in contabilità che il lato dell'autorizzazione non indica come accettata."
+        },
+        "rule": {
+          "title": "Una regola citata",
+          "body": "La rilevazione indica la regola secondo cui le fonti sono state confrontate, cercata nel pacchetto di regole fissato per l'esecuzione. Se il pacchetto non contiene quella regola, l'esecuzione non riesce, invece di registrare una rilevazione senza citazione."
+        },
+        "inputs": {
+          "title": "I suoi input",
+          "body": "La rilevazione rimanda ai record di input, ai loro hash e alla versione del pacchetto di regole. Gli stessi input e la stessa versione producono la stessa rilevazione. La gravità è un'impostazione predefinita di triage tecnico, non una valutazione giuridica."
+        }
+      },
+      "notice": {
+        "title": "Non è consulenza fiscale",
+        "body": "Il servizio non è un consulente fiscale. Una rilevazione dice che due fonti non concordano secondo una regola citata. Non dice se qualcosa sia dovuto, lecito o conforme e non raccomanda alcuna azione. Tale valutazione resta a voi e al vostro consulente."
+      }
+    },
+    "unproven": {
+      "eyebrow": "Limiti",
+      "title": "Che cosa non è ancora dimostrato",
+      "lead": "Questo prodotto è in sviluppo iniziale. Queste sono le questioni aperte, esposte con chiarezza.",
+      "items": {
+        "realData": {
+          "title": "Nessun controllo ha incontrato dati reali",
+          "body": "Nessun controllo è stato eseguito su dati reali di clienti e nessuno è convalidato su dati reali di autorità. C1 funziona solo su dati sintetici."
+        },
+        "rules": {
+          "title": "I pacchetti di regole sono bozze",
+          "body": "I pacchetti di regole scritti finora sono bozze. Nessuno è attivato e nessuna persona li ha rivisti. Non è ancora stato nominato alcun responsabile della conformità."
+        },
+        "competitors": {
+          "title": "Gli altri prodotti non sono ancora stati confrontati",
+          "body": "Non è stato stabilito che cosa coprano già gli altri prodotti. Funzionalità di riconciliazione possono esistere altrove; il confronto, controllo per controllo, deve ancora essere scritto sulla base della documentazione ufficiale dei produttori."
+        },
+        "demand": {
+          "title": "La domanda non è verificata",
+          "body": "Non è stato verificato se i team finanziari pagherebbero per questo servizio. Non sono state ancora svolte interviste ai clienti."
+        },
+        "availability": {
+          "title": "I dati delle autorità potrebbero non essere raggiungibili",
+          "body": "Se il lato di ciascuna autorità sia leggibile e in quale forma resta una questione aperta per ogni paese. I controlli contrassegnati come lato autorità dipendono da questa risposta."
+        }
+      }
+    }
+  }
+}

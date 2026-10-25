@@ -1,0 +1,123 @@
+{
+  "trust": {
+    "metadata": {
+      "title": "Vertrouwen",
+      "description": "Beveiliging, privacy en de juridische positie van de dienst in heldere taal, inclusief alles wat nog openstaat."
+    },
+    "status": {
+      "building": "In aanbouw",
+      "planned": "Gepland",
+      "later": "Later",
+      "buildingHint": "Bestaat en draait. Alleen synthetische gegevens.",
+      "plannedHint": "Ontworpen en vastgelegd. Nog niet gebouwd.",
+      "laterHint": "Bewust na de eerste versies."
+    },
+    "hero": {
+      "eyebrow": "Vertrouwen",
+      "title": "Beveiliging, privacy en de juridische positie",
+      "lead": "Waartoe de dienst is gebouwd, wat ze niet is en wat nog openstaat, in heldere taal. Ze is in een vroege fase van ontwikkeling en is nooit uitgevoerd op echte klantgegevens."
+    },
+    "principles": {
+      "eyebrow": "Hoe het is gebouwd",
+      "title": "Zeven punten waar het ontwerp op staat",
+      "lead": "Dit zijn ontwerpregels waartegen de code is geschreven. Elke regel is gemarkeerd met hoe ver ze werkelijk is.",
+      "items": {
+        "isolation": {
+          "title": "Tenantisolatie",
+          "body": "Elke tabel met klantgegevens bevat een tenant-id, en beveiliging op rijniveau in beide databases beperkt elke sessie tot de rijen van de eigen tenant. Als er geen tenant is ingesteld, mislukt een query met een foutmelding in plaats van rijen terug te geven: ze faalt veilig.",
+          "detail": "Gecontroleerd op een lokaal paar databases met een gewone rol zonder superuser-rechten. Nog niet gecontroleerd op productieachtige infrastructuur."
+        },
+        "ledger": {
+          "title": "Een manipulatiebestendig register",
+          "body": "Elke klant heeft een append-only register. Elke gebeurtenis bewaart een hash die de voorgaande gebeurtenis omvat, dus het wijzigen van de historie breekt de keten. Updates en verwijderingen worden geblokkeerd door rechten en door triggers. Om te merken dat de nieuwste gebeurtenissen zijn weggeknipt is een tijdstempelanker nodig, dat gepland is.",
+          "detail": "Een bewerking met bevoegdheden van één rij op een lokaal testpaar werd opgemerkt door ketenverificatie."
+        },
+        "privacy": {
+          "title": "Geen persoonsgegevens in logs, het register of embeddings",
+          "body": "Payloads van het register bevatten ondoorzichtige verwijzingen, geen namen of fiscale identificatienummers. Identificatievelden worden versleuteld opgeslagen, en verwijdering is bedoeld te werken door de sleutel te vernietigen, zodat de keten verifieerbaar blijft nadat de gegevens weg zijn. Logs, traces en de zoekindex over wetteksten mogen geen klantrecords of persoonsgegevens bevatten.",
+          "detail": "Versleutelde identificatiekolommen en sleutelvernietiging zijn beproefd op een lokaal testpaar. Dit is een ontwerpregel, geen certificering."
+        },
+        "residency": {
+          "title": "Gegevens uitsluitend in de EU, als ontwerpbeslissing",
+          "body": "Het ontwerp houdt klantgegevens in EU-regio's en stuurt er geen naar verwerkers buiten de EU of naar gehoste taalmodel-API's. Dit is een ontwerpbeslissing, geen uitspraak over een draaiende dienst: de hostingprovider is niet gekozen en er is geen productie-implementatie.",
+          "detail": "Een gegevensbeschermingseffectbeoordeling en een register van verwerkingen bestaan als concepten voor de functionaris voor gegevensbescherming en juristen. Geen mens heeft ze beoordeeld en ze zijn geen juridisch advies. De lijst met subverwerkers is nog niet opgesteld."
+        },
+        "deterministic": {
+          "title": "Deterministische bevindingen; geen model beslist",
+          "body": "Een bevinding is een zuivere functie van de hashes van de invoerrecords en de versie van het regelpakket. Bij de beoordeling van regels is er geen klok, willekeur, netwerkaanroep of taalmodel, dus een nieuwe uitvoering geeft hetzelfde resultaat. Als ooit een taalmodel wordt gebruikt, is dat adviserend en kan het geen bevinding of bronvermelding aanmaken.",
+          "detail": "Geïmplementeerd voor controle C1, op synthetische gegevens."
+        },
+        "rules": {
+          "title": "Regels zijn gegevens met bronvermelding en vereisen menselijke goedkeuring",
+          "body": "Elke regel, bewaartermijn en landspecifieke datum wordt opgeslagen als gegeven met een verwijzing naar de primaire bron, nooit als constante in code. Een regelpakket hoort goedkeuring van een compliance-verantwoordelijke nodig te hebben voordat het wordt ingeschakeld. Er is geen compliance-verantwoordelijke aangewezen, en elk tot nu toe geschreven regelpakket is een niet-beoordeeld concept dat is uitgeschakeld."
+        },
+        "keys": {
+          "title": "API-sleutels",
+          "body": "API-sleutels worden alleen als Argon2id-hashes opgeslagen, één keer getoond bij het aanmaken en beperkt tot specifieke handelingen. In de webconsole bewaart de browser alleen een verzegelde HttpOnly-sessiecookie, nooit een toegangstoken."
+        }
+      }
+    },
+    "legal": {
+      "eyebrow": "Juridisch",
+      "title": "De juridische positie",
+      "lead": "Wat de dienst niet doet, is even belangrijk als wat ze doet.",
+      "items": {
+        "adviser": {
+          "title": "Geen belastingadviseur",
+          "body": "{app} is een softwaredienst die bronnen vergelijkt. Ze is geen belastingadviseur, en niets wat ze oplevert is fiscaal, juridisch of boekhoudkundig advies."
+        },
+        "conclusions": {
+          "title": "Bevindingen bevatten nooit juridische conclusies",
+          "body": "Een bevinding stelt vast dat twee bronnen verschillen volgens een vermelde regel. Ze zegt niet of iets toegestaan, verschuldigd of conform is en beveelt geen handeling aan. Sjablonen voor bevindingen zijn volgens die regel geschreven."
+        },
+        "review": {
+          "title": "De positionering wordt nog beoordeeld",
+          "body": "Of bevindingen met vermelde regels in de landen waarop wij mikken als gereguleerd advies gelden, is een vraag voor juristen en is nog niet beantwoord. De formulering van bevindingen en van deze site kan veranderen zodra dat het geval is."
+        }
+      }
+    },
+    "open": {
+      "eyebrow": "Open punten",
+      "title": "Wat nog openstaat",
+      "lead": "Niet besloten, niet gebouwd of niet gemeten. Er wordt geen beveiligings- of compliancecertificering gehouden of beweerd.",
+      "items": {
+        "failover": {
+          "title": "Failover",
+          "body": "Het overschakelen van de schrijfdatabase terwijl de leeskopie blijft repliceren, is niet geverifieerd. In de fundamentenfase is een spike gepland."
+        },
+        "load": {
+          "title": "Belasting en beschikbaarheid",
+          "body": "Er is niets onder belasting getest. Elk cijfer voor beschikbaarheid en herstel in het ontwerp is een ontwerpdoel, geen meting."
+        },
+        "penTest": {
+          "title": "Onafhankelijke penetratietest",
+          "body": "Er is geen penetratietest uitgevoerd. Die is gepland voor een verhardingsfase."
+        },
+        "timestamp": {
+          "title": "Gekwalificeerde tijdstempelaanbieder",
+          "body": "Er is geen gekwalificeerde tijdstempelaanbieder gekozen. Verankering met tijdstempels wacht op die beslissing."
+        },
+        "owner": {
+          "title": "Compliance-verantwoordelijke",
+          "body": "Er is geen compliance-verantwoordelijke aangewezen. Regelpakketten kunnen pas worden goedgekeurd als die er is."
+        },
+        "counsel": {
+          "title": "Juristen en functionaris voor gegevensbescherming",
+          "body": "Juristen hebben de juridische positionering niet beoordeeld en er is geen functionaris voor gegevensbescherming aangesteld."
+        },
+        "hosting": {
+          "title": "Hostingprovider",
+          "body": "De EU-hostingprovider en de regio's zijn niet gekozen. Zolang dat niet is gebeurd, is er geen productie-implementatie."
+        },
+        "identity": {
+          "title": "Identiteitsprovider van klanten",
+          "body": "De identiteitsprovider voor het aanmelden van klanten is niet gekozen."
+        },
+        "certification": {
+          "title": "Certificeringen",
+          "body": "Er wordt geen beveiligings- of compliancecertificering gehouden of beweerd. Een gereedheidsbeoordeling is gepland voor een latere fase."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "common": {
+    "close": "Schließen",
+    "loading": "Wird geladen",
+    "retry": "Erneut versuchen",
+    "signIn": "Anmelden",
+    "signOut": "Abmelden",
+    "none": "Nicht gesetzt"
+  },
+  "metadata": {
+    "title": "Recon",
+    "description": "Abgleich der Unternehmensbücher mit der Kopie, die jede Behörde führt, mit zitierter Rechtsgrundlage."
+  },
+  "shell": {
+    "appName": "Recon",
+    "console": "Konsole",
+    "skipToContent": "Zum Hauptinhalt springen",
+    "sidebarTitle": "Navigation",
+    "sidebarDescription": "Links der Hauptnavigation.",
+    "toggleSidebar": "Navigation umschalten",
+    "navLabel": "Haupt",
+    "nav": {
+      "overview": "Übersicht",
+      "findings": "Abweichungen"
+    },
+    "language": {
+      "label": "Sprache",
+      "en": "English",
+      "ro": "Română",
+      "it": "Italiano",
+      "es": "Español",
+      "fr": "Français",
+      "de": "Deutsch",
+      "nl": "Nederlands",
+      "pl": "Polski"
+    },
+    "theme": {
+      "label": "Darstellung",
+      "light": "Hell",
+      "dark": "Dunkel",
+      "system": "System"
+    },
+    "session": {
+      "checking": "Sitzung wird geprüft"
+    }
+  },
+  "overview": {
+    "title": "Übersicht",
+    "intro": "Recon vergleicht Ihre Bücher mit der Kopie, die jede Behörde führt, und listet auf, wo die Quellen nach einer zitierten Regel voneinander abweichen.",
+    "notice": "Abweichungen halten fest, dass Quellen nach einer zitierten Regel voneinander abweichen. Sie sind keine Steuerberatung.",
+    "findingsCard": {
+      "title": "Abweichungen",
+      "description": "Unstimmigkeiten zwischen Ihren Büchern und der Kopie einer Behörde, jeweils mit der Regel, nach der geprüft wurde.",
+      "action": "Abweichungen öffnen"
+    },
+    "batchCard": {
+      "title": "Stapelstatus",
+      "description": "Verarbeitungsstatus eines hochgeladenen Stapels anhand seiner Kennung abfragen.",
+      "label": "Stapelkennung",
+      "placeholder": "00000000-0000-7000-8000-000000000000",
+      "submit": "Status anzeigen",
+      "invalid": "Geben Sie eine gültige Stapelkennung (UUID) ein."
+    }
+  },
+  "findings": {
+    "title": "Abweichungen",
+    "description": "Wo Ihre Bücher und die Kopie einer Behörde nach einer zitierten Regel voneinander abweichen. Dies ist keine Steuerberatung.",
+    "tableLabel": "Liste der Abweichungen",
+    "columns": {
+      "check": "Prüfung",
+      "severity": "Schweregrad",
+      "jurisdiction": "Land",
+      "summary": "Zusammenfassung",
+      "citation": "Regelzitat",
+      "created": "Erfasst"
+    },
+    "severity": {
+      "info": "Info",
+      "low": "Niedrig",
+      "medium": "Mittel",
+      "high": "Hoch"
+    },
+    "empty": {
+      "title": "Keine Abweichungen",
+      "description": "Der Dienst hat keine Abweichungen zurückgegeben."
+    }
+  },
+  "batch": {
+    "title": "Stapelstatus",
+    "back": "Zurück zur Übersicht",
+    "fields": {
+      "id": "Stapelkennung",
+      "status": "Status",
+      "sourceType": "Quellentyp",
+      "period": "Zeitraum",
+      "created": "Registriert",
+      "failureReason": "Fehlergrund"
+    },
+    "periodRange": "{start} bis {end}",
+    "status": {
+      "registered": "Registriert",
+      "parsing": "Wird eingelesen",
+      "parsed": "Eingelesen",
+      "failed": "Fehlgeschlagen"
+    }
+  },
+  "errors": {
+    "unauthenticated": {
+      "title": "Anmeldung erforderlich",
+      "description": "Ihre Sitzung fehlt oder ist abgelaufen. Melden Sie sich an, um fortzufahren."
+    },
+    "notFound": {
+      "title": "Nicht gefunden",
+      "description": "Der Dienst hat keinen Datensatz mit dieser Kennung."
+    },
+    "replicaLag": {
+      "title": "Daten werden noch synchronisiert",
+      "description": "Die Lesekopie ist noch nicht auf dem neuesten Stand. Versuchen Sie es gleich noch einmal."
+    },
+    "unavailable": {
+      "title": "Dienst nicht verfügbar",
+      "description": "Der Dienst war nicht erreichbar oder hat einen Fehler zurückgegeben. Versuchen Sie es später erneut."
+    },
+    "invalidResponse": {
+      "title": "Unerwartete Antwort",
+      "description": "Der Dienst hat in einem Format geantwortet, das diese Anwendung nicht erkennt."
+    },
+    "network": {
+      "title": "Verbindungsproblem",
+      "description": "Die Anfrage wurde nicht abgeschlossen. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut."
+    }
+  }
+}

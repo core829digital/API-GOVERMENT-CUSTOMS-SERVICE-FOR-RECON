@@ -1,0 +1,86 @@
+# Starts the W + R PostgreSQL 18 pair used by db-integration, legal-audit (L4/L6/L7) and the nightly run.
+#   W  postgres:18.6               wal_level=logical (publisher)      127.0.0.1:55440  db recon_w
+#   R  pgvector/pgvector:0.8.6-pg18 (PostgreSQL 18 + pgvector 0.8.6)  127.0.0.1:55441  db recon_r
+# Both images are pinned by tag AND manifest-list digest (resolved from Docker Hub on 2026-10-23; the tags exist).
+# The superuser password is random per run and masked in logs. After this action the following env vars exist for later
+# steps: RECON_TEST_W_URL, RECON_TEST_R_URL (superuser URLs, used by the Rust DB tests), RECON_W_URL, RECON_R_URL (the
+# variables `recon-migrate compare` reads) and RECON_W_CONNINFO (how R reaches W inside the docker network).
+# This action only starts the servers: migrations, subscription and checks are explicit steps of the calling job.
+name: Start W and R PostgreSQL 18 pair
+description: Two PostgreSQL 18 containers (W with logical replication, R with pgvector) on a private docker network
+inputs:
+  w-image:
+    description: Image for W
+    default: postgres:18.6@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6
+  r-image:
+    description: Image for R (PostgreSQL 18 with pgvector)
+    default: pgvector/pgvector:0.8.6-pg18@sha256:2ba9ca5f2e7daa0f0e7723cba1ee9167bab54efd3640516a44ac1a928dd67e7a
+runs:
+  using: composite
+  steps:
+    - name: Generate a throwaway superuser password
+      shell: bash
+      run: |
+        set -euo pipefail
+        pw="$(openssl rand -hex 24)"
+        echo "::add-mask::${pw}"
+        echo "PG_CI_PASSWORD=${pw}" >> "${GITHUB_ENV}"
+
+    - name: Create network and start W (wal_level=logical)
+      shell: bash
+      env:
+        POSTGRES_PASSWORD: ${{ env.PG_CI_PASSWORD }}
+        W_IMAGE: ${{ inputs.w-image }}
+      run: |
+        set -euo pipefail
+        docker network create recon-ci
+        docker run --detach --name recon-w --network recon-ci \
+          --publish 127.0.0.1:55440:5432 \
+          --env POSTGRES_PASSWORD \
+          --env POSTGRES_DB=recon_w \
+          "${W_IMAGE}" \
+          -c wal_level=logical -c max_replication_slots=10 -c max_wal_senders=10
+
+    - name: Start R (pgvector, logical-replication subscriber)
+      shell: bash
+      env:
+        POSTGRES_PASSWORD: ${{ env.PG_CI_PASSWORD }}
+        R_IMAGE: ${{ inputs.r-image }}
+      run: |
+        set -euo pipefail
+        docker run --detach --name recon-r --network recon-ci \
+          --publish 127.0.0.1:55441:5432 \
+          --env POSTGRES_PASSWORD \
+          --env POSTGRES_DB=recon_r \
+          "${R_IMAGE}" \
+          -c max_logical_replication_workers=8
+
+    - name: Wait until both accept TCP connections
+      shell: bash
+      run: |
+        set -euo pipefail
+        for node in recon-w:recon_w recon-r:recon_r; do
+          name="${node%%:*}"; db="${node##*:}"
+          for i in $(seq 1 90); do
+            if docker exec "${name}" pg_isready --host 127.0.0.1 --username postgres --dbname "${db}" > /dev/null 2>&1; then
+              echo "${name} ready after ${i}s"
+              continue 2
+            fi
+            sleep 1
+          done
+          echo "::error::${name} did not become ready"
+          docker logs "${name}" | tail -n 50
+          exit 1
+        done
+
+    - name: Export connection settings to later steps
+      shell: bash
+      run: |
+        set -euo pipefail
+        {
+          echo "RECON_TEST_W_URL=postgres://postgres:${PG_CI_PASSWORD}@127.0.0.1:55440/recon_w"
+          echo "RECON_TEST_R_URL=postgres://postgres:${PG_CI_PASSWORD}@127.0.0.1:55441/recon_r"
+          echo "RECON_W_URL=postgres://postgres:${PG_CI_PASSWORD}@127.0.0.1:55440/recon_w"
+          echo "RECON_R_URL=postgres://postgres:${PG_CI_PASSWORD}@127.0.0.1:55441/recon_r"
+          echo "RECON_W_CONNINFO=host=recon-w port=5432 dbname=recon_w user=postgres password=${PG_CI_PASSWORD}"
+        } >> "${GITHUB_ENV}"

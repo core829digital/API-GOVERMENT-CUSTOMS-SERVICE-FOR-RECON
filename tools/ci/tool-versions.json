@@ -1,0 +1,62 @@
+{
+  "_comment": "Pinned CI tool binaries for GitHub-hosted ubuntu runners (linux-x64), installed by tools/ci/install-tools.mjs after sha256 verification. `sha256` is copied from the checksum file the project publishes for the release (named in `checksums`), except cargo-deny whose project publishes a per-asset .sha256 file. Versions resolved on 2026-10-23 from the projects' GitHub release pages (helm: get.helm.sh). cosign is installed by sigstore/cosign-installer, not here. Dependabot does not track this file: bump version, url and sha256 together.",
+  "platform": "linux-x64",
+  "tools": {
+    "actionlint": {
+      "version": "1.7.12",
+      "url": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz",
+      "sha256": "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8",
+      "checksums": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_checksums.txt",
+      "archive": "tar.gz",
+      "binary": "actionlint"
+    },
+    "cargo-deny": {
+      "version": "0.20.2",
+      "url": "https://github.com/EmbarkStudios/cargo-deny/releases/download/0.20.2/cargo-deny-0.20.2-x86_64-unknown-linux-musl.tar.gz",
+      "sha256": "9f12ed4c49936e09b48bf862b595cde2fe64fcbd9d74dfacac6131ca824c8d5f",
+      "checksums": "https://github.com/EmbarkStudios/cargo-deny/releases/download/0.20.2/cargo-deny-0.20.2-x86_64-unknown-linux-musl.tar.gz.sha256",
+      "archive": "tar.gz",
+      "binary": "cargo-deny"
+    },
+    "osv-scanner": {
+      "version": "2.7.0",
+      "url": "https://github.com/google/osv-scanner/releases/download/v2.7.0/osv-scanner_linux_amd64",
+      "sha256": "160c6253e2922e9e0a6a9771c5c4c40a4b3c6090b34a3cdd5e80c96cc2e4218b",
+      "checksums": "https://github.com/google/osv-scanner/releases/download/v2.7.0/osv-scanner_SHA256SUMS",
+      "archive": "none",
+      "binary": "osv-scanner"
+    },
+    "gitleaks": {
+      "version": "8.30.1",
+      "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz",
+      "sha256": "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb",
+      "checksums": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_checksums.txt",
+      "archive": "tar.gz",
+      "binary": "gitleaks"
+    },
+    "conftest": {
+      "version": "0.71.1",
+      "url": "https://github.com/open-policy-agent/conftest/releases/download/v0.71.1/conftest_0.71.1_Linux_x86_64.tar.gz",
+      "sha256": "c3f6b2a753bd56e377a1e51a95ae3e057f926f2e9139f7d5b5dfbbaf810f7985",
+      "checksums": "https://github.com/open-policy-agent/conftest/releases/download/v0.71.1/checksums.txt",
+      "archive": "tar.gz",
+      "binary": "conftest"
+    },
+    "kubeconform": {
+      "version": "0.8.0",
+      "url": "https://github.com/yannh/kubeconform/releases/download/v0.8.0/kubeconform-linux-amd64.tar.gz",
+      "sha256": "9bc2bffbf71f261128533edaf912153948b7ff238f9a531ae6d34466ec287883",
+      "checksums": "https://github.com/yannh/kubeconform/releases/download/v0.8.0/CHECKSUMS",
+      "archive": "tar.gz",
+      "binary": "kubeconform"
+    },
+    "helm": {
+      "version": "4.3.1",
+      "url": "https://get.helm.sh/helm-v4.3.1-linux-amd64.tar.gz",
+      "sha256": "0403a88ae20913d11b10a2467b50087721fea7581736da6b9d3992f5357fe54b",
+      "checksums": "https://get.helm.sh/helm-v4.3.1-linux-amd64.tar.gz.sha256sum",
+      "archive": "tar.gz",
+      "binary": "helm"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+
+error: could not compile `recon-store` (test "pair") due to 1 previous error

@@ -1,0 +1,21 @@
+{
+  "site": {
+    "nav": {
+      "label": "Principal",
+      "platform": "Plataforma",
+      "checks": "Comprobaciones",
+      "trust": "Confianza",
+      "console": "Consola",
+      "openMenu": "Abrir menú",
+      "menuTitle": "Menú",
+      "menuDescription": "Navegación del sitio."
+    },
+    "footer": {
+      "tagline": "Conciliación de la contabilidad de una empresa con la copia que conserva cada autoridad.",
+      "explore": "Explorar",
+      "access": "Acceso",
+      "notice": "Los hallazgos indican que las fuentes discrepan según una regla citada. No constituyen asesoramiento fiscal.",
+      "status": "Desarrollo temprano. Este sitio describe el producto previsto; cada funcionalidad indica su estado."
+    }
+  }
+}

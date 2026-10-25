@@ -1,0 +1,56 @@
+{
+  "login": {
+    "metaTitle": "Connexion",
+    "eyebrow": "Accès à la console",
+    "title": "Connexion",
+    "redirectNote": "Vous allez être redirigé vers le fournisseur d'identité de votre organisation pour vous connecter.",
+    "backToSite": "Retour au site",
+    "retry": "Réessayer",
+    "notice": {
+      "idp_unreachable": {
+        "title": "Votre fournisseur d'identité est injoignable",
+        "description": "Le service de connexion n'a pas répondu et rien n'a été modifié. Réessayez dans un instant."
+      },
+      "invalid_callback": {
+        "title": "La connexion n'a pas pu aboutir",
+        "description": "La réponse du fournisseur d'identité était absente, avait expiré ou ne correspondait pas à la demande initiale. Recommencez."
+      },
+      "not_configured": {
+        "title": "La connexion n'est pas disponible",
+        "description": "Aucun fournisseur d'identité n'est encore configuré pour ce déploiement ; il n'y a donc rien à faire depuis cette page."
+      },
+      "session_expired": {
+        "title": "Votre session est terminée",
+        "description": "Connectez-vous à nouveau pour reprendre là où vous en étiez."
+      },
+      "signed_out": {
+        "title": "Vous êtes déconnecté",
+        "description": "La session de ce navigateur a été fermée."
+      },
+      "unknown": {
+        "title": "La connexion n'a pas abouti",
+        "description": "Une erreur s'est produite. Réessayez."
+      }
+    },
+    "panel": {
+      "eyebrow": "Développement précoce",
+      "statement": "Les points où votre comptabilité et la copie d'une autorité divergent, présentés avec la règle selon laquelle ils ont été contrôlés.",
+      "status": "La console fonctionne uniquement avec des données synthétiques.",
+      "guaranteesTitle": "À quoi vous attendre",
+      "guarantees": {
+        "advice": {
+          "title": "Pas un conseil fiscal",
+          "description": "Un constat indique que deux sources divergent selon une règle citée. Il n'indique jamais ce que vous devez ni si quelque chose est licite."
+        },
+        "citation": {
+          "title": "Chaque constat cite une règle",
+          "description": "Chaque constat nomme la règle selon laquelle il a été évalué, afin que le raisonnement puisse être vérifié."
+        },
+        "credentials": {
+          "title": "Le navigateur ne détient jamais vos identifiants",
+          "description": "La connexion se fait auprès de votre fournisseur d'identité. Votre session est un cookie chiffré, réservé à HTTP, et le jeton d'accès qu'il contient ne peut être ouvert que sur le serveur."
+        }
+      }
+    }
+  }
+}

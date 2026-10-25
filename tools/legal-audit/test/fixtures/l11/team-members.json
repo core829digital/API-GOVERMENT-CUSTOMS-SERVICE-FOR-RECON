@@ -1,0 +1,4 @@
+{
+  "core829srl/compliance": ["alice-compliance", "Carol-DPO"],
+  "core829srl/engineering": ["bob-dev", "dave-dev"]
+}

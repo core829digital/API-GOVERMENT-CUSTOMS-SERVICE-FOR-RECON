@@ -1,0 +1,13 @@
+{
+  "pages": {
+    "notFound": {
+      "title": "Pagina non trovata",
+      "description": "La pagina richiesta non esiste o è stata spostata.",
+      "back": "Torna al sito"
+    },
+    "error": {
+      "title": "Qualcosa è andato storto",
+      "description": "Non è stato possibile mostrare la pagina. Riprovare; se il problema persiste, ricaricare la pagina."
+    }
+  }
+}

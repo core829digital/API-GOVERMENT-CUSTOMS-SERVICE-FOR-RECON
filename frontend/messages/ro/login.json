@@ -1,0 +1,56 @@
+{
+  "login": {
+    "metaTitle": "Autentificare",
+    "eyebrow": "Acces la consolă",
+    "title": "Autentificare",
+    "redirectNote": "Veți fi redirecționat către furnizorul de identitate al organizației dumneavoastră pentru a vă autentifica.",
+    "backToSite": "Înapoi la site",
+    "retry": "Încearcă din nou",
+    "notice": {
+      "idp_unreachable": {
+        "title": "Furnizorul de identitate nu a putut fi contactat",
+        "description": "Serviciul de autentificare nu a răspuns și nimic nu a fost modificat. Încercați din nou peste puțin timp."
+      },
+      "invalid_callback": {
+        "title": "Autentificarea nu a putut fi finalizată",
+        "description": "Răspunsul furnizorului de identitate lipsea, expirase sau nu corespundea cererii care l-a inițiat. Reluați autentificarea."
+      },
+      "not_configured": {
+        "title": "Autentificarea nu este disponibilă",
+        "description": "Această instanță nu are încă un furnizor de identitate configurat, deci nu puteți face nimic din această pagină."
+      },
+      "session_expired": {
+        "title": "Sesiunea dumneavoastră s-a încheiat",
+        "description": "Autentificați-vă din nou pentru a continua de unde ați rămas."
+      },
+      "signed_out": {
+        "title": "V-ați deconectat",
+        "description": "Sesiunea din acest browser a fost închisă."
+      },
+      "unknown": {
+        "title": "Autentificarea nu s-a finalizat",
+        "description": "A apărut o eroare. Încercați din nou."
+      }
+    },
+    "panel": {
+      "eyebrow": "Dezvoltare timpurie",
+      "statement": "Unde registrele dumneavoastră și copia unei autorități nu concordă, arătat împreună cu regula conform căreia a fost verificat.",
+      "status": "Consola rulează exclusiv pe date sintetice.",
+      "guaranteesTitle": "La ce să vă așteptați",
+      "guarantees": {
+        "advice": {
+          "title": "Nu reprezintă consultanță fiscală",
+          "description": "O constatare arată că două surse nu concordă conform unei reguli citate. Nu spune ce datorați și nici dacă ceva este legal."
+        },
+        "citation": {
+          "title": "Fiecare constatare citează o regulă",
+          "description": "Fiecare constatare numește regula conform căreia a fost evaluată, astfel încât raționamentul să poată fi verificat."
+        },
+        "credentials": {
+          "title": "Browserul nu deține niciodată datele dumneavoastră de autentificare",
+          "description": "Autentificarea are loc la furnizorul dumneavoastră de identitate. Sesiunea este un cookie criptat, doar HTTP, iar tokenul de acces din el poate fi deschis numai pe server."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "pages": {
+    "notFound": {
+      "title": "Seite nicht gefunden",
+      "description": "Die angeforderte Seite existiert nicht oder wurde verschoben.",
+      "back": "Zurück zur Website"
+    },
+    "error": {
+      "title": "Etwas ist schiefgelaufen",
+      "description": "Die Seite konnte nicht angezeigt werden. Versuchen Sie es erneut; wenn das Problem bleibt, laden Sie die Seite neu."
+    }
+  }
+}

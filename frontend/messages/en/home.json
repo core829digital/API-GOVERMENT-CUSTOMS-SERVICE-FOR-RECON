@@ -1,0 +1,155 @@
+{
+  "home": {
+    "metaTitle": "Books against the authority's copy",
+    "metaDescription": "Recon compares company ledgers with the data tax and customs authorities hold, and lists every disagreement with the rule it was checked under. Early development, synthetic data only.",
+    "status": {
+      "building": "Building · synthetic data",
+      "planned": "Planned"
+    },
+    "hero": {
+      "eyebrow": "Ledger reconciliation against authority data",
+      "title": "Where your books and the authority's copy disagree.",
+      "lead": "Recon compares company ledgers with the data each tax and customs authority holds, and lists every disagreement with the rule it was checked under.",
+      "secondary": "See how it works",
+      "note": "Early development. Everything shown here runs on synthetic data only."
+    },
+    "field": {
+      "books": "Books",
+      "authority": "Authority copy",
+      "mismatch": "Mismatch",
+      "rule": "Rule",
+      "status": {
+        "cleared": "Cleared",
+        "rejected": "Rejected"
+      },
+      "caption": "Illustrative only. Synthetic records, not real data.",
+      "description": "Illustration: two ledgers side by side, Books and Authority copy. Most rows match and are joined by a line. One row differs and is flagged as a mismatch under a cited rule."
+    },
+    "gap": {
+      "eyebrow": "The gap",
+      "title": "The books say one thing. The authority's copy may say another.",
+      "lead": "A company's ledger and the copy a tax or customs authority holds are kept apart. When they drift, the difference can stay unseen until a notice, an audit or a closing review brings it up, and by then the reason is hard to reconstruct.",
+      "inputsLabel": "What Recon reads",
+      "items": {
+        "erp": {
+          "title": "ERP ledger exports",
+          "body": "The company's side: invoices and ledger entries exported from its accounting or ERP system."
+        },
+        "clearance": {
+          "title": "Authority-side status",
+          "body": "The authority's side, for example the clearance status of an e-invoice in a system such as KSeF, e-Factura or SdI. Today this record type is read from synthetic batches only; nothing is connected to a real authority system."
+        },
+        "returns": {
+          "title": "Return and customs data",
+          "body": "Filed returns and customs declarations, compared with the books. No check for these exists yet."
+        }
+      }
+    },
+    "pipeline": {
+      "eyebrow": "Pipeline",
+      "title": "From an export to something you can verify.",
+      "lead": "Four stages. Each one is marked with what exists today.",
+      "steps": {
+        "ingest": {
+          "name": "Ingest",
+          "body": "Reads exports and authority-side data into immutable, hashed batches. Only the batch API exists today; the adapters for ERP and authority sources are planned."
+        },
+        "normalise": {
+          "name": "Normalise",
+          "body": "Maps every source to one canonical record shape, so the same rule can read both sides."
+        },
+        "reconcile": {
+          "name": "Reconcile",
+          "body": "Applies cited rules to both sides and records every disagreement. Check C1, invoice against clearance status, runs on synthetic data."
+        },
+        "evidence": {
+          "name": "Evidence",
+          "body": "Findings go to an append-only, hash-chained ledger. The chain verifier and the timestamp-token verification code exist; evidence packs are planned."
+        }
+      }
+    },
+    "anatomy": {
+      "eyebrow": "A finding",
+      "title": "Anatomy of a finding.",
+      "lead": "Every finding has the same parts, so it can be read, challenged and reproduced. The one below is synthetic.",
+      "cardLabel": "Illustrative finding",
+      "cardNote": "Synthetic data. No real company or authority.",
+      "calloutsLabel": "Why each part exists",
+      "fields": {
+        "check": "Check",
+        "severity": "Severity",
+        "summary": "Summary",
+        "rule": "Cited rule",
+        "inputs": "Inputs"
+      },
+      "values": {
+        "checkName": "Invoice against clearance status",
+        "severity": "Medium",
+        "summary": "Invoice {invoice} is recorded in the books as issued. The authority-side copy holds a different clearance status for the same invoice.",
+        "booksInput": "Books record",
+        "authorityInput": "Authority record"
+      },
+      "callouts": {
+        "reproducible": {
+          "title": "Check and severity",
+          "body": "Names the deterministic check that ran. The same inputs under the same rule-pack version give the same finding, and no model decides it."
+        },
+        "neutral": {
+          "title": "Summary",
+          "body": "States only that two sources disagree. Recon is not a tax adviser: what to do about a disagreement is for the company and its advisers."
+        },
+        "cited": {
+          "title": "Cited rule",
+          "body": "Names the rule the comparison was made under. Rules are versioned data that cite their source, and a human compliance owner approves them."
+        },
+        "evidence": {
+          "title": "Inputs",
+          "body": "Points to the exact records by hash, so the finding can be traced back and checked against the tamper-evident ledger."
+        }
+      }
+    },
+    "principles": {
+      "eyebrow": "Principles",
+      "title": "What does not change.",
+      "lead": "Constraints the product is built around. Where one is a design decision and not yet something that runs, it says so.",
+      "kind": {
+        "exists": "In place · synthetic data",
+        "rule": "Design rule",
+        "decision": "Design decision"
+      },
+      "items": {
+        "determinism": {
+          "title": "Same inputs, same findings",
+          "body": "A finding is a pure function of the input record hashes and the rule-pack version. Running it again reproduces it. No model decides a finding."
+        },
+        "isolation": {
+          "title": "Every tenant isolated",
+          "body": "Row-level security in both databases keeps one tenant's records out of another tenant's queries."
+        },
+        "ledger": {
+          "title": "Append-only ledger",
+          "body": "Events are hash-chained per tenant and cannot be updated or deleted. A verifier recomputes the chain."
+        },
+        "privacy": {
+          "title": "No personal data in logs",
+          "body": "Logs, traces and ledger payloads are to be kept free of personal data."
+        },
+        "rules": {
+          "title": "Rules are cited data",
+          "body": "Dates, thresholds and rates live in versioned rule packs with a source reference, never in code. A human compliance owner approves each change."
+        },
+        "residency": {
+          "title": "EU-only residency",
+          "body": "Tenant data is meant to stay with EU-based processors. This is a design decision; the hosting provider has not been chosen yet."
+        }
+      },
+      "trustLink": "Read the trust notes"
+    },
+    "closing": {
+      "eyebrow": "Next",
+      "title": "See where the two copies disagree.",
+      "body": "Recon is in early development and runs on synthetic data today. Sign in to look at the current build, or read which checks exist and which are planned.",
+      "checksLink": "Browse the checks"
+    }
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "trust": {
+    "metadata": {
+      "title": "Încredere",
+      "description": "Securitatea, confidențialitatea și poziția juridică a serviciului, în cuvinte simple, inclusiv tot ce este încă deschis."
+    },
+    "status": {
+      "building": "În lucru",
+      "planned": "Planificat",
+      "later": "Mai târziu",
+      "buildingHint": "Există și rulează. Doar pe date sintetice.",
+      "plannedHint": "Proiectat și scris. Încă nu este construit.",
+      "laterHint": "Intenționat după primele versiuni."
+    },
+    "hero": {
+      "eyebrow": "Încredere",
+      "title": "Securitate, confidențialitate și poziția juridică",
+      "lead": "Ce este construit serviciul să facă, ce nu este și ce este încă deschis, în cuvinte simple. Este în dezvoltare timpurie și nu a rulat pe date reale ale clienților."
+    },
+    "principles": {
+      "eyebrow": "Cum este construit",
+      "title": "Șapte lucruri pe care proiectul le impune",
+      "lead": "Acestea sunt reguli de proiectare după care este scris codul. Fiecare are o etichetă care arată cât de departe a ajuns de fapt.",
+      "items": {
+        "isolation": {
+          "title": "Izolarea clienților",
+          "body": "Fiecare tabel care conține date ale clienților poartă un identificator de client, iar securitatea la nivel de rând din ambele baze de date limitează fiecare sesiune la rândurile propriului client. Dacă niciun client nu este setat, interogarea eșuează cu o eroare în loc să returneze rânduri: eșuează închis.",
+          "detail": "Verificat pe o pereche locală de baze de date, cu un rol obișnuit, fără drepturi de superutilizator. Încă neverificat pe o infrastructură apropiată de producție."
+        },
+        "ledger": {
+          "title": "Un registru care arată orice modificare",
+          "body": "Fiecare client are un registru doar-adăugare. Fiecare eveniment păstrează un hash care îl acoperă pe cel dinaintea lui, așa că modificarea istoricului strică lanțul. Actualizările și ștergerile sunt blocate prin privilegii și prin declanșatoare. Observarea faptului că ultimele evenimente au fost tăiate cere o ancoră de marcă temporală, care este planificată.",
+          "detail": "O modificare privilegiată a unui singur rând pe o pereche locală de test a fost prinsă de verificarea lanțului."
+        },
+        "privacy": {
+          "title": "Fără date personale în jurnale, în registru sau în embeddinguri",
+          "body": "Conținutul evenimentelor din registru poartă referințe opace, nu nume sau identificatori fiscali. Câmpurile de identificare sunt stocate criptat, iar ștergerea urmează să funcționeze prin distrugerea cheii, astfel încât lanțul rămâne verificabil după ce datele au dispărut. Jurnalele, urmele de execuție și indexul de căutare peste textele juridice nu trebuie să conțină înregistrări ale clienților sau date personale.",
+          "detail": "Coloanele de identificare criptate și distrugerea cheii au fost încercate pe o pereche locală de test. Aceasta este o regulă de proiectare, nu o certificare."
+        },
+        "residency": {
+          "title": "Rezidență exclusiv în UE, ca decizie de proiectare",
+          "body": "Proiectul păstrează datele clienților în regiuni din UE și nu trimite nimic către procesatori din afara UE sau către API-uri găzduite de modele lingvistice. Aceasta este o decizie de proiectare, nu o afirmație despre un serviciu aflat în funcțiune: furnizorul de găzduire nu a fost ales și nu există o implementare de producție.",
+          "detail": "O evaluare a impactului asupra protecției datelor și un registru al prelucrărilor există ca ciorne pentru responsabilul cu protecția datelor și pentru consilierul juridic. Niciun om nu le-a revizuit, iar ele nu reprezintă consultanță juridică. Lista subprocesatorilor nu este încă scrisă."
+        },
+        "deterministic": {
+          "title": "Constatări deterministe; niciun model nu decide",
+          "body": "O constatare este o funcție pură a hash-urilor înregistrărilor de intrare și a versiunii pachetului de reguli. În evaluarea regulilor nu există ceas, aleatoriu, apel în rețea sau model lingvistic, așa că o nouă rulare dă același rezultat. Dacă vreodată se folosește un model lingvistic, acesta este doar consultativ și nu poate crea o constatare sau o citare.",
+          "detail": "Implementat pentru verificarea C1, pe date sintetice."
+        },
+        "rules": {
+          "title": "Regulile sunt date citate și cer aprobare umană",
+          "body": "Fiecare regulă, perioadă de păstrare și dată specifică unei țări este stocată ca dată, cu citarea sursei primare, niciodată ca o constantă în cod. Un pachet de reguli urmează să ceară aprobarea unui responsabil de conformitate înainte de a fi activat. Nu a fost numit niciun responsabil de conformitate, iar fiecare pachet de reguli scris până acum este o ciornă nerevizuită, dezactivată."
+        },
+        "keys": {
+          "title": "Chei API",
+          "body": "Cheile API sunt stocate doar ca hash-uri Argon2id, afișate o singură dată la creare și limitate la acțiuni anume. În consola web, browserul păstrează doar un cookie de sesiune sigilat, HttpOnly, niciodată un jeton de acces."
+        }
+      }
+    },
+    "legal": {
+      "eyebrow": "Juridic",
+      "title": "Poziția juridică",
+      "lead": "Ce nu face serviciul contează la fel de mult ca ce face.",
+      "items": {
+        "adviser": {
+          "title": "Nu este consultant fiscal",
+          "body": "{app} este un serviciu software care compară surse. Nu este consultant fiscal, iar nimic din ce produce nu este consultanță fiscală, juridică sau contabilă."
+        },
+        "conclusions": {
+          "title": "Constatările nu formulează niciodată concluzii juridice",
+          "body": "O constatare spune că două surse nu concordă conform unei reguli citate. Nu spune dacă ceva este legal, datorat sau conform și nu recomandă o acțiune. Șabloanele constatărilor sunt scrise după această regulă."
+        },
+        "review": {
+          "title": "Poziționarea este încă în analiză",
+          "body": "Dacă constatările cu reguli citate sunt considerate consultanță reglementată în țările vizate este o întrebare pentru un consilier juridic și încă nu are răspuns. Formularea constatărilor și a acestui site se poate schimba când va avea."
+        }
+      }
+    },
+    "open": {
+      "eyebrow": "Puncte deschise",
+      "title": "Ce este încă deschis",
+      "lead": "Nehotărât, nefăcut sau nemăsurat. Nu se deține și nu se pretinde nicio certificare de securitate sau de conformitate.",
+      "items": {
+        "failover": {
+          "title": "Failover",
+          "body": "Trecerea pe o altă instanță a bazei de date de scriere, în timp ce copia de citire continuă să se replice, nu a fost verificată. Un test exploratoriu este planificat în faza de fundamente."
+        },
+        "load": {
+          "title": "Încărcare și disponibilitate",
+          "body": "Nimic nu a fost testat sub încărcare. Fiecare cifră de disponibilitate și de recuperare din proiect este o țintă de proiectare, nu o măsurătoare."
+        },
+        "penTest": {
+          "title": "Test de penetrare independent",
+          "body": "Nu s-a efectuat niciun test de penetrare. Este planificat pentru o fază de consolidare."
+        },
+        "timestamp": {
+          "title": "Furnizor calificat de mărci temporale",
+          "body": "Nu a fost ales niciun furnizor calificat de mărci temporale. Ancorarea prin marcă temporală așteaptă această decizie."
+        },
+        "owner": {
+          "title": "Responsabil de conformitate",
+          "body": "Nu a fost numit niciun responsabil de conformitate. Pachetele de reguli nu pot fi aprobate până când nu este numit unul."
+        },
+        "counsel": {
+          "title": "Consilier juridic și responsabil cu protecția datelor",
+          "body": "Un consilier juridic nu a revizuit poziționarea juridică și nu a fost numit niciun responsabil cu protecția datelor."
+        },
+        "hosting": {
+          "title": "Furnizor de găzduire",
+          "body": "Furnizorul de găzduire din UE și regiunile nu sunt alese. Până atunci nu există o implementare de producție."
+        },
+        "identity": {
+          "title": "Furnizor de identitate pentru clienți",
+          "body": "Furnizorul de identitate pentru autentificarea clienților nu a fost ales."
+        },
+        "certification": {
+          "title": "Certificări",
+          "body": "Nu se deține și nu se pretinde nicio certificare de securitate sau de conformitate. O evaluare a pregătirii este planificată pentru o fază ulterioară."
+        }
+      }
+    }
+  }
+}

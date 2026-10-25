@@ -1,0 +1,155 @@
+{
+  "home": {
+    "metaTitle": "La comptabilité face à la copie de l'autorité",
+    "metaDescription": "Recon compare les grands livres d'une entreprise avec les données détenues par les autorités fiscales et douanières, et liste chaque divergence avec la règle selon laquelle elle a été contrôlée. Développement précoce, données synthétiques uniquement.",
+    "status": {
+      "building": "En construction · données synthétiques",
+      "planned": "Prévu"
+    },
+    "hero": {
+      "eyebrow": "Rapprochement comptable avec les données des autorités",
+      "title": "Là où votre comptabilité et la copie de l'autorité divergent.",
+      "lead": "Recon compare les grands livres d'une entreprise avec les données détenues par chaque autorité fiscale et douanière, et liste chaque divergence avec la règle selon laquelle elle a été contrôlée.",
+      "secondary": "Voir le fonctionnement",
+      "note": "Développement précoce. Tout ce qui est présenté ici fonctionne uniquement avec des données synthétiques."
+    },
+    "field": {
+      "books": "Comptabilité",
+      "authority": "Copie de l'autorité",
+      "mismatch": "Écart",
+      "rule": "Règle",
+      "status": {
+        "cleared": "Validée",
+        "rejected": "Rejetée"
+      },
+      "caption": "À titre d'illustration uniquement. Enregistrements synthétiques, pas de données réelles.",
+      "description": "Illustration : deux grands livres côte à côte, Comptabilité et Copie de l'autorité. La plupart des lignes concordent et sont reliées par un trait. Une ligne diffère et est signalée comme un écart selon une règle citée."
+    },
+    "gap": {
+      "eyebrow": "Le décalage",
+      "title": "La comptabilité dit une chose. La copie de l'autorité peut en dire une autre.",
+      "lead": "Le grand livre d'une entreprise et la copie détenue par une autorité fiscale ou douanière sont tenus séparément. Quand ils s'écartent, la différence peut passer inaperçue jusqu'à ce qu'un avis, un contrôle ou une revue de clôture la fasse apparaître, et il est alors difficile d'en reconstituer l'origine.",
+      "inputsLabel": "Ce que Recon lit",
+      "items": {
+        "erp": {
+          "title": "Exports du grand livre ERP",
+          "body": "Le côté de l'entreprise : factures et écritures comptables exportées depuis son système comptable ou ERP."
+        },
+        "clearance": {
+          "title": "Statut côté autorité",
+          "body": "Le côté de l'autorité, par exemple le statut de validation d'une facture électronique dans un système tel que KSeF, e-Factura ou SdI. Aujourd'hui, ce type d'enregistrement n'est lu qu'à partir de lots synthétiques ; rien n'est connecté à un système réel d'autorité."
+        },
+        "returns": {
+          "title": "Déclarations et données douanières",
+          "body": "Déclarations déposées et déclarations en douane, comparées à la comptabilité. Aucun contrôle n'existe encore pour celles-ci."
+        }
+      }
+    },
+    "pipeline": {
+      "eyebrow": "Chaîne de traitement",
+      "title": "D'un export à quelque chose que vous pouvez vérifier.",
+      "lead": "Quatre étapes. Chacune indique ce qui existe aujourd'hui.",
+      "steps": {
+        "ingest": {
+          "name": "Ingestion",
+          "body": "Lit les exports et les données côté autorité dans des lots immuables et hachés. Seule l'API de lots existe aujourd'hui ; les adaptateurs pour les sources ERP et d'autorités sont prévus."
+        },
+        "normalise": {
+          "name": "Normalisation",
+          "body": "Ramène chaque source à une forme d'enregistrement canonique unique, afin que la même règle puisse lire les deux côtés."
+        },
+        "reconcile": {
+          "name": "Rapprochement",
+          "body": "Applique des règles citées aux deux côtés et enregistre chaque divergence. Le contrôle C1, facture face au statut de validation, fonctionne sur des données synthétiques."
+        },
+        "evidence": {
+          "name": "Preuve",
+          "body": "Les constats sont inscrits dans un registre d'événements en ajout seul, à chaîne de hachage. Le vérificateur de chaîne et le code de vérification des jetons d'horodatage existent ; les dossiers de preuve sont prévus."
+        }
+      }
+    },
+    "anatomy": {
+      "eyebrow": "Un constat",
+      "title": "Anatomie d'un constat.",
+      "lead": "Chaque constat comporte les mêmes éléments, afin de pouvoir être lu, contesté et reproduit. Celui ci-dessous est synthétique.",
+      "cardLabel": "Constat illustratif",
+      "cardNote": "Données synthétiques. Aucune entreprise ni autorité réelle.",
+      "calloutsLabel": "Pourquoi chaque élément existe",
+      "fields": {
+        "check": "Contrôle",
+        "severity": "Gravité",
+        "summary": "Résumé",
+        "rule": "Règle citée",
+        "inputs": "Entrées"
+      },
+      "values": {
+        "checkName": "Facture face au statut de validation",
+        "severity": "Moyenne",
+        "summary": "La facture {invoice} est enregistrée dans la comptabilité comme émise. La copie côté autorité contient un statut de validation différent pour la même facture.",
+        "booksInput": "Enregistrement comptable",
+        "authorityInput": "Enregistrement de l'autorité"
+      },
+      "callouts": {
+        "reproducible": {
+          "title": "Contrôle et gravité",
+          "body": "Nomme le contrôle déterministe qui a été exécuté. Les mêmes entrées, avec la même version du lot de règles, donnent le même constat, et aucun modèle n'en décide."
+        },
+        "neutral": {
+          "title": "Résumé",
+          "body": "Indique seulement que deux sources divergent. Recon n'est pas un conseiller fiscal : les suites à donner à une divergence relèvent de l'entreprise et de ses conseillers."
+        },
+        "cited": {
+          "title": "Règle citée",
+          "body": "Nomme la règle selon laquelle la comparaison a été faite. Les règles sont des données versionnées qui citent leur source, et un responsable de la conformité les approuve."
+        },
+        "evidence": {
+          "title": "Entrées",
+          "body": "Renvoie aux enregistrements exacts par leur hachage, afin que le constat puisse être retracé et confronté au registre infalsifiable."
+        }
+      }
+    },
+    "principles": {
+      "eyebrow": "Principes",
+      "title": "Ce qui ne change pas.",
+      "lead": "Les contraintes autour desquelles le produit est construit. Lorsque l'une relève d'une décision de conception et ne fonctionne pas encore, cela est indiqué.",
+      "kind": {
+        "exists": "En place · données synthétiques",
+        "rule": "Règle de conception",
+        "decision": "Décision de conception"
+      },
+      "items": {
+        "determinism": {
+          "title": "Mêmes entrées, mêmes constats",
+          "body": "Un constat est une fonction pure des hachages des enregistrements d'entrée et de la version du lot de règles. Le réexécuter le reproduit. Aucun modèle ne décide d'un constat."
+        },
+        "isolation": {
+          "title": "Chaque locataire est isolé",
+          "body": "La sécurité au niveau des lignes, dans les deux bases de données, empêche les enregistrements d'un locataire d'apparaître dans les requêtes d'un autre."
+        },
+        "ledger": {
+          "title": "Registre en ajout seul",
+          "body": "Les événements sont chaînés par hachage pour chaque locataire et ne peuvent être ni modifiés ni supprimés. Un vérificateur recalcule la chaîne."
+        },
+        "privacy": {
+          "title": "Aucune donnée personnelle dans les journaux",
+          "body": "Les journaux, les traces et les contenus du registre doivent rester exempts de données personnelles."
+        },
+        "rules": {
+          "title": "Les règles sont des données citées",
+          "body": "Les dates, seuils et taux figurent dans des lots de règles versionnés, avec une référence à la source, jamais dans le code. Un responsable de la conformité approuve chaque modification."
+        },
+        "residency": {
+          "title": "Hébergement exclusivement dans l'UE",
+          "body": "Les données des locataires sont destinées à rester chez des sous-traitants établis dans l'UE. Il s'agit d'une décision de conception ; l'hébergeur n'a pas encore été choisi."
+        }
+      },
+      "trustLink": "Lire les notes de confiance"
+    },
+    "closing": {
+      "eyebrow": "Suite",
+      "title": "Voyez où les deux copies divergent.",
+      "body": "Recon est en développement précoce et fonctionne aujourd'hui avec des données synthétiques. Connectez-vous pour consulter la version actuelle, ou lisez quels contrôles existent et lesquels sont prévus.",
+      "checksLink": "Parcourir les contrôles"
+    }
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "common": {
+    "close": "Cerrar",
+    "loading": "Cargando",
+    "retry": "Reintentar",
+    "signIn": "Iniciar sesión",
+    "signOut": "Cerrar sesión",
+    "none": "Sin definir"
+  },
+  "metadata": {
+    "title": "Recon",
+    "description": "Conciliación de la contabilidad de una empresa con la copia que conserva cada autoridad, con la base legal citada."
+  },
+  "shell": {
+    "appName": "Recon",
+    "console": "Consola",
+    "skipToContent": "Saltar al contenido principal",
+    "sidebarTitle": "Navegación",
+    "sidebarDescription": "Enlaces de navegación principal.",
+    "toggleSidebar": "Mostrar u ocultar la navegación",
+    "navLabel": "Principal",
+    "nav": {
+      "overview": "Resumen",
+      "findings": "Hallazgos"
+    },
+    "language": {
+      "label": "Idioma",
+      "en": "English",
+      "ro": "Română",
+      "it": "Italiano",
+      "es": "Español",
+      "fr": "Français",
+      "de": "Deutsch",
+      "nl": "Nederlands",
+      "pl": "Polski"
+    },
+    "theme": {
+      "label": "Tema",
+      "light": "Claro",
+      "dark": "Oscuro",
+      "system": "Sistema"
+    },
+    "session": {
+      "checking": "Comprobando la sesión"
+    }
+  },
+  "overview": {
+    "title": "Resumen",
+    "intro": "Recon compara su contabilidad con la copia que conserva cada autoridad y enumera en qué puntos las fuentes discrepan según una regla citada.",
+    "notice": "Los hallazgos indican que las fuentes discrepan según una regla citada. No constituyen asesoramiento fiscal.",
+    "findingsCard": {
+      "title": "Hallazgos",
+      "description": "Discrepancias entre su contabilidad y la copia de una autoridad, cada una con la regla bajo la que se comprobó.",
+      "action": "Abrir hallazgos"
+    },
+    "batchCard": {
+      "title": "Estado del lote",
+      "description": "Consulte el estado de procesamiento de un lote cargado mediante su identificador.",
+      "label": "Identificador del lote",
+      "placeholder": "00000000-0000-7000-8000-000000000000",
+      "submit": "Mostrar estado",
+      "invalid": "Introduzca un identificador de lote válido (UUID)."
+    }
+  },
+  "findings": {
+    "title": "Hallazgos",
+    "description": "Puntos en los que su contabilidad y la copia de una autoridad discrepan según una regla citada. Esto no es asesoramiento fiscal.",
+    "tableLabel": "Lista de hallazgos",
+    "columns": {
+      "check": "Comprobación",
+      "severity": "Gravedad",
+      "jurisdiction": "Jurisdicción",
+      "summary": "Resumen",
+      "citation": "Regla citada",
+      "created": "Registrado"
+    },
+    "severity": {
+      "info": "Info",
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta"
+    },
+    "empty": {
+      "title": "Sin hallazgos",
+      "description": "El servicio no devolvió ningún hallazgo."
+    }
+  },
+  "batch": {
+    "title": "Estado del lote",
+    "back": "Volver al resumen",
+    "fields": {
+      "id": "Identificador del lote",
+      "status": "Estado",
+      "sourceType": "Tipo de fuente",
+      "period": "Periodo",
+      "created": "Registrado",
+      "failureReason": "Motivo del fallo"
+    },
+    "periodRange": "{start} a {end}",
+    "status": {
+      "registered": "Registrado",
+      "parsing": "Analizando",
+      "parsed": "Analizado",
+      "failed": "Fallido"
+    }
+  },
+  "errors": {
+    "unauthenticated": {
+      "title": "Inicio de sesión necesario",
+      "description": "La sesión no existe o ha caducado. Inicie sesión para continuar."
+    },
+    "notFound": {
+      "title": "No encontrado",
+      "description": "El servicio no tiene ningún registro con este identificador."
+    },
+    "replicaLag": {
+      "title": "Los datos aún se están sincronizando",
+      "description": "La copia de lectura todavía no se ha puesto al día. Vuelva a intentarlo en breve."
+    },
+    "unavailable": {
+      "title": "Servicio no disponible",
+      "description": "No se pudo acceder al servicio o este devolvió un error. Vuelva a intentarlo más tarde."
+    },
+    "invalidResponse": {
+      "title": "Respuesta inesperada",
+      "description": "El servicio respondió con un formato que esta aplicación no reconoce."
+    },
+    "network": {
+      "title": "Problema de conexión",
+      "description": "La solicitud no se completó. Compruebe su conexión y vuelva a intentarlo."
+    }
+  }
+}

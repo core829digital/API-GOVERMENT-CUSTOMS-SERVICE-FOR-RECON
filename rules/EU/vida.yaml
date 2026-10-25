@@ -1,0 +1,173 @@
+# DRAFT rule pack. Not approved. Not legal advice. Disabled until a human compliance approver signs off (Rules.md R-RULES-2, Progress.md D-5).
+# Scope: amendments to Directive 2006/112/EC made by Council Directive (EU) 2025/516 of 11 March 2025 ("VAT in the Digital Age", OJ L, 25.3.2025,
+# ELI http://data.europa.eu/eli/dir/2025/516/oj). Text read on 2026-10-23 from EUR-Lex CELEX:32025L0516 (as published; no consolidation exists
+# for the dates below in the consolidated text dated 2025-04-14).
+# Application dates come from Art. 6 of that Directive: Art. 2 -> 2027-01-01; Art. 3 -> 2028-07-01 (Art. 3 point (1) = Art. 28a: each Member
+# State applies it at the earliest 2028-07-01 and at the latest 2030-01-01); Art. 4 -> 2029-07-01; Art. 5 -> 2030-07-01 (Member States that
+# had a domestic digital real-time transaction-based reporting obligation in place on 2024-01-01, or an Art. 395 authorisation / adopted
+# legislation before that date, apply Art. 5 points (5) as regards Art. 218 and (19) by 2035-01-01 for domestic e-invoicing and reporting;
+# the Commission may propose postponement after the Art. 271c report).
+# The per-Member-State application date is NOT recorded here: it is national data to be added per country pack once verified.
+# Entries are deliberately not given `valid_to` on the replaced provisions: the replaced text stays in its original pack until a human
+# releases a new version (R-RULES-4, R-RULES-5).
+pack: vida
+jurisdiction: EU
+version: 0.1.0
+valid_from: 2027-01-01
+valid_to:
+last_reviewed: 2026-10-23
+reviewed_by: "UNREVIEWED agent draft (awaiting @compliance, Progress.md D-5)"
+enabled: false
+rules:
+  - code: VIDA-001
+    title: "Art. 14a replaced: electronic-interface deemed-supplier rule for distance sales of imported goods in consignments not exceeding EUR 150 and for Union supplies by non-established taxable persons to taxable persons or non-taxable legal persons whose intra-Community acquisitions are not subject to VAT under Art. 3(1), or to any other non-taxable person; Commission report due by 2027-07-01"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 2 point (1); Art. 6(2)"
+    accessed_on: 2026-10-23
+    valid_from: 2027-01-01
+    valid_to:
+    pending_change:
+  - code: VIDA-002
+    title: "Art. 17a call-off stock: only arrangements with dispatch or transport on or before 2028-06-30 qualify, and the Article ceases to apply on 2029-06-30"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 2 point (2) (Art. 17a(2)(a) and new Art. 17a(8)); Art. 6(2)"
+    accessed_on: 2026-10-23
+    valid_from: 2027-01-01
+    valid_to:
+    pending_change:
+  - code: VIDA-003
+    title: "New Art. 28a: a taxable person facilitating through an electronic interface the supply in the Union of short-term accommodation rental (uninterrupted rental of up to 30 nights) or passenger transport by road is deemed to have received and supplied those services, unless the provider has given the facilitator a VAT identification number and declared that it will charge the VAT"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 3 point (1) (Art. 28a); Art. 6(3)"
+    accessed_on: 2026-10-23
+    valid_from: 2028-07-01
+    valid_to:
+    pending_change: "Application date is per Member State, between 2028-07-01 (earliest) and 2030-01-01 (latest) under Art. 6(3), second subparagraph; the date for each Member State is not recorded in this pack."
+  - code: VIDA-004
+    title: "New Art. 46a: the place of supply of the facilitation service provided to a non-taxable person through an electronic interface is the place where the underlying transaction is supplied"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 3 point (2) (Art. 46a); Art. 6(3)"
+    accessed_on: 2026-10-23
+    valid_from: 2028-07-01
+    valid_to:
+    pending_change:
+  - code: VIDA-005
+    title: "New special scheme for transfers of own goods (Arts. 369xa to 369xk): identification in the Member State of identification only, monthly VAT return by the end of the following month with total value per Member State, intra-Community acquisition in the destination Member State exempt, records kept 10 years from 31 December of the year of the transfer"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 3 (Title XII Chapter 6 Section 5, Arts. 369xa-369xk); Art. 6(3)"
+    accessed_on: 2026-10-23
+    valid_from: 2028-07-01
+    valid_to:
+    pending_change:
+  - code: VIDA-006
+    title: "Art. 243(3) (register of call-off stock transfers) deleted and Art. 262(2) (recapitulative statement information on call-off stock) deleted"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 4 points (1) and (2); Art. 6(4)"
+    accessed_on: 2026-10-23
+    valid_from: 2029-07-01
+    valid_to:
+    pending_change:
+  - code: VIDA-007
+    title: "Art. 217 replaced: 'electronic invoice' means an invoice containing the information required by the Directive which, at least for the data referred to in Arts. 262 and 271b, has been issued, transmitted and received in a structured electronic format allowing automated and electronic processing"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 5 point (4); Art. 6(5)"
+    accessed_on: 2026-10-23
+    valid_from: 2030-07-01
+    valid_to:
+    pending_change: "Member States with a domestic real-time reporting obligation in place on 2024-01-01 (or authorised/legislated before that date) may apply the Art. 5 point (5) measures related to Art. 218 by 2035-01-01 for domestic e-invoicing and reporting (Art. 6(5), second subparagraph)."
+  - code: VIDA-008
+    title: "Art. 218 replaced: invoices are issued as electronic invoices (Member States may accept other documents for transactions not subject to Chapter 6 reporting); electronic invoices comply with the European standard on electronic invoicing and its syntax list under Directive 2014/55/EU, other standards allowed for domestic supplies other than those referred to in Art. 262"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 5 point (5); Art. 6(5)"
+    accessed_on: 2026-10-23
+    valid_from: 2030-07-01
+    valid_to:
+    pending_change: "Member States with a domestic real-time reporting obligation in place on 2024-01-01 (or authorised/legislated before that date) may apply this measure by 2035-01-01 for domestic e-invoicing and reporting; the Commission may propose postponement if the Art. 271c interim report (due 2033-03-31) shows shortcomings (Art. 6(5), second subparagraph)."
+  - code: VIDA-009
+    title: "Art. 222 first paragraph replaced: invoice for Art. 138 supplies and for supplies of goods or services with customer-liable VAT under Arts. 194 to 197 issued no later than 10 days following the chargeable event; for payments on account, 10 days following receipt of the payment"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 5 point (6); Art. 6(5)"
+    accessed_on: 2026-10-23
+    valid_from: 2030-07-01
+    valid_to:
+    pending_change:
+  - code: VIDA-010
+    title: "Art. 223 replaced: summary invoices for Art. 222 supplies issued no later than 10 days following the end of the calendar month to which they refer; Member States may exclude summary invoices in certain fraud-sensitive sectors"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 5 point (7); Art. 6(5)"
+    accessed_on: 2026-10-23
+    valid_from: 2030-07-01
+    valid_to:
+    pending_change:
+  - code: VIDA-011
+    title: "Art. 226 amended: point (11a) adds the mention 'triangular transaction' for Art. 197 supplies of goods; new point (16) the sequential number of the corrected invoice for a corrective invoice under Art. 219; new point (17) the bank or virtual account numbers or other identifiers of the supplier's accounts into which the invoice can be paid"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 5 point (8); Art. 6(5)"
+    accessed_on: 2026-10-23
+    valid_from: 2030-07-01
+    valid_to:
+    pending_change:
+  - code: VIDA-012
+    title: "Art. 232 replaced: electronic invoices complying with the European standard on electronic invoicing are not subject to acceptance by the recipient (Member States using the Art. 218(2) option may require acceptance for transactions not subject to Chapter 6 reporting); invoices under other standards or non-electronic-invoice formats remain subject to acceptance"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 5 point (9); Art. 6(5)"
+    accessed_on: 2026-10-23
+    valid_from: 2030-07-01
+    valid_to:
+    pending_change:
+  - code: VIDA-013
+    title: "Art. 262 replaced: every taxable person identified for VAT submits Art. 264 data for supplies and transfers under Art. 138(1) and (2)(c), intra-Community acquisitions under Arts. 20 to 22, and supplies and acquisitions with customer-liable VAT (Arts. 194 to 197, and 204 for acquisitions), to the Member State that issued the VAT identification number used; Member State option not to require data on acquisitions"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 5 point (15); Art. 6(5)"
+    accessed_on: 2026-10-23
+    valid_from: 2030-07-01
+    valid_to:
+    pending_change:
+  - code: VIDA-014
+    title: "Art. 263 replaced: data transmitted per individual transaction at the time the invoice is issued or should have been issued; no later than 5 days after issue where the acquirer or recipient issues the invoice, and no later than 5 days after receipt for acquisitions; common electronic message determined under Art. 58(2) of Regulation (EU) No 904/2010"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 5 point (16); Art. 6(5)"
+    accessed_on: 2026-10-23
+    valid_from: 2030-07-01
+    valid_to:
+    pending_change:
+  - code: VIDA-015
+    title: "Art. 264 replaced: data transmitted are the Art. 226 information listed per transaction type (points (1) to (4), (6), (7), (8), (11), (16), (17), and (11a) where relevant, for Art. 138(1) supplies and customer-liable supplies; the lists in points (b) to (e) for transfers and acquisitions)"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 5 point (17); Art. 6(5)"
+    accessed_on: 2026-10-23
+    valid_from: 2030-07-01
+    valid_to:
+    pending_change:
+  - code: VIDA-016
+    title: "Arts. 265 to 271 (recapitulative statement provisions for acquisitions, additional information, simplifications) deleted"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 5 point (18); Art. 6(5)"
+    accessed_on: 2026-10-23
+    valid_from: 2030-07-01
+    valid_to:
+    pending_change:
+  - code: VIDA-017
+    title: "New Arts. 271a and 271b: Member State option to require taxable persons established or identified in their territory to send electronically data on domestic supplies and acquisitions; transmission at invoice issue (or within 5 days where issued by the acquirer or recipient, or after receipt for acquisitions); data from invoices complying with the European standard on electronic invoicing to be accepted"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 5 point (19) (Arts. 271a, 271b); Art. 6(5)"
+    accessed_on: 2026-10-23
+    valid_from: 2030-07-01
+    valid_to:
+    pending_change: "Member States with a domestic real-time reporting obligation in place on 2024-01-01 (or authorised/legislated before that date) may apply the Art. 5 point (19) measures related to Arts. 271a and 271b by 2035-01-01 for domestic e-invoicing and reporting (Art. 6(5), second subparagraph)."
+  - code: VIDA-018
+    title: "Art. 138(1a) replaced: the intra-Community supply exemption does not apply where the supplier has not complied with the obligation in Arts. 262 and 263 to communicate intra-Community transaction data, or where the data transmitted do not contain the correct information required under Art. 264, unless the supplier can duly justify the shortcomings to the competent authorities"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 5 point (2); Art. 6(5)"
+    accessed_on: 2026-10-23
+    valid_from: 2030-07-01
+    valid_to:
+    pending_change:
+  - code: VIDA-019
+    title: "Art. 168 paragraph added: for transactions subject to the Art. 271a(1) reporting, Member States may provide that the customer is entitled to deduct or reclaim the VAT only if the customer holds an electronic invoice issued in accordance with Art. 218(3)"
+    source_ref: "CELEX:32025L0516"
+    article: "Art. 5 point (3); Art. 6(5)"
+    accessed_on: 2026-10-23
+    valid_from: 2030-07-01
+    valid_to:
+    pending_change:

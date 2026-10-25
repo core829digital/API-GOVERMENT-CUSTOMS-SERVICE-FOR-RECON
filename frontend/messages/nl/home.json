@@ -1,0 +1,155 @@
+{
+  "home": {
+    "metaTitle": "Boekhouding tegenover de kopie van de autoriteit",
+    "metaDescription": "Recon vergelijkt de grootboeken van bedrijven met de gegevens van belasting- en douane-autoriteiten en toont elk verschil met de regel waaronder het is gecontroleerd. Vroege ontwikkeling, uitsluitend synthetische gegevens.",
+    "status": {
+      "building": "In aanbouw · synthetische gegevens",
+      "planned": "Gepland"
+    },
+    "hero": {
+      "eyebrow": "Grootboekafstemming met gegevens van autoriteiten",
+      "title": "Waar uw boekhouding en de kopie van de autoriteit verschillen.",
+      "lead": "Recon vergelijkt de grootboeken van bedrijven met de gegevens van elke belasting- en douane-autoriteit en toont elk verschil met de regel waaronder het is gecontroleerd.",
+      "secondary": "Bekijk hoe het werkt",
+      "note": "Vroege ontwikkeling. Alles wat hier te zien is, draait uitsluitend op synthetische gegevens."
+    },
+    "field": {
+      "books": "Boeken",
+      "authority": "Kopie autoriteit",
+      "mismatch": "Verschil",
+      "rule": "Regel",
+      "status": {
+        "cleared": "Goedgekeurd",
+        "rejected": "Afgewezen"
+      },
+      "caption": "Alleen ter illustratie. Synthetische records, geen echte gegevens.",
+      "description": "Illustratie: twee grootboeken naast elkaar, Boeken en Kopie autoriteit. De meeste rijen komen overeen en zijn met een lijn verbonden. Eén rij wijkt af en is gemarkeerd als verschil volgens een vermelde regel."
+    },
+    "gap": {
+      "eyebrow": "De kloof",
+      "title": "De boeken zeggen het ene. De kopie van de autoriteit kan iets anders zeggen.",
+      "lead": "Het grootboek van een bedrijf en de kopie die een belasting- of douane-autoriteit bijhoudt, worden gescheiden beheerd. Als ze uit elkaar lopen, kan het verschil onopgemerkt blijven tot een aanmaning, een controle of een afsluitende review het aan het licht brengt, en dan is de oorzaak moeilijk te reconstrueren.",
+      "inputsLabel": "Wat Recon inleest",
+      "items": {
+        "erp": {
+          "title": "Exports van ERP-grootboeken",
+          "body": "De kant van het bedrijf: facturen en grootboekboekingen, geëxporteerd uit het boekhoud- of ERP-systeem."
+        },
+        "clearance": {
+          "title": "Status bij de autoriteit",
+          "body": "De kant van de autoriteit, bijvoorbeeld de goedkeuringsstatus van een e-factuur in een systeem als KSeF, e-Factura of SdI. Dit recordtype wordt vandaag alleen uit synthetische batches ingelezen; er is niets gekoppeld aan een echt systeem van een autoriteit."
+        },
+        "returns": {
+          "title": "Aangifte- en douanegegevens",
+          "body": "Ingediende aangiften en douaneaangiften, vergeleken met de boekhouding. Hiervoor bestaat nog geen controle."
+        }
+      }
+    },
+    "pipeline": {
+      "eyebrow": "Verwerking",
+      "title": "Van een export naar iets wat u kunt verifiëren.",
+      "lead": "Vier fasen. Elke fase toont wat er vandaag al bestaat.",
+      "steps": {
+        "ingest": {
+          "name": "Inlezen",
+          "body": "Leest exports en gegevens van autoriteiten in als onveranderlijke batches met hash. Vandaag bestaat alleen de batch-API; de adapters voor ERP- en autoriteitsbronnen zijn gepland."
+        },
+        "normalise": {
+          "name": "Normaliseren",
+          "body": "Zet elke bron om naar één canoniek recordformaat, zodat dezelfde regel beide kanten kan lezen."
+        },
+        "reconcile": {
+          "name": "Afstemmen",
+          "body": "Past vermelde regels toe op beide kanten en legt elk verschil vast. Controle C1, factuur tegenover goedkeuringsstatus, draait op synthetische gegevens."
+        },
+        "evidence": {
+          "name": "Bewijs",
+          "body": "Bevindingen gaan naar een append-only register met hashketen. De ketenverificatie en de code voor het verifiëren van tijdstempels bestaan; bewijspakketten zijn gepland."
+        }
+      }
+    },
+    "anatomy": {
+      "eyebrow": "Een bevinding",
+      "title": "Anatomie van een bevinding.",
+      "lead": "Elke bevinding heeft dezelfde onderdelen, zodat ze gelezen, betwist en gereproduceerd kan worden. Het voorbeeld hieronder is synthetisch.",
+      "cardLabel": "Illustratieve bevinding",
+      "cardNote": "Synthetische gegevens. Geen echt bedrijf of echte autoriteit.",
+      "calloutsLabel": "Waarom elk onderdeel bestaat",
+      "fields": {
+        "check": "Controle",
+        "severity": "Ernst",
+        "summary": "Samenvatting",
+        "rule": "Vermelde regel",
+        "inputs": "Invoer"
+      },
+      "values": {
+        "checkName": "Factuur tegenover goedkeuringsstatus",
+        "severity": "Gemiddeld",
+        "summary": "Factuur {invoice} staat in de boeken als uitgereikt. De kopie bij de autoriteit bevat voor dezelfde factuur een andere goedkeuringsstatus.",
+        "booksInput": "Record uit de boeken",
+        "authorityInput": "Record van de autoriteit"
+      },
+      "callouts": {
+        "reproducible": {
+          "title": "Controle en ernst",
+          "body": "Noemt de deterministische controle die is uitgevoerd. Dezelfde invoer onder dezelfde versie van het regelpakket geeft dezelfde bevinding, en geen enkel model beslist erover."
+        },
+        "neutral": {
+          "title": "Samenvatting",
+          "body": "Stelt alleen vast dat twee bronnen verschillen. Recon is geen belastingadviseur: wat er met een verschil moet gebeuren, is aan het bedrijf en zijn adviseurs."
+        },
+        "cited": {
+          "title": "Vermelde regel",
+          "body": "Noemt de regel waaronder de vergelijking is gemaakt. Regels zijn geversioneerde gegevens met bronvermelding en worden goedgekeurd door een menselijke compliance-verantwoordelijke."
+        },
+        "evidence": {
+          "title": "Invoer",
+          "body": "Verwijst via hash naar de exacte records, zodat de bevinding herleid en getoetst kan worden aan het manipulatiebestendige register."
+        }
+      }
+    },
+    "principles": {
+      "eyebrow": "Principes",
+      "title": "Wat niet verandert.",
+      "lead": "Uitgangspunten waarrond het product is gebouwd. Waar er een ontwerpbeslissing is die nog niet draait, staat dat erbij.",
+      "kind": {
+        "exists": "Aanwezig · synthetische gegevens",
+        "rule": "Ontwerpregel",
+        "decision": "Ontwerpbeslissing"
+      },
+      "items": {
+        "determinism": {
+          "title": "Zelfde invoer, zelfde bevindingen",
+          "body": "Een bevinding is een zuivere functie van de hashes van de invoerrecords en de versie van het regelpakket. Opnieuw uitvoeren reproduceert haar. Geen enkel model beslist over een bevinding."
+        },
+        "isolation": {
+          "title": "Elke tenant geïsoleerd",
+          "body": "Beveiliging op rijniveau in beide databases houdt de records van de ene tenant buiten de query's van een andere."
+        },
+        "ledger": {
+          "title": "Append-only register",
+          "body": "Gebeurtenissen worden per tenant in een hashketen vastgelegd en kunnen niet worden gewijzigd of verwijderd. Een verificatietool berekent de keten opnieuw."
+        },
+        "privacy": {
+          "title": "Geen persoonsgegevens in logs",
+          "body": "Logs, traces en payloads van het register moeten vrij van persoonsgegevens blijven."
+        },
+        "rules": {
+          "title": "Regels zijn gegevens met bronvermelding",
+          "body": "Data, drempels en tarieven staan in geversioneerde regelpakketten met een bronverwijzing, nooit in code. Een menselijke compliance-verantwoordelijke keurt elke wijziging goed."
+        },
+        "residency": {
+          "title": "Gegevens uitsluitend in de EU",
+          "body": "Tenantgegevens horen bij verwerkers in de EU te blijven. Dit is een ontwerpbeslissing; de hostingprovider is nog niet gekozen."
+        }
+      },
+      "trustLink": "Lees de toelichting over vertrouwen"
+    },
+    "closing": {
+      "eyebrow": "Volgende",
+      "title": "Zie waar de twee kopieën verschillen.",
+      "body": "Recon is in een vroege fase van ontwikkeling en draait vandaag op synthetische gegevens. Meld u aan om de huidige versie te bekijken, of lees welke controles bestaan en welke gepland zijn.",
+      "checksLink": "Bekijk de controles"
+    }
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "trust": {
+    "metadata": {
+      "title": "Confianza",
+      "description": "La seguridad, la privacidad y la posición legal del servicio en palabras llanas, incluido todo lo que sigue abierto."
+    },
+    "status": {
+      "building": "En construcción",
+      "planned": "Planificado",
+      "later": "Después",
+      "buildingHint": "Existe y funciona. Solo con datos sintéticos.",
+      "plannedHint": "Diseñado y documentado. Aún no construido.",
+      "laterHint": "Deliberadamente posterior a las primeras versiones."
+    },
+    "hero": {
+      "eyebrow": "Confianza",
+      "title": "Seguridad, privacidad y posición legal",
+      "lead": "Qué está diseñado para hacer el servicio, qué no es y qué sigue abierto, en palabras llanas. Está en desarrollo temprano y no se ha ejecutado con datos reales de clientes."
+    },
+    "principles": {
+      "eyebrow": "Cómo está construido",
+      "title": "Siete cosas en las que insiste el diseño",
+      "lead": "Son reglas de diseño con las que se escribe el código. Cada una lleva una etiqueta que indica hasta dónde ha llegado realmente.",
+      "items": {
+        "isolation": {
+          "title": "Aislamiento de inquilinos",
+          "body": "Toda tabla que contiene datos de clientes lleva un identificador de inquilino, y la seguridad a nivel de fila en ambas bases de datos limita cada sesión a las filas de su propio inquilino. Si no se establece ningún inquilino, la consulta falla con un error en lugar de devolver filas: falla en modo seguro.",
+          "detail": "Comprobado en un par de bases de datos locales con un rol ordinario, sin privilegios de superusuario. Aún no comprobado en una infraestructura similar a la de producción."
+        },
+        "ledger": {
+          "title": "Un registro de eventos que evidencia manipulaciones",
+          "body": "Cada cliente tiene un registro de eventos de solo adición. Cada evento almacena un hash que abarca el evento anterior, de modo que cambiar el historial rompe la cadena. Las modificaciones y eliminaciones están bloqueadas mediante privilegios y disparadores. Detectar que se cortaron los eventos más recientes requiere un anclaje de sello de tiempo, que está planificado.",
+          "detail": "La verificación de la cadena detectó la edición privilegiada de una fila en un par de pruebas locales."
+        },
+        "privacy": {
+          "title": "Sin datos personales en los registros de actividad, el registro de eventos ni los embeddings",
+          "body": "Los contenidos del registro de eventos llevan referencias opacas, no nombres ni identificadores fiscales. Los campos de identificadores se almacenan cifrados, y la supresión debe funcionar destruyendo la clave, de modo que la cadena siga siendo verificable una vez desaparecidos los datos. Los registros de actividad, las trazas y el índice de búsqueda sobre texto legal no deben contener registros de clientes ni datos personales.",
+          "detail": "Las columnas de identificadores cifradas y la destrucción de claves se probaron en un par de pruebas locales. Es una regla de diseño, no una certificación."
+        },
+        "residency": {
+          "title": "Residencia exclusivamente en la UE, como decisión de diseño",
+          "body": "El diseño mantiene los datos de los clientes en regiones de la UE y no envía ninguno a encargados del tratamiento de fuera de la UE ni a API de modelos de lenguaje alojados. Es una decisión de diseño, no una afirmación sobre un servicio en funcionamiento: no se ha elegido el proveedor de alojamiento y no hay ningún despliegue en producción.",
+          "detail": "Existen borradores de una evaluación de impacto relativa a la protección de datos y de un registro de actividades de tratamiento para el delegado de protección de datos y los asesores jurídicos. Ninguna persona los ha revisado y no constituyen asesoramiento jurídico. La lista de subencargados aún no está redactada."
+        },
+        "deterministic": {
+          "title": "Hallazgos deterministas; ningún modelo decide",
+          "body": "Un hallazgo es una función pura de los hashes de los registros de entrada y de la versión del paquete de reglas. No hay reloj, aleatoriedad, llamada de red ni modelo de lenguaje dentro de la evaluación de reglas, de modo que una nueva ejecución da el mismo resultado. Si alguna vez se usa un modelo de lenguaje, será meramente orientativo y no podrá crear un hallazgo ni una cita.",
+          "detail": "Implementado para la comprobación C1, con datos sintéticos."
+        },
+        "rules": {
+          "title": "Las reglas son datos citados y requieren aprobación humana",
+          "body": "Cada regla, plazo de conservación y fecha por país se almacena como dato con una cita a su fuente primaria, nunca como constante en el código. Está previsto que un paquete de reglas necesite la aprobación de un responsable de cumplimiento antes de activarse. No se ha nombrado a ningún responsable de cumplimiento, y todos los paquetes de reglas redactados hasta ahora son borradores sin revisar y están desactivados."
+        },
+        "keys": {
+          "title": "Claves de API",
+          "body": "Las claves de API se almacenan solo como hashes Argon2id, se muestran una sola vez al crearlas y tienen un alcance limitado a acciones concretas. En la consola web el navegador guarda únicamente una cookie de sesión sellada y HttpOnly, nunca un token de acceso."
+        }
+      }
+    },
+    "legal": {
+      "eyebrow": "Legal",
+      "title": "La posición legal",
+      "lead": "Lo que el servicio no hace importa tanto como lo que hace.",
+      "items": {
+        "adviser": {
+          "title": "No es un asesor fiscal",
+          "body": "{app} es un servicio de software que compara fuentes. No es un asesor fiscal, y nada de lo que produce constituye asesoramiento fiscal, jurídico ni contable."
+        },
+        "conclusions": {
+          "title": "Los hallazgos nunca expresan conclusiones jurídicas",
+          "body": "Un hallazgo indica que dos fuentes discrepan según una regla citada. No indica si algo es lícito, se adeuda o es conforme, ni recomienda ninguna acción. Las plantillas de hallazgos se redactan conforme a esa regla."
+        },
+        "review": {
+          "title": "El posicionamiento aún está en revisión",
+          "body": "Si los hallazgos con reglas citadas se consideran asesoramiento regulado en los países a los que nos dirigimos es una cuestión para los asesores jurídicos, y no se ha respondido. La redacción de los hallazgos y de este sitio puede cambiar cuando se responda."
+        }
+      }
+    },
+    "open": {
+      "eyebrow": "Asuntos abiertos",
+      "title": "Lo que sigue abierto",
+      "lead": "No decidido, no construido o no medido. No se posee ni se declara ninguna certificación de seguridad o de cumplimiento.",
+      "items": {
+        "failover": {
+          "title": "Conmutación por error",
+          "body": "No se ha verificado la conmutación por error de la base de datos de escritura mientras la copia de lectura sigue replicando. Se ha planificado una prueba de concepto en la fase de cimientos."
+        },
+        "load": {
+          "title": "Carga y disponibilidad",
+          "body": "No se ha sometido nada a pruebas de carga. Toda cifra de disponibilidad y recuperación del diseño es un objetivo de diseño, no una medición."
+        },
+        "penTest": {
+          "title": "Prueba de penetración independiente",
+          "body": "No se ha realizado ninguna prueba de penetración. Está planificada para una fase de refuerzo."
+        },
+        "timestamp": {
+          "title": "Proveedor cualificado de sellado de tiempo",
+          "body": "No se ha elegido ningún proveedor cualificado de sellado de tiempo. El anclaje del sello de tiempo espera esa decisión."
+        },
+        "owner": {
+          "title": "Responsable de cumplimiento",
+          "body": "No se ha nombrado a ningún responsable de cumplimiento. Los paquetes de reglas no pueden aprobarse hasta que exista uno."
+        },
+        "counsel": {
+          "title": "Asesoría jurídica y delegado de protección de datos",
+          "body": "La asesoría jurídica no ha revisado el posicionamiento legal y no se ha designado a ningún delegado de protección de datos."
+        },
+        "hosting": {
+          "title": "Proveedor de alojamiento",
+          "body": "No se han elegido el proveedor de alojamiento en la UE ni las regiones. Hasta entonces, no hay ningún despliegue en producción."
+        },
+        "identity": {
+          "title": "Proveedor de identidad de los clientes",
+          "body": "No se ha elegido el proveedor de identidad para el inicio de sesión de los clientes."
+        },
+        "certification": {
+          "title": "Certificaciones",
+          "body": "No se posee ni se declara ninguna certificación de seguridad o de cumplimiento. Una evaluación de preparación está planificada para una fase posterior."
+        }
+      }
+    }
+  }
+}

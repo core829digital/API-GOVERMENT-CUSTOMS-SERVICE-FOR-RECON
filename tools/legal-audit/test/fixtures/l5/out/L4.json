@@ -1,0 +1,1 @@
+{ "gate": "L4", "status": "pass", "summary": "3 columns inspected", "findings": [], "evidence": ["classification.json", "ropa-diff.md", "ropa-diff.json"], "metrics": {}, "inputs": {}, "tools": {}, "waived": [] }

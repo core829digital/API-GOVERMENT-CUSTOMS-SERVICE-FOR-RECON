@@ -1,0 +1,36 @@
+# Build context hygiene for infra/docker/*.Dockerfile (context = repository root).
+# Keeps secrets, local state and build output out of images and out of the build cache key.
+
+# VCS and CI
+.git
+.github
+
+# Rust build output and local dev state (PostgreSQL data dirs, logs)
+target
+.dev
+
+# Node
+**/node_modules
+**/.next
+**/out
+**/dist
+**/test-results
+**/playwright-report
+**/*.tsbuildinfo
+frontend/next-env.d.ts
+frontend/e2e
+frontend/tests
+frontend/verify-oidc.tmp.mjs
+
+# Secrets and local environment (examples are tracked but never needed inside an image)
+**/.env
+**/.env.*
+**/*.pem
+**/*.key
+
+# Documentation and tooling that no image needs
+*.md
+docs
+tools
+infra
+.omp

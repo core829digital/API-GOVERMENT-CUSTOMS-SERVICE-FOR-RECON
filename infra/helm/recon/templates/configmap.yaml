@@ -1,0 +1,22 @@
+{{- $api := printf "http://%s-api:%v" (include "recon.fullname" .) .Values.api.port -}}
+{{- $issuer := required "oidc.issuer is required (https URL of the OIDC issuer)" .Values.oidc.issuer -}}
+{{- if not (hasPrefix "https://" $issuer) -}}
+{{- fail "oidc.issuer must be an https:// URL (the BFF refuses plain-http discovery)" -}}
+{{- end -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "recon.fullname" . }}-config
+  labels:
+    {{- include "recon.labels" (dict "root" . "component" "config") | nindent 4 }}
+data:
+  # recon-api (crates/recon-api/src/bin/recon-api.rs)
+  RECON_BIND: {{ printf "0.0.0.0:%v" .Values.api.port | quote }}
+  RECON_BRIDGE_WAIT_MS: {{ .Values.api.bridgeWaitMs | quote }}
+  # frontend (frontend/.env.example); secrets (SESSION_SECRET, OIDC_CLIENT_SECRET) come from a Secret reference.
+  # In-cluster hop BFF -> API is plain HTTP: recon-api has no TLS listener; reachability is restricted by NetworkPolicy.
+  RECON_API_BASE_URL: {{ $api | quote }}
+  OIDC_ISSUER: {{ $issuer | quote }}
+  OIDC_CLIENT_ID: {{ .Values.oidc.clientId | quote }}
+  OIDC_SCOPE: {{ .Values.oidc.scope | quote }}
+  APP_BASE_URL: {{ required "appBaseUrl is required" .Values.appBaseUrl | quote }}

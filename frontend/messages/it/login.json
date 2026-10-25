@@ -1,0 +1,56 @@
+{
+  "login": {
+    "metaTitle": "Accedi",
+    "eyebrow": "Accesso alla console",
+    "title": "Accedi",
+    "redirectNote": "Verrete reindirizzati all'identity provider della vostra organizzazione per accedere.",
+    "backToSite": "Torna al sito",
+    "retry": "Riprova",
+    "notice": {
+      "idp_unreachable": {
+        "title": "L'identity provider non è raggiungibile",
+        "description": "Il servizio di accesso non ha risposto e nulla è stato modificato. Riprovare tra un momento."
+      },
+      "invalid_callback": {
+        "title": "Non è stato possibile completare l'accesso",
+        "description": "La risposta dell'identity provider era assente, scaduta o non corrispondeva alla richiesta che l'aveva avviata. Ricominciare."
+      },
+      "not_configured": {
+        "title": "L'accesso non è disponibile",
+        "description": "Questa installazione non ha ancora alcun identity provider configurato, quindi da questa pagina non c'è nulla da fare."
+      },
+      "session_expired": {
+        "title": "La sessione è terminata",
+        "description": "Accedere di nuovo per riprendere da dove si era rimasti."
+      },
+      "signed_out": {
+        "title": "Disconnessione effettuata",
+        "description": "La sessione in questo browser è stata chiusa."
+      },
+      "unknown": {
+        "title": "L'accesso non è stato completato",
+        "description": "Si è verificato un problema. Riprovare."
+      }
+    },
+    "panel": {
+      "eyebrow": "Sviluppo iniziale",
+      "statement": "Dove la vostra contabilità e la copia di un'autorità non concordano, mostrato con la regola secondo cui è stato verificato.",
+      "status": "La console funziona solo con dati sintetici.",
+      "guaranteesTitle": "Che cosa aspettarsi",
+      "guarantees": {
+        "advice": {
+          "title": "Non è consulenza fiscale",
+          "description": "Una rilevazione dice che due fonti non concordano secondo una regola citata. Non dice mai che cosa dovete né se qualcosa sia lecito."
+        },
+        "citation": {
+          "title": "Ogni rilevazione cita una regola",
+          "description": "Ogni rilevazione indica la regola secondo cui è stata valutata, così che il ragionamento possa essere verificato."
+        },
+        "credentials": {
+          "title": "Il browser non conserva mai le vostre credenziali",
+          "description": "L'accesso avviene presso il vostro identity provider. La sessione è un cookie cifrato e HTTP-only, e il token di accesso al suo interno può essere aperto solo sul server."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "checks": {
+    "metadata": {
+      "title": "Contrôles",
+      "description": "Le catalogue des contrôles de rapprochement envisagés, C1 à C8 : ce que chacun compare, si une autorité détient l'une des sources, et où en est chacun."
+    },
+    "status": {
+      "building": "En construction",
+      "planned": "Prévu",
+      "later": "Plus tard",
+      "buildingHint": "Existe et fonctionne. Données synthétiques uniquement.",
+      "plannedHint": "Conçu et documenté. Pas encore construit.",
+      "laterHint": "Volontairement après les premières versions."
+    },
+    "hero": {
+      "eyebrow": "Contrôles",
+      "title": "Huit contrôles envisagés. Un seul fonctionne, sur des données synthétiques.",
+      "lead": "Un contrôle compare deux sources ou plus et indique où elles divergent. Voici le catalogue des contrôles envisagés. Seul le premier existe, et il n'a jamais vu de données réelles."
+    },
+    "catalogue": {
+      "eyebrow": "Catalogue",
+      "title": "Ce qui est comparé à quoi",
+      "lead": "« Côté autorité » indique si l'une des sources comparées est une copie détenue par une autorité : oui, en partie ou non. « État » indique où en est chaque contrôle. La liste est un ensemble de candidats et peut évoluer.",
+      "caption": "Contrôles envisagés C1 à C8, sources comparées par chacun, présence ou non d'une autorité parmi les détenteurs, et état de chaque contrôle",
+      "columns": {
+        "id": "ID",
+        "check": "Contrôle",
+        "sources": "Sources comparées",
+        "authority": "Côté autorité",
+        "status": "État"
+      },
+      "authority": {
+        "yes": "Oui",
+        "partial": "En partie",
+        "no": "Non"
+      },
+      "rows": {
+        "c1": {
+          "check": "Facture émise face au statut de validation et au contenu",
+          "sources": "Grand livre comptable et statut détenu par un système de validation de factures électroniques (exemples : KSeF, e-Factura, SdI)"
+        },
+        "c2": {
+          "check": "PDF de facture face à son XML structuré",
+          "sources": "PDF de facture et XML de facture"
+        },
+        "c3": {
+          "check": "Cases de la déclaration de TVA face au grand livre, par période",
+          "sources": "Grand livre comptable et déclaration déposée"
+        },
+        "c4": {
+          "check": "Déclaration OSS ou IOSS face aux ventes aux particuliers, par État de consommation et par taux",
+          "sources": "Grand livre ou données de place de marché et déclaration OSS"
+        },
+        "c5": {
+          "check": "Livraisons intracommunautaires entre entreprises face à la validité du numéro de TVA au moment de la livraison",
+          "sources": "Grand livre comptable et historique des résultats VIES"
+        },
+        "c6": {
+          "check": "TVA à l'importation déduite face au relevé douanier ou d'importation",
+          "sources": "Grand livre comptable et dossier douanier"
+        },
+        "c7": {
+          "check": "Rapport de place de marché face au grand livre",
+          "sources": "Rapport de place de marché et grand livre comptable"
+        },
+        "c8": {
+          "check": "Paiements face aux factures",
+          "sources": "Relevés bancaires ou de prestataire de paiement et grand livre comptable"
+        }
+      }
+    },
+    "c1": {
+      "eyebrow": "Contrôle C1",
+      "title": "Ce que C1 signale aujourd'hui",
+      "lead": "Les factures du grand livre sont comparées au statut de validation signalé pour elles. Pour chaque référence de facture, au plus un résultat est signalé : le premier qui correspond, dans cet ordre. Ceci fonctionne uniquement sur des données synthétiques.",
+      "outcomes": {
+        "noClearance": "Aucun enregistrement de validation n'existe pour la facture.",
+        "notAccepted": "L'enregistrement de validation a un statut autre qu'accepté.",
+        "amountMismatch": "La devise ou le total diffère entre la facture et l'enregistrement de validation.",
+        "orphan": "Un enregistrement de validation existe sans facture."
+      },
+      "note": "Si deux enregistrements de facture ou deux enregistrements de validation partagent une référence, l'entrée est ambiguë. L'exécution échoue plutôt que de deviner."
+    },
+    "produces": {
+      "eyebrow": "Résultat",
+      "title": "Ce que produit un contrôle",
+      "lead": "Chaque résultat est un constat. Un constat est un énoncé portant sur deux sources, jamais sur la marche à suivre.",
+      "items": {
+        "disagreement": {
+          "title": "Une divergence",
+          "body": "Deux sources disent des choses différentes à propos du même élément. Par exemple : une facture du grand livre que le côté validation ne liste pas comme acceptée."
+        },
+        "rule": {
+          "title": "Une règle citée",
+          "body": "Le constat nomme la règle selon laquelle les sources ont été comparées, recherchée dans le lot de règles figé de l'exécution. Si le lot ne contient pas cette règle, l'exécution échoue plutôt que d'émettre un constat sans citation."
+        },
+        "inputs": {
+          "title": "Ses entrées",
+          "body": "Le constat renvoie aux enregistrements d'entrée, à leurs hachages et à la version du lot de règles. Les mêmes entrées et la même version donnent le même constat. La gravité est une valeur de tri technique par défaut, et non une qualification juridique."
+        }
+      },
+      "notice": {
+        "title": "Pas un conseil fiscal",
+        "body": "Le service n'est pas un conseiller fiscal. Un constat indique que deux sources divergent selon une règle citée. Il n'indique pas si quelque chose est dû, licite ou conforme, et ne recommande aucune action. Cette appréciation vous revient, ainsi qu'à votre conseiller."
+      }
+    },
+    "unproven": {
+      "eyebrow": "Limites",
+      "title": "Ce qui n'est pas encore démontré",
+      "lead": "Ce produit est en développement précoce. Voici les questions ouvertes, énoncées sans détour.",
+      "items": {
+        "realData": {
+          "title": "Aucun contrôle n'a rencontré de données réelles",
+          "body": "Aucun contrôle n'a été exécuté sur des données réelles de clients, et aucun n'est validé face à des données réelles d'autorités. C1 fonctionne uniquement sur des données synthétiques."
+        },
+        "rules": {
+          "title": "Les lots de règles sont des ébauches",
+          "body": "Les lots de règles rédigés jusqu'ici sont des ébauches. Aucun n'est activé et aucune personne ne les a relus. Aucun responsable de la conformité n'a encore été désigné."
+        },
+        "competitors": {
+          "title": "Les autres produits ne sont pas encore comparés",
+          "body": "Ce que couvrent déjà les autres produits n'a pas été établi. Des fonctions de rapprochement peuvent exister ailleurs ; la comparaison, contrôle par contrôle, reste à rédiger à partir de la documentation officielle des éditeurs."
+        },
+        "demand": {
+          "title": "La demande n'est pas testée",
+          "body": "On n'a pas testé si des équipes financières paieraient pour cela. Aucun entretien avec des clients n'a encore eu lieu."
+        },
+        "availability": {
+          "title": "Les données des autorités peuvent être inaccessibles",
+          "body": "Savoir si le côté de chaque autorité peut être lu, et sous quelle forme, reste ouvert pour chaque pays. Les contrôles marqués « côté autorité » dépendent de cette réponse."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "platform": {
+    "metadata": {
+      "title": "Platformă",
+      "description": "Cum ajung datele din registrele dumneavoastră la o constatare: preluare, normalizare, reconciliere, proiecție și dovezi, cu starea fiecărei componente."
+    },
+    "status": {
+      "building": "În lucru",
+      "planned": "Planificat",
+      "later": "Mai târziu",
+      "buildingHint": "Există și rulează. Doar pe date sintetice.",
+      "plannedHint": "Proiectat și scris. Încă nu este construit.",
+      "laterHint": "Intenționat după primele versiuni."
+    },
+    "hero": {
+      "eyebrow": "Platformă",
+      "title": "Cum funcționează serviciul",
+      "lead": "Registrele intră în serviciu. Un motor determinist le compară cu copia deținută de o autoritate. Fiecare neconcordanță devine o constatare, cu regula citată și cu dovezile ei. Fiecare componentă de mai jos își arată starea."
+    },
+    "flow": {
+      "eyebrow": "Fluxul datelor",
+      "title": "De la un fișier la o constatare, în cinci pași",
+      "lead": "Fiecare pas face un singur lucru și predă mai departe. Nimic din toate acestea nu a rulat pe date reale ale clienților.",
+      "steps": {
+        "ingest": {
+          "name": "Preluare",
+          "body": "Un client înregistrează în API un fișier încărcat, prin SHA-256, tipul sursei și perioadă. Înregistrarea și un eveniment din registru se scriu într-o singură tranzacție. Astăzi se acceptă doar aceste metadate; niciun adaptor nu citește încă conținutul fișierelor."
+        },
+        "normalise": {
+          "name": "Normalizare",
+          "body": "Un worker transformă fiecare sursă într-o formă canonică de înregistrare, astfel încât înregistrările din sisteme diferite să poată fi comparate. Facturile se mapează pe un model comun, construit după standardul de factură electronică EN 16931, cu un adaptor pentru fiecare țară."
+        },
+        "reconcile": {
+          "name": "Reconciliere",
+          "body": "Motorul citește înregistrările normalizate, aplică o versiune fixată a pachetului de reguli și scrie rularea și constatările ei. Rezultatul depinde doar de înregistrările de intrare și de acea versiune. Astăzi este vorba de verificarea C1, pe date sintetice."
+        },
+        "project": {
+          "name": "Proiecție",
+          "body": "Un proiector transformă constatările și intrările din registru replicate în vederi rapide de citit și, mai târziu, într-un index peste textele juridice publice. Scrie doar în copia de citire."
+        },
+        "evidence": {
+          "name": "Dovezi",
+          "body": "Fiecare modificare lasă un eveniment într-un registru înlănțuit prin hash. Capătul lanțului urmează să fie marcat temporal periodic, iar pachetele de dovezi urmează să fie generate la cerere. Registrul și un verificator de lanț există; marcarea temporală și pachetele sunt planificate."
+        }
+      }
+    },
+    "stores": {
+      "eyebrow": "Stocare",
+      "title": "Două baze de date, un singur adevăr",
+      "lead": "Datele clienților se află în două clustere PostgreSQL cu roluri separate. Codul este tipizat astfel încât o interogare să nu poată ajunge la partea de scriere, iar o comandă să nu poată citi din partea greșită.",
+      "w": {
+        "name": "W: stocul autoritativ",
+        "body": "Aici scriu doar comenzile: înregistrarea unui lot, pornirea unei rulări, emiterea unei constatări. Fiecare comandă adaugă un eveniment în registru, în aceeași tranzacție cu modificarea ei. W este singurul loc în care se stabilește un fapt."
+      },
+      "r": {
+        "name": "R: copia de citire",
+        "body": "Replicarea logică alimentează R din W. API-ul interoghează întotdeauna doar R. R conține și date derivate, precum proiecțiile, pe care W nu le vede niciodată. Dacă R nu este disponibil, interogarea primește o eroare; nu este niciodată servită pe tăcute din W."
+      },
+      "ryw": {
+        "title": "Să vezi ce tocmai ai scris",
+        "body": "Replicarea durează o clipă, așa că o citire imediat după o scriere ar putea să nu o vadă. Un client care tocmai a scris poate cere API-ului să aștepte până când copia de citire ajunge din urmă. Fiecare scriere întoarce numărul de secvență din registru pe care l-a produs, iar trimiterea acestui număr la următoarea citire este întregul mecanism. Dacă în limita de timp copia de citire nu a ajuns din urmă, clientul primește un răspuns 503 clar, niciodată o revenire tăcută la partea de scriere.",
+        "detail": "Verificat doar pe o pereche locală de baze de date. Nu s-a rulat niciun test de failover sau de încărcare."
+      },
+      "diagram": {
+        "label": "Diagrama părții de scriere W și a copiei de citire R",
+        "caption": "Diagramă ilustrativă. Sistemele dumneavoastră apelează API-ul. API-ul trimite comenzi către W și interoghează R. W se replică în R. Motorul citește din R și scrie în W.",
+        "nodes": {
+          "clients": { "name": "Clienți", "note": "Sistemele dvs." },
+          "api": { "name": "API", "note": "Punct de intrare" },
+          "w": { "name": "W", "note": "Autoritativ" },
+          "r": { "name": "R", "note": "Copie de citire" },
+          "engine": { "name": "Motor", "note": "Reguli" }
+        },
+        "flows": {
+          "writes": "scrieri",
+          "reads": "citiri",
+          "replication": "replicare"
+        }
+      }
+    },
+    "api": {
+      "eyebrow": "API",
+      "title": "Suprafața API",
+      "lead": "Cinci endpointuri există astăzi. Restul suprafeței schițate este planificat și se poate schimba.",
+      "side": {
+        "write": "Scrie în W",
+        "read": "Citește din R",
+        "push": "Trimite către dvs."
+      },
+      "webhooksName": "Webhookuri",
+      "items": {
+        "batchesCreate": "Înregistrează un fișier încărcat prin SHA-256, tipul sursei și perioadă. Idempotent. Întoarce numărul de secvență din registru al scrierii.",
+        "batchesGet": "Starea de procesare a unui lot înregistrat.",
+        "runsCreate": "Pornește o rulare de reconciliere fixată pe o singură versiune a pachetului de reguli. Asincron.",
+        "runsGet": "Starea unei rulări de reconciliere.",
+        "findingsList": "Listează constatările emise de rulări.",
+        "evidence": "Pachetul de dovezi pentru o constatare, livrat printr-un link semnat.",
+        "rulesSearch": "Caută în corpusul juridic citat după cuvinte-cheie și după sens.",
+        "erasure": "Cere ștergerea datelor personale. Regulile de păstrare pot amâna o cerere; decizia este înregistrată.",
+        "export": "Exportă datele personale într-un format care poate fi citit automat.",
+        "webhooks": "Apeluri inverse semnate când o rulare se încheie sau când este emisă o constatare."
+      },
+      "headers": "Fiecare scriere cere antetul <code>Idempotency-Key</code>, astfel încât o cerere reluată să nu poată crea un al doilea lot sau o a doua rulare. Fiecare scriere răspunde cu antetul <code>X-Commit-Seq</code>, care conține numărul de secvență din registru pe care l-a produs. Fiecare citire răspunde cu <code>X-Data-Watermark</code> și respectă <code>X-Min-Seq</code>, așteptarea descrisă mai sus."
+    },
+    "evidence": {
+      "eyebrow": "Dovezi",
+      "title": "Dovezi care pot fi verificate offline",
+      "lead": "Scopul este ca o constatare să vină cu o dovadă pe care o puteți verifica fără să aveți încredere în serviciu. O parte din ea există. Restul este planificat, iar fiecare element are eticheta lui.",
+      "items": {
+        "ledger": {
+          "title": "Registru doar-adăugare, înlănțuit prin hash",
+          "body": "Fiecare comandă adaugă un eveniment în registrul clientului căruia îi aparține. Hash-ul unui eveniment acoperă hash-ul evenimentului anterior și o formă canonică a conținutului său, așa că modificarea istoricului strică fiecare hash de după. Actualizările, ștergerile și trunchierea sunt blocate prin privilegii și prin declanșatoare.",
+          "detail": "Pe o pereche locală de test, o modificare privilegiată a unui singur rând a fost detectată de verificarea lanțului."
+        },
+        "verifier": {
+          "title": "Verificator de lanț offline",
+          "body": "O unealtă în linie de comandă citește un lanț exportat și arată dacă este consecvent intern. Nu împarte cod cu baza de date. Un lanț de hash-uri nu poate arăta că ultimele evenimente au fost tăiate, așa că unealta poate primi și hash-ul de capăt pe care îl așteptați."
+        },
+        "token": {
+          "title": "Verificarea jetonului de marcă temporală",
+          "body": "Există cod care verifică un jeton de marcă temporală RFC 3161 în raport cu un hash de capăt al registrului și cu un set de certificate de încredere."
+        },
+        "anchoring": {
+          "title": "Ancorare prin marcă temporală",
+          "body": "Un worker programat urmează să obțină un jeton de marcă temporală pentru capătul registrului fiecărui client. Încă nu a fost ales un furnizor calificat de mărci temporale."
+        },
+        "pack": {
+          "title": "Pachet de dovezi",
+          "body": "La cerere, un pachet pentru o constatare: un manifest cu citările și hash-urile intrărilor, extrase din înregistrările sursă, segmentul de lanț, jetoanele de marcă temporală și un script de verificare."
+        }
+      },
+      "chain": {
+        "label": "Ilustrație a unui lanț de hash-uri",
+        "caption": "Ilustrație, nu date reale. Fiecare eveniment păstrează hash-ul celui dinaintea lui.",
+        "event": "Evenimentul {n}",
+        "prev": "hash anterior"
+      }
+    }
+  }
+}

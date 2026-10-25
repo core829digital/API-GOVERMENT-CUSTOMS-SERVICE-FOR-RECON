@@ -1,0 +1,133 @@
+{
+  "common": {
+    "close": "Chiudi",
+    "loading": "Caricamento",
+    "retry": "Riprova",
+    "signIn": "Accedi",
+    "signOut": "Esci",
+    "none": "Non impostato"
+  },
+  "metadata": {
+    "title": "Recon",
+    "description": "Riconciliazione della contabilità aziendale con la copia detenuta da ciascuna autorità, con base normativa citata."
+  },
+  "shell": {
+    "appName": "Recon",
+    "console": "Console",
+    "skipToContent": "Vai al contenuto principale",
+    "sidebarTitle": "Navigazione",
+    "sidebarDescription": "Collegamenti di navigazione principali.",
+    "toggleSidebar": "Mostra o nascondi la navigazione",
+    "navLabel": "Principale",
+    "nav": {
+      "overview": "Panoramica",
+      "findings": "Rilevazioni"
+    },
+    "language": {
+      "label": "Lingua",
+      "en": "English",
+      "ro": "Română",
+      "it": "Italiano",
+      "es": "Español",
+      "fr": "Français",
+      "de": "Deutsch",
+      "nl": "Nederlands",
+      "pl": "Polski"
+    },
+    "theme": {
+      "label": "Tema",
+      "light": "Chiaro",
+      "dark": "Scuro",
+      "system": "Sistema"
+    },
+    "session": {
+      "checking": "Verifica della sessione"
+    }
+  },
+  "overview": {
+    "title": "Panoramica",
+    "intro": "Recon confronta la vostra contabilità con la copia detenuta da ciascuna autorità ed elenca dove le fonti non concordano secondo una regola citata.",
+    "notice": "Le rilevazioni indicano che le fonti non concordano secondo una regola citata. Non costituiscono consulenza fiscale.",
+    "findingsCard": {
+      "title": "Rilevazioni",
+      "description": "Discordanze tra la vostra contabilità e la copia di un'autorità, ciascuna con la regola secondo cui è stata verificata.",
+      "action": "Apri le rilevazioni"
+    },
+    "batchCard": {
+      "title": "Stato del lotto",
+      "description": "Consultate lo stato di elaborazione di un lotto caricato tramite il suo identificativo.",
+      "label": "Identificativo del lotto",
+      "placeholder": "00000000-0000-7000-8000-000000000000",
+      "submit": "Mostra stato",
+      "invalid": "Inserire un identificativo di lotto valido (UUID)."
+    }
+  },
+  "findings": {
+    "title": "Rilevazioni",
+    "description": "Dove la vostra contabilità e la copia di un'autorità non concordano secondo una regola citata. Non è consulenza fiscale.",
+    "tableLabel": "Elenco delle rilevazioni",
+    "columns": {
+      "check": "Controllo",
+      "severity": "Gravità",
+      "jurisdiction": "Giurisdizione",
+      "summary": "Sintesi",
+      "citation": "Regola citata",
+      "created": "Rilevata"
+    },
+    "severity": {
+      "info": "Info",
+      "low": "Bassa",
+      "medium": "Media",
+      "high": "Alta"
+    },
+    "empty": {
+      "title": "Nessuna rilevazione",
+      "description": "Il servizio non ha restituito rilevazioni."
+    }
+  },
+  "batch": {
+    "title": "Stato del lotto",
+    "back": "Torna alla panoramica",
+    "fields": {
+      "id": "Identificativo del lotto",
+      "status": "Stato",
+      "sourceType": "Tipo di fonte",
+      "period": "Periodo",
+      "created": "Registrato",
+      "failureReason": "Motivo dell'errore"
+    },
+    "periodRange": "da {start} a {end}",
+    "status": {
+      "registered": "Registrato",
+      "parsing": "In analisi",
+      "parsed": "Analizzato",
+      "failed": "Non riuscito"
+    }
+  },
+  "errors": {
+    "unauthenticated": {
+      "title": "Accesso richiesto",
+      "description": "La sessione è assente o scaduta. Accedere per continuare."
+    },
+    "notFound": {
+      "title": "Non trovato",
+      "description": "Il servizio non contiene alcun record con questo identificativo."
+    },
+    "replicaLag": {
+      "title": "I dati sono ancora in sincronizzazione",
+      "description": "La copia di lettura non è ancora aggiornata. Riprovare tra poco."
+    },
+    "unavailable": {
+      "title": "Servizio non disponibile",
+      "description": "Il servizio non è raggiungibile o ha restituito un errore. Riprovare più tardi."
+    },
+    "invalidResponse": {
+      "title": "Risposta inattesa",
+      "description": "Il servizio ha risposto in un formato che questa applicazione non riconosce."
+    },
+    "network": {
+      "title": "Problema di connessione",
+      "description": "La richiesta non è stata completata. Verificare la connessione e riprovare."
+    }
+  }
+}

@@ -1,0 +1,12 @@
+# waivers: dated, reviewed exceptions (Workflow.md §4.2). Empty list is valid.
+# Gates that may be waived: L1, L2, L3, L8, L9 only. L4, L6, L7, L10, L11 can never be waived.
+waivers: []
+# entry shape:
+# - id: W-2026-001
+#   gate: L1                    # one of L1 L2 L3 L8 L9 only
+#   subject: "crate-or-advisory-id-or-path"   # what is waived; exact match against finding.subject
+#   owner: "name@company"
+#   reason: "text"
+#   issue: "https://…"          # linked issue
+#   created: 2026-10-23
+#   expires: 2026-12-01         # <= created + 90 days; expired ⇒ gate error

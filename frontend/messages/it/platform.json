@@ -1,0 +1,140 @@
+{
+  "platform": {
+    "metadata": {
+      "title": "Piattaforma",
+      "description": "Come il servizio porta i dati dalla vostra contabilità a una rilevazione: acquisizione, normalizzazione, riconciliazione, proiezione ed evidenze, con lo stato di ogni parte."
+    },
+    "status": {
+      "building": "In sviluppo",
+      "planned": "Pianificato",
+      "later": "Più avanti",
+      "buildingHint": "Esiste e funziona. Solo dati sintetici.",
+      "plannedHint": "Progettato e documentato. Non ancora realizzato.",
+      "laterHint": "Volutamente dopo le prime versioni."
+    },
+    "hero": {
+      "eyebrow": "Piattaforma",
+      "title": "Come funziona il servizio",
+      "lead": "La contabilità entra. Un motore deterministico la confronta con la copia detenuta da un'autorità. Ogni discordanza esce come rilevazione, con la sua regola citata e le sue evidenze. Ogni parte qui sotto riporta il proprio stato."
+    },
+    "flow": {
+      "eyebrow": "Flusso dei dati",
+      "title": "Da un file a una rilevazione, in cinque fasi",
+      "lead": "Ogni fase svolge un solo compito e passa il testimone alla successiva. Nulla di tutto ciò ha mai funzionato su dati reali di clienti.",
+      "steps": {
+        "ingest": {
+          "name": "Acquisizione",
+          "body": "Un client registra presso l'API un file caricato indicandone SHA-256, tipo di fonte e periodo. La registrazione e un evento del registro sono scritti in un'unica transazione. Oggi sono accettati solo questi metadati; nessun adattatore legge ancora il contenuto dei file."
+        },
+        "normalise": {
+          "name": "Normalizzazione",
+          "body": "Un worker analizza ogni fonte portandola a un'unica struttura canonica di record, così che i record di sistemi diversi possano essere confrontati. Le fatture sono riportate a un modello comune basato sullo standard di fattura elettronica EN 16931, con un adattatore per ciascun paese."
+        },
+        "reconcile": {
+          "name": "Riconciliazione",
+          "body": "Il motore legge i record normalizzati, applica una versione fissata del pacchetto di regole e scrive l'esecuzione e le relative rilevazioni. Il risultato dipende solo dai record di input e da quella versione. Oggi si tratta del controllo C1, su dati sintetici."
+        },
+        "project": {
+          "name": "Proiezione",
+          "body": "Un proiettore trasforma le rilevazioni replicate e le voci del registro eventi in viste rapide da consultare e, in seguito, in un indice del testo giuridico pubblico. Scrive solo nella copia di lettura."
+        },
+        "evidence": {
+          "name": "Evidenze",
+          "body": "Ogni modifica lascia un evento in un registro a catena di hash. La testa della catena deve essere marcata temporalmente a intervalli, e i pacchetti di evidenze devono poter essere generati su richiesta. Esistono il registro e un verificatore della catena; marcatura temporale e pacchetti sono pianificati."
+        }
+      }
+    },
+    "stores": {
+      "eyebrow": "Archiviazione",
+      "title": "Due database, una sola verità",
+      "lead": "I dati dei clienti risiedono in due cluster PostgreSQL con compiti distinti. Il codice è tipizzato in modo che una query non possa raggiungere il lato di scrittura e un comando non possa leggere dal lato sbagliato.",
+      "w": {
+        "name": "W: l'archivio di riferimento",
+        "body": "Qui scrivono solo i comandi: registrare un lotto, avviare un'esecuzione, registrare una rilevazione. Ogni comando aggiunge un evento al registro nella stessa transazione della modifica. W è l'unico luogo in cui un fatto viene stabilito."
+      },
+      "r": {
+        "name": "R: la copia di lettura",
+        "body": "La replica logica alimenta R a partire da W. L'API interroga sempre e solo R. R contiene anche dati derivati, come le proiezioni, che W non vede mai. Se R non è disponibile, una query riceve un errore; non riceve mai silenziosamente risposta da W."
+      },
+      "ryw": {
+        "title": "Vedere ciò che si è appena scritto",
+        "body": "La replica richiede un istante, quindi una lettura subito dopo una scrittura potrebbe non trovarla. Un client che ha appena scritto può chiedere all'API di attendere che la copia di lettura si sia allineata. Ogni scrittura restituisce il numero di sequenza del registro che ha prodotto, e inviare quel numero con la lettura successiva è l'intero meccanismo. Se la copia di lettura non si allinea entro il limite di tempo, il client riceve una chiara risposta 503, mai un ripiego silenzioso sul lato di scrittura.",
+        "detail": "Provato solo su una coppia di database locale. Non sono stati eseguiti test di failover né di carico."
+      },
+      "diagram": {
+        "label": "Diagramma del lato di scrittura W e della copia di lettura R",
+        "caption": "Diagramma illustrativo. I vostri sistemi chiamano l'API. L'API invia comandi a W e interroga R. W replica su R. Il motore legge da R e scrive su W.",
+        "nodes": {
+          "clients": { "name": "Client", "note": "I vostri sistemi" },
+          "api": { "name": "API", "note": "Punto di accesso" },
+          "w": { "name": "W", "note": "Di riferimento" },
+          "r": { "name": "R", "note": "Copia di lettura" },
+          "engine": { "name": "Motore", "note": "Regole" }
+        },
+        "flows": {
+          "writes": "scritture",
+          "reads": "letture",
+          "replication": "replica"
+        }
+      }
+    },
+    "api": {
+      "eyebrow": "API",
+      "title": "Superficie dell'API",
+      "lead": "Oggi esistono cinque endpoint. Il resto della superficie abbozzata è pianificato e può cambiare.",
+      "side": {
+        "write": "Scrive su W",
+        "read": "Legge da R",
+        "push": "Invia ai vostri sistemi"
+      },
+      "webhooksName": "Webhook",
+      "items": {
+        "batchesCreate": "Registra un file caricato indicandone SHA-256, tipo di fonte e periodo. Idempotente. Restituisce il numero di sequenza del registro della scrittura.",
+        "batchesGet": "Stato di elaborazione di un lotto registrato.",
+        "runsCreate": "Avvia un'esecuzione di riconciliazione fissata a una versione del pacchetto di regole. Asincrona.",
+        "runsGet": "Stato di un'esecuzione di riconciliazione.",
+        "findingsList": "Elenca le rilevazioni registrate dalle esecuzioni.",
+        "evidence": "Il pacchetto di evidenze per una rilevazione, consegnato come collegamento firmato.",
+        "rulesSearch": "Cerca nel corpus giuridico citato per parola chiave e per significato.",
+        "erasure": "Richiede la cancellazione di dati personali. Le regole di conservazione possono rinviare una richiesta; tale decisione viene registrata.",
+        "export": "Esporta i dati personali in un formato leggibile da macchina.",
+        "webhooks": "Callback firmati quando un'esecuzione termina o viene registrata una rilevazione."
+      },
+      "headers": "Ogni scrittura richiede un'intestazione <code>Idempotency-Key</code>, così che una richiesta ripetuta non possa creare un secondo lotto o una seconda esecuzione. Ogni scrittura risponde con un'intestazione <code>X-Commit-Seq</code> che riporta il numero di sequenza del registro prodotto. Ogni lettura risponde con <code>X-Data-Watermark</code> e rispetta <code>X-Min-Seq</code>, l'attesa descritta sopra."
+    },
+    "evidence": {
+      "eyebrow": "Evidenze",
+      "title": "Evidenze verificabili offline",
+      "lead": "L'obiettivo è che una rilevazione sia accompagnata da una prova verificabile senza dover fidarsi del servizio. Alcune parti esistono. Altre sono pianificate, e ciascuna è contrassegnata.",
+      "items": {
+        "ledger": {
+          "title": "Registro append-only a catena di hash",
+          "body": "Ogni comando aggiunge un evento al registro del proprio cliente. L'hash di un evento comprende l'hash dell'evento precedente e una forma canonica del suo contenuto, quindi modificare la cronologia invalida ogni hash successivo. Aggiornamenti, eliminazioni e troncamenti sono bloccati da privilegi e trigger.",
+          "detail": "Su una coppia di test locale, la modifica privilegiata di una riga è stata rilevata dalla verifica della catena."
+        },
+        "verifier": {
+          "title": "Verificatore della catena offline",
+          "body": "Uno strumento da riga di comando legge una catena esportata e indica se è internamente coerente. Non condivide codice con il database. Una catena di hash non può mostrare che i suoi eventi più recenti siano stati tagliati, quindi allo strumento si può fornire anche l'hash di testa atteso."
+        },
+        "token": {
+          "title": "Verifica del token di marcatura temporale",
+          "body": "Esiste codice che controlla un token di marcatura temporale RFC 3161 rispetto all'hash di testa del registro e a un insieme di certificati attendibili."
+        },
+        "anchoring": {
+          "title": "Ancoraggio con marcatura temporale",
+          "body": "Un worker pianificato deve ottenere un token di marcatura temporale per la testa del registro di ciascun cliente. Non è ancora stato scelto alcun fornitore di marcatura temporale qualificata."
+        },
+        "pack": {
+          "title": "Pacchetto di evidenze",
+          "body": "Su richiesta, un pacchetto per una rilevazione: un manifesto con le citazioni e gli hash degli input, estratti dei record di origine, il segmento di catena, i token di marcatura temporale e uno script di verifica."
+        }
+      },
+      "chain": {
+        "label": "Illustrazione di una catena di hash",
+        "caption": "Illustrazione, non dati reali. Ogni evento memorizza l'hash di quello che lo precede.",
+        "event": "Evento {n}",
+        "prev": "hash prec."
+      }
+    }
+  }
+}

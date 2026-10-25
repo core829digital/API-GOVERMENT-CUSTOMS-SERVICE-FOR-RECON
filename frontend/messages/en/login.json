@@ -1,0 +1,56 @@
+{
+  "login": {
+    "metaTitle": "Sign in",
+    "eyebrow": "Console access",
+    "title": "Sign in",
+    "redirectNote": "You will be redirected to your organisation's identity provider to sign in.",
+    "backToSite": "Back to the site",
+    "retry": "Try again",
+    "notice": {
+      "idp_unreachable": {
+        "title": "Your identity provider could not be reached",
+        "description": "The sign-in service did not respond, and nothing was changed. Try again in a moment."
+      },
+      "invalid_callback": {
+        "title": "Sign-in could not be completed",
+        "description": "The response from the identity provider was missing, had expired or did not match the request that started it. Start again."
+      },
+      "not_configured": {
+        "title": "Sign-in is not available",
+        "description": "This deployment has no identity provider configured yet, so there is nothing to do from this page."
+      },
+      "session_expired": {
+        "title": "Your session has ended",
+        "description": "Sign in again to continue where you left off."
+      },
+      "signed_out": {
+        "title": "You have signed out",
+        "description": "The session in this browser has been closed."
+      },
+      "unknown": {
+        "title": "Sign-in did not complete",
+        "description": "Something went wrong. Try again."
+      }
+    },
+    "panel": {
+      "eyebrow": "Early development",
+      "statement": "Where your books and an authority's copy disagree, shown with the rule it was checked under.",
+      "status": "The console runs on synthetic data only.",
+      "guaranteesTitle": "What to expect",
+      "guarantees": {
+        "advice": {
+          "title": "Not tax advice",
+          "description": "A finding says two sources disagree under a cited rule. It never says what you owe or whether something is lawful."
+        },
+        "citation": {
+          "title": "Every finding cites a rule",
+          "description": "Each finding names the rule it was evaluated under, so the reasoning can be checked."
+        },
+        "credentials": {
+          "title": "The browser never holds your credentials",
+          "description": "Sign-in happens at your identity provider. Your session is an encrypted, HTTP-only cookie, and the access token inside it can only be opened on the server."
+        }
+      }
+    }
+  }
+}

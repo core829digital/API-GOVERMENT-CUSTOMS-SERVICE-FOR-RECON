@@ -1,0 +1,155 @@
+{
+  "home": {
+    "metaTitle": "Księgi wobec kopii organu",
+    "metaDescription": "Recon porównuje księgi firmy z danymi, które posiadają organy podatkowe i celne, i wskazuje każdą niezgodność wraz z regułą, według której ją sprawdzono. Wczesna faza rozwoju, wyłącznie dane syntetyczne.",
+    "status": {
+      "building": "W budowie · dane syntetyczne",
+      "planned": "Planowane"
+    },
+    "hero": {
+      "eyebrow": "Uzgadnianie ksiąg z danymi organów",
+      "title": "Gdzie księgi i kopia organu się różnią.",
+      "lead": "Recon porównuje księgi firmy z danymi posiadanymi przez każdy organ podatkowy i celny i wskazuje każdą niezgodność wraz z regułą, według której ją sprawdzono.",
+      "secondary": "Zobacz, jak to działa",
+      "note": "Wczesna faza rozwoju. Wszystko, co tu pokazano, działa wyłącznie na danych syntetycznych."
+    },
+    "field": {
+      "books": "Księgi",
+      "authority": "Kopia organu",
+      "mismatch": "Niezgodność",
+      "rule": "Reguła",
+      "status": {
+        "cleared": "Przyjęta",
+        "rejected": "Odrzucona"
+      },
+      "caption": "Tylko ilustracja. Rekordy syntetyczne, nie rzeczywiste dane.",
+      "description": "Ilustracja: dwie księgi obok siebie, Księgi i Kopia organu. Większość wierszy się zgadza i jest połączona linią. Jeden wiersz się różni i jest oznaczony jako niezgodność w świetle przytoczonej reguły."
+    },
+    "gap": {
+      "eyebrow": "Luka",
+      "title": "Księgi mówią jedno. Kopia organu może mówić co innego.",
+      "lead": "Księga główna firmy i kopia danych posiadana przez organ podatkowy lub celny są prowadzone osobno. Gdy się rozchodzą, różnica może pozostać niezauważona do czasu wezwania, kontroli lub przeglądu zamknięcia roku, a wtedy trudno odtworzyć jej przyczynę.",
+      "inputsLabel": "Co czyta Recon",
+      "items": {
+        "erp": {
+          "title": "Eksporty księgi głównej z ERP",
+          "body": "Strona firmy: faktury i zapisy księgowe wyeksportowane z jej systemu księgowego lub ERP."
+        },
+        "clearance": {
+          "title": "Status po stronie organu",
+          "body": "Strona organu, na przykład status rozliczenia e-faktury w systemie takim jak KSeF, e-Factura lub SdI. Obecnie ten typ rekordu jest odczytywany wyłącznie z partii syntetycznych; nic nie jest połączone z rzeczywistym systemem organu."
+        },
+        "returns": {
+          "title": "Dane deklaracji i danych celnych",
+          "body": "Złożone deklaracje i zgłoszenia celne porównywane z księgami. Kontrola dla nich jeszcze nie istnieje."
+        }
+      }
+    },
+    "pipeline": {
+      "eyebrow": "Potok",
+      "title": "Od eksportu do czegoś, co można zweryfikować.",
+      "lead": "Cztery etapy. Każdy jest oznaczony tym, co istnieje obecnie.",
+      "steps": {
+        "ingest": {
+          "name": "Pobranie",
+          "body": "Wczytuje eksporty i dane po stronie organu do niezmiennych partii z haszami. Obecnie istnieje tylko API partii; adaptery dla ERP i źródeł organów są planowane."
+        },
+        "normalise": {
+          "name": "Normalizacja",
+          "body": "Mapuje każde źródło na jeden kanoniczny kształt rekordu, aby ta sama reguła mogła odczytać obie strony."
+        },
+        "reconcile": {
+          "name": "Uzgodnienie",
+          "body": "Stosuje przytoczone reguły do obu stron i zapisuje każdą niezgodność. Kontrola C1, faktura wobec statusu rozliczenia, działa na danych syntetycznych."
+        },
+        "evidence": {
+          "name": "Dowody",
+          "body": "Rozbieżności trafiają do rejestru zdarzeń typu append-only z łańcuchem haszy. Weryfikator łańcucha i kod weryfikacji tokenu znacznika czasu istnieją; pakiety dowodowe są planowane."
+        }
+      }
+    },
+    "anatomy": {
+      "eyebrow": "Rozbieżność",
+      "title": "Anatomia rozbieżności.",
+      "lead": "Każda rozbieżność ma te same elementy, dzięki czemu można ją odczytać, zakwestionować i odtworzyć. Poniższa jest syntetyczna.",
+      "cardLabel": "Przykładowa rozbieżność",
+      "cardNote": "Dane syntetyczne. Żadna rzeczywista firma ani organ.",
+      "calloutsLabel": "Po co każdy element",
+      "fields": {
+        "check": "Kontrola",
+        "severity": "Waga",
+        "summary": "Opis",
+        "rule": "Przytoczona reguła",
+        "inputs": "Dane wejściowe"
+      },
+      "values": {
+        "checkName": "Faktura wobec statusu rozliczenia",
+        "severity": "Średnia",
+        "summary": "Faktura {invoice} jest w księgach zapisana jako wystawiona. Kopia po stronie organu zawiera dla tej samej faktury inny status rozliczenia.",
+        "booksInput": "Rekord ksiąg",
+        "authorityInput": "Rekord organu"
+      },
+      "callouts": {
+        "reproducible": {
+          "title": "Kontrola i waga",
+          "body": "Wskazuje deterministyczną kontrolę, która została wykonana. Te same dane wejściowe przy tej samej wersji pakietu reguł dają tę samą rozbieżność, a żaden model o niej nie decyduje."
+        },
+        "neutral": {
+          "title": "Opis",
+          "body": "Stwierdza jedynie, że dwa źródła się różnią. Recon nie jest doradcą podatkowym: co zrobić z niezgodnością, rozstrzyga firma wraz ze swoimi doradcami."
+        },
+        "cited": {
+          "title": "Przytoczona reguła",
+          "body": "Wskazuje regułę, według której dokonano porównania. Reguły są wersjonowanymi danymi z podanym źródłem, a zatwierdza je osoba odpowiedzialna za zgodność."
+        },
+        "evidence": {
+          "title": "Dane wejściowe",
+          "body": "Wskazuje dokładne rekordy za pomocą haszy, dzięki czemu rozbieżność można prześledzić wstecz i sprawdzić z rejestrem odpornym na manipulacje."
+        }
+      }
+    },
+    "principles": {
+      "eyebrow": "Zasady",
+      "title": "Co się nie zmienia.",
+      "lead": "Ograniczenia, wokół których zbudowano produkt. Jeśli któreś jest decyzją projektową, a nie czymś, co już działa, jest to wyraźnie napisane.",
+      "kind": {
+        "exists": "Wdrożone · dane syntetyczne",
+        "rule": "Reguła projektowa",
+        "decision": "Decyzja projektowa"
+      },
+      "items": {
+        "determinism": {
+          "title": "Te same dane, te same rozbieżności",
+          "body": "Rozbieżność jest czystą funkcją haszy rekordów wejściowych i wersji pakietu reguł. Ponowne uruchomienie ją odtwarza. Żaden model nie decyduje o rozbieżności."
+        },
+        "isolation": {
+          "title": "Każdy najemca odizolowany",
+          "body": "Zabezpieczenia na poziomie wierszy w obu bazach danych nie dopuszczają rekordów jednego najemcy do zapytań innego."
+        },
+        "ledger": {
+          "title": "Rejestr tylko do dopisywania",
+          "body": "Zdarzenia są łączone w łańcuch haszy osobno dla każdego najemcy i nie można ich zmieniać ani usuwać. Weryfikator przelicza łańcuch od nowa."
+        },
+        "privacy": {
+          "title": "Brak danych osobowych w logach",
+          "body": "Logi, ślady i ładunki rejestru mają być wolne od danych osobowych."
+        },
+        "rules": {
+          "title": "Reguły to dane z przytoczeniem",
+          "body": "Daty, progi i stawki znajdują się w wersjonowanych pakietach reguł z odwołaniem do źródła, nigdy w kodzie. Każdą zmianę zatwierdza osoba odpowiedzialna za zgodność."
+        },
+        "residency": {
+          "title": "Dane wyłącznie w UE",
+          "body": "Dane najemców mają pozostawać u podmiotów przetwarzających z siedzibą w UE. To decyzja projektowa; dostawca hostingu nie został jeszcze wybrany."
+        }
+      },
+      "trustLink": "Przeczytaj uwagi o zaufaniu"
+    },
+    "closing": {
+      "eyebrow": "Dalej",
+      "title": "Zobacz, gdzie obie kopie się różnią.",
+      "body": "Recon jest we wczesnej fazie rozwoju i obecnie działa na danych syntetycznych. Zaloguj się, aby obejrzeć bieżącą wersję, lub przeczytaj, które kontrole istnieją, a które są planowane.",
+      "checksLink": "Przeglądaj kontrole"
+    }
+  }
+}

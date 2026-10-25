@@ -1,0 +1,56 @@
+{
+  "login": {
+    "metaTitle": "Anmelden",
+    "eyebrow": "Zugang zur Konsole",
+    "title": "Anmelden",
+    "redirectNote": "Sie werden zur Anmeldung an den Identitätsanbieter Ihrer Organisation weitergeleitet.",
+    "backToSite": "Zurück zur Website",
+    "retry": "Erneut versuchen",
+    "notice": {
+      "idp_unreachable": {
+        "title": "Ihr Identitätsanbieter war nicht erreichbar",
+        "description": "Der Anmeldedienst hat nicht geantwortet, und es wurde nichts geändert. Versuchen Sie es gleich noch einmal."
+      },
+      "invalid_callback": {
+        "title": "Die Anmeldung konnte nicht abgeschlossen werden",
+        "description": "Die Antwort des Identitätsanbieters fehlte, war abgelaufen oder passte nicht zu der Anfrage, die sie ausgelöst hat. Beginnen Sie von vorn."
+      },
+      "not_configured": {
+        "title": "Anmeldung nicht verfügbar",
+        "description": "Für diese Bereitstellung ist noch kein Identitätsanbieter eingerichtet, daher gibt es auf dieser Seite nichts zu tun."
+      },
+      "session_expired": {
+        "title": "Ihre Sitzung wurde beendet",
+        "description": "Melden Sie sich erneut an, um dort weiterzumachen, wo Sie aufgehört haben."
+      },
+      "signed_out": {
+        "title": "Sie haben sich abgemeldet",
+        "description": "Die Sitzung in diesem Browser wurde geschlossen."
+      },
+      "unknown": {
+        "title": "Die Anmeldung wurde nicht abgeschlossen",
+        "description": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+      }
+    },
+    "panel": {
+      "eyebrow": "Frühe Entwicklung",
+      "statement": "Wo Ihre Bücher und die Kopie einer Behörde voneinander abweichen, mit der Regel, nach der geprüft wurde.",
+      "status": "Die Konsole läuft ausschließlich mit synthetischen Daten.",
+      "guaranteesTitle": "Was Sie erwarten können",
+      "guarantees": {
+        "advice": {
+          "title": "Keine Steuerberatung",
+          "description": "Eine Abweichung hält fest, dass zwei Quellen nach einer zitierten Regel voneinander abweichen. Sie sagt nie, was Sie schulden oder ob etwas rechtmäßig ist."
+        },
+        "citation": {
+          "title": "Jede Abweichung zitiert eine Regel",
+          "description": "Jede Abweichung nennt die Regel, nach der sie ausgewertet wurde, sodass die Begründung nachprüfbar ist."
+        },
+        "credentials": {
+          "title": "Der Browser hält nie Ihre Zugangsdaten",
+          "description": "Die Anmeldung erfolgt bei Ihrem Identitätsanbieter. Ihre Sitzung ist ein verschlüsseltes HTTP-only-Cookie, und das darin enthaltene Zugriffstoken kann nur auf dem Server geöffnet werden."
+        }
+      }
+    }
+  }
+}

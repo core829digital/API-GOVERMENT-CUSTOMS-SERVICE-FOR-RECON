@@ -1,0 +1,8 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: recon-w
+  annotations:
+    recon.core829.eu/subprocessor: Example Hosting EU GmbH   # compute and storage
+spec:
+  replicas: 1

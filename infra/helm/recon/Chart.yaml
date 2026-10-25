@@ -1,0 +1,13 @@
+apiVersion: v2
+name: recon
+description: >-
+  recon API (Axum) and frontend (Next.js BFF) with a pre-install/pre-upgrade migration Job.
+  PostgreSQL (clusters W and R) is NOT part of this chart: see infra/k8s/cnpg.
+type: application
+# Chart version moves with chart changes; appVersion is the default image tag for all recon images.
+version: 0.1.0
+appVersion: "0.1.0"
+kubeVersion: ">=1.30.0-0"
+maintainers:
+  - name: engineering
+# No chart dependencies: the chart renders offline.

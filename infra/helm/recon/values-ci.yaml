@@ -1,0 +1,38 @@
+# Values for offline rendering in CI (helm lint / helm template / conftest / kubeconform).
+# Every value is a placeholder naming a resource that would exist in a real cluster; nothing here is a secret.
+#   helm template recon infra/helm/recon -f infra/helm/recon/values-ci.yaml
+# The chart has no dependencies, so rendering needs no network access.
+
+appBaseUrl: https://app.recon.example.eu
+
+oidc:
+  issuer: https://idp.recon.example.eu/realms/recon
+  clientId: recon-web
+  scope: openid
+  # IdP operated by us in the same cluster for CI rendering: no third-party processor, no annotation.
+  subprocessor: ""
+  subprocessorRegion: ""
+
+ingress:
+  className: nginx
+  frontend:
+    host: app.recon.example.eu
+    tlsSecretName: recon-app-tls
+  api:
+    enabled: true
+    host: api.recon.example.eu
+    tlsSecretName: recon-api-tls
+
+frontend:
+  # IdP running in-cluster in namespace `idp` (a namespaceSelector peer needs no CIDR allow-listing).
+  idpEgress:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: idp
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: idp
+  idpPort: 8443
+
+image:
+  registry: ghcr.io/core829srl

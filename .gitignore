@@ -1,0 +1,18 @@
+# build output
+/target/
+**/node_modules/
+**/.next/
+**/dist/
+**/test-results/
+**/playwright-report/
+*.tsbuildinfo
+
+# local dev state (PostgreSQL data directories, logs)
+/.dev/
+
+# environment and secrets (examples are tracked)
+.env
+.env.*
+!.env.example
+*.pem
+*.key

@@ -1,0 +1,135 @@
+{
+  "checks": {
+    "metadata": {
+      "title": "Kontrole",
+      "description": "Katalog kandydujących kontroli uzgadniania C1–C8: co każda porównuje, czy jedno ze źródeł posiada organ i na jakim etapie jest każda z nich."
+    },
+    "status": {
+      "building": "W budowie",
+      "planned": "Planowane",
+      "later": "Później",
+      "buildingHint": "Istnieje i działa. Wyłącznie dane syntetyczne.",
+      "plannedHint": "Zaprojektowane i opisane. Jeszcze niezbudowane.",
+      "laterHint": "Celowo po pierwszych wersjach."
+    },
+    "hero": {
+      "eyebrow": "Kontrole",
+      "title": "Osiem kandydujących kontroli. Jedna działa, na danych syntetycznych.",
+      "lead": "Kontrola porównuje dwa lub więcej źródeł i wskazuje, gdzie się różnią. To katalog kandydatów. Istnieje tylko pierwsza i nigdy nie widziała rzeczywistych danych."
+    },
+    "catalogue": {
+      "eyebrow": "Katalog",
+      "title": "Co z czym jest porównywane",
+      "lead": "Kolumna Strona organu mówi, czy jedno z porównywanych źródeł jest kopią posiadaną przez organ: tak, częściowo lub nie. Status pokazuje, jak daleko zaszła każda kontrola. Lista to zbiór kandydatów i może się zmienić.",
+      "caption": "Kandydujące kontrole C1–C8, źródła porównywane przez każdą z nich, informacja, czy jedno z nich posiada organ, oraz status każdej kontroli",
+      "columns": {
+        "id": "ID",
+        "check": "Kontrola",
+        "sources": "Porównywane źródła",
+        "authority": "Strona organu",
+        "status": "Status"
+      },
+      "authority": {
+        "yes": "Tak",
+        "partial": "Częściowo",
+        "no": "Nie"
+      },
+      "rows": {
+        "c1": {
+          "check": "Wystawiona faktura wobec statusu i treści rozliczenia",
+          "sources": "Księga główna i status posiadany przez system rozliczania e-faktur (przykłady: KSeF, e-Factura, SdI)"
+        },
+        "c2": {
+          "check": "PDF faktury wobec jej ustrukturyzowanego XML",
+          "sources": "PDF faktury i XML faktury"
+        },
+        "c3": {
+          "check": "Pola deklaracji VAT wobec księgi głównej, według okresu",
+          "sources": "Księga główna i złożona deklaracja"
+        },
+        "c4": {
+          "check": "Deklaracja OSS lub IOSS wobec sprzedaży dla konsumentów, według państwa konsumpcji i stawki",
+          "sources": "Księga główna lub dane platformy handlowej i deklaracja OSS"
+        },
+        "c5": {
+          "check": "Dostawy wewnątrzunijne między przedsiębiorstwami wobec ważności numeru VAT w chwili dostawy",
+          "sources": "Księga główna i historia wyników VIES"
+        },
+        "c6": {
+          "check": "Odliczony VAT z importu wobec dokumentu celnego lub importowego",
+          "sources": "Księga główna i dokumentacja celna"
+        },
+        "c7": {
+          "check": "Raport platformy handlowej wobec księgi głównej",
+          "sources": "Raport platformy handlowej i księga główna"
+        },
+        "c8": {
+          "check": "Płatności wobec faktur",
+          "sources": "Dane banku lub operatora płatności i księga główna"
+        }
+      }
+    },
+    "c1": {
+      "eyebrow": "Kontrola C1",
+      "title": "Co C1 zgłasza obecnie",
+      "lead": "Faktury w księdze głównej są porównywane ze statusem rozliczenia zgłoszonym dla nich. Dla każdego odniesienia do faktury zgłaszany jest co najwyżej jeden wynik: pierwszy pasujący, w tej kolejności. Działa to wyłącznie na danych syntetycznych.",
+      "outcomes": {
+        "noClearance": "Dla faktury nie istnieje rekord rozliczenia.",
+        "notAccepted": "Rekord rozliczenia ma status inny niż zaakceptowany.",
+        "amountMismatch": "Waluta lub suma różni się między fakturą a rekordem rozliczenia.",
+        "orphan": "Istnieje rekord rozliczenia bez faktury."
+      },
+      "note": "Jeśli dwa rekordy faktur lub dwa rekordy rozliczeń mają to samo odniesienie, dane wejściowe są niejednoznaczne. Przebieg kończy się niepowodzeniem zamiast zgadywać."
+    },
+    "produces": {
+      "eyebrow": "Wynik",
+      "title": "Co daje kontrola",
+      "lead": "Każdy wynik jest rozbieżnością. Rozbieżność to stwierdzenie o dwóch źródłach, nigdy o tym, co robić.",
+      "items": {
+        "disagreement": {
+          "title": "Niezgodność",
+          "body": "Dwa źródła mówią co innego o tej samej pozycji. Na przykład: faktura w księdze głównej, której strona rozliczenia nie wykazuje jako zaakceptowanej."
+        },
+        "rule": {
+          "title": "Przytoczona reguła",
+          "body": "Rozbieżność wskazuje regułę, według której porównano źródła, odnalezioną w przypiętym pakiecie reguł przebiegu. Jeśli pakiet nie zawiera tej reguły, przebieg kończy się niepowodzeniem zamiast zgłaszać rozbieżność bez przytoczenia."
+        },
+        "inputs": {
+          "title": "Dane wejściowe",
+          "body": "Rozbieżność wskazuje rekordy wejściowe, ich hasze i wersję pakietu reguł. Te same dane wejściowe i ta sama wersja dają tę samą rozbieżność. Waga jest roboczą wartością domyślną do selekcji, a nie oceną prawną."
+        }
+      },
+      "notice": {
+        "title": "To nie jest porada podatkowa",
+        "body": "Usługa nie jest doradcą podatkowym. Rozbieżność mówi, że dwa źródła różnią się w świetle przytoczonej reguły. Nie mówi, czy cokolwiek jest należne, zgodne z prawem lub zgodne z przepisami, i nie zaleca żadnego działania. Ta ocena należy do Państwa i Państwa doradcy."
+      }
+    },
+    "unproven": {
+      "eyebrow": "Ograniczenia",
+      "title": "Czego jeszcze nie udowodniono",
+      "lead": "Ten produkt jest we wczesnej fazie rozwoju. Oto otwarte pytania, opisane wprost.",
+      "items": {
+        "realData": {
+          "title": "Żadna kontrola nie zetknęła się z rzeczywistymi danymi",
+          "body": "Żadna kontrola nie działała na rzeczywistych danych klientów i żadna nie została zwalidowana na rzeczywistych danych organów. C1 działa wyłącznie na danych syntetycznych."
+        },
+        "rules": {
+          "title": "Pakiety reguł to wersje robocze",
+          "body": "Dotychczas napisane pakiety reguł są wersjami roboczymi. Żaden nie jest włączony i żaden nie został sprawdzony przez człowieka. Nie wyznaczono jeszcze osoby odpowiedzialnej za zgodność."
+        },
+        "competitors": {
+          "title": "Inne produkty nie zostały jeszcze porównane",
+          "body": "Nie ustalono, co już obejmują inne produkty. Funkcje uzgadniania mogą istnieć gdzie indziej; porównanie, kontrola po kontroli, ma dopiero powstać na podstawie dokumentacji producentów."
+        },
+        "demand": {
+          "title": "Popyt nie został zweryfikowany",
+          "body": "Nie sprawdzono, czy zespoły finansowe zapłaciłyby za to rozwiązanie. Nie przeprowadzono jeszcze żadnych rozmów z klientami."
+        },
+        "availability": {
+          "title": "Dane organów mogą być nieosiągalne",
+          "body": "To, czy w ogóle można odczytać stronę organu i w jakiej postaci, jest otwarte dla każdego kraju. Kontrole oznaczone jako strona organu zależą od tej odpowiedzi."
+        }
+      }
+    }
+  }
+}

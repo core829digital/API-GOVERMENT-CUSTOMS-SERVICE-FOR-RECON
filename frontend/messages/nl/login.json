@@ -1,0 +1,56 @@
+{
+  "login": {
+    "metaTitle": "Aanmelden",
+    "eyebrow": "Toegang tot console",
+    "title": "Aanmelden",
+    "redirectNote": "U wordt doorgestuurd naar de identiteitsprovider van uw organisatie om u aan te melden.",
+    "backToSite": "Terug naar de site",
+    "retry": "Opnieuw proberen",
+    "notice": {
+      "idp_unreachable": {
+        "title": "Uw identiteitsprovider was niet bereikbaar",
+        "description": "De aanmeldingsdienst antwoordde niet en er is niets gewijzigd. Probeer het zo meteen opnieuw."
+      },
+      "invalid_callback": {
+        "title": "Aanmelden kon niet worden voltooid",
+        "description": "Het antwoord van de identiteitsprovider ontbrak, was verlopen of kwam niet overeen met het verzoek waarmee het begon. Begin opnieuw."
+      },
+      "not_configured": {
+        "title": "Aanmelden is niet beschikbaar",
+        "description": "Voor deze implementatie is nog geen identiteitsprovider ingesteld, dus u kunt vanaf deze pagina niets doen."
+      },
+      "session_expired": {
+        "title": "Uw sessie is beëindigd",
+        "description": "Meld u opnieuw aan om verder te gaan waar u bent gebleven."
+      },
+      "signed_out": {
+        "title": "U bent afgemeld",
+        "description": "De sessie in deze browser is gesloten."
+      },
+      "unknown": {
+        "title": "Aanmelden is niet voltooid",
+        "description": "Er is iets misgegaan. Probeer het opnieuw."
+      }
+    },
+    "panel": {
+      "eyebrow": "Vroege ontwikkeling",
+      "statement": "Waar uw boekhouding en de kopie van een autoriteit verschillen, getoond met de regel waaronder het is gecontroleerd.",
+      "status": "De console draait uitsluitend op synthetische gegevens.",
+      "guaranteesTitle": "Wat u kunt verwachten",
+      "guarantees": {
+        "advice": {
+          "title": "Geen belastingadvies",
+          "description": "Een bevinding zegt dat twee bronnen verschillen volgens een vermelde regel. Ze zegt nooit wat u verschuldigd bent of of iets is toegestaan."
+        },
+        "citation": {
+          "title": "Elke bevinding noemt een regel",
+          "description": "Elke bevinding noemt de regel waaronder ze is beoordeeld, zodat de redenering kan worden gecontroleerd."
+        },
+        "credentials": {
+          "title": "De browser bewaart nooit uw inloggegevens",
+          "description": "Aanmelden gebeurt bij uw identiteitsprovider. Uw sessie is een versleutelde, HTTP-only cookie, en het toegangstoken erin kan alleen op de server worden geopend."
+        }
+      }
+    }
+  }
+}

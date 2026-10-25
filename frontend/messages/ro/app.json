@@ -1,0 +1,133 @@
+{
+  "common": {
+    "close": "Închide",
+    "loading": "Se încarcă",
+    "retry": "Încearcă din nou",
+    "signIn": "Autentificare",
+    "signOut": "Deconectare",
+    "none": "Nesetat"
+  },
+  "metadata": {
+    "title": "Recon",
+    "description": "Reconcilierea registrelor contabile ale companiei cu copia deținută de fiecare autoritate, cu temei legal citat."
+  },
+  "shell": {
+    "appName": "Recon",
+    "console": "Consolă",
+    "skipToContent": "Sari la conținutul principal",
+    "sidebarTitle": "Navigare",
+    "sidebarDescription": "Linkurile principale de navigare.",
+    "toggleSidebar": "Comută navigarea",
+    "navLabel": "Principal",
+    "nav": {
+      "overview": "Prezentare generală",
+      "findings": "Constatări"
+    },
+    "language": {
+      "label": "Limbă",
+      "en": "English",
+      "ro": "Română",
+      "it": "Italiano",
+      "es": "Español",
+      "fr": "Français",
+      "de": "Deutsch",
+      "nl": "Nederlands",
+      "pl": "Polski"
+    },
+    "theme": {
+      "label": "Temă",
+      "light": "Luminoasă",
+      "dark": "Întunecată",
+      "system": "Sistem"
+    },
+    "session": {
+      "checking": "Se verifică sesiunea"
+    }
+  },
+  "overview": {
+    "title": "Prezentare generală",
+    "intro": "Recon compară registrele dumneavoastră cu copia deținută de fiecare autoritate și listează unde sursele nu concordă conform unei reguli citate.",
+    "notice": "Constatările arată că sursele nu concordă conform unei reguli citate. Nu reprezintă consultanță fiscală.",
+    "findingsCard": {
+      "title": "Constatări",
+      "description": "Neconcordanțe între registrele dumneavoastră și copia unei autorități, fiecare cu regula conform căreia a fost verificată.",
+      "action": "Deschide constatările"
+    },
+    "batchCard": {
+      "title": "Starea lotului",
+      "description": "Căutați starea de procesare a unui lot încărcat după identificatorul acestuia.",
+      "label": "Identificatorul lotului",
+      "placeholder": "00000000-0000-7000-8000-000000000000",
+      "submit": "Arată starea",
+      "invalid": "Introduceți un identificator de lot valid (UUID)."
+    }
+  },
+  "findings": {
+    "title": "Constatări",
+    "description": "Unde registrele dumneavoastră și copia unei autorități nu concordă conform unei reguli citate. Nu reprezintă consultanță fiscală.",
+    "tableLabel": "Lista constatărilor",
+    "columns": {
+      "check": "Verificare",
+      "severity": "Severitate",
+      "jurisdiction": "Jurisdicție",
+      "summary": "Rezumat",
+      "citation": "Regulă citată",
+      "created": "Generată"
+    },
+    "severity": {
+      "info": "Informativ",
+      "low": "Scăzută",
+      "medium": "Medie",
+      "high": "Ridicată"
+    },
+    "empty": {
+      "title": "Nicio constatare",
+      "description": "Serviciul nu a returnat nicio constatare."
+    }
+  },
+  "batch": {
+    "title": "Starea lotului",
+    "back": "Înapoi la prezentarea generală",
+    "fields": {
+      "id": "Identificatorul lotului",
+      "status": "Stare",
+      "sourceType": "Tipul sursei",
+      "period": "Perioadă",
+      "created": "Înregistrat",
+      "failureReason": "Motivul eșecului"
+    },
+    "periodRange": "{start} – {end}",
+    "status": {
+      "registered": "Înregistrat",
+      "parsing": "Se procesează",
+      "parsed": "Procesat",
+      "failed": "Eșuat"
+    }
+  },
+  "errors": {
+    "unauthenticated": {
+      "title": "Autentificare necesară",
+      "description": "Sesiunea lipsește sau a expirat. Autentificați-vă pentru a continua."
+    },
+    "notFound": {
+      "title": "Negăsit",
+      "description": "Serviciul nu are nicio înregistrare cu acest identificator."
+    },
+    "replicaLag": {
+      "title": "Datele se sincronizează încă",
+      "description": "Copia de citire nu este încă la zi. Încercați din nou în scurt timp."
+    },
+    "unavailable": {
+      "title": "Serviciu indisponibil",
+      "description": "Serviciul nu a putut fi contactat sau a returnat o eroare. Încercați din nou mai târziu."
+    },
+    "invalidResponse": {
+      "title": "Răspuns neașteptat",
+      "description": "Serviciul a răspuns într-un format pe care această aplicație nu îl recunoaște."
+    },
+    "network": {
+      "title": "Problemă de conexiune",
+      "description": "Cererea nu s-a finalizat. Verificați conexiunea și încercați din nou."
+    }
+  }
+}

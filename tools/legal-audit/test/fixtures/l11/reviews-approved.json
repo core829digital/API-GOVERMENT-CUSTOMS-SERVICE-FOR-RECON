@@ -1,0 +1,26 @@
+[
+  {
+    "id": 80,
+    "node_id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3ODA=",
+    "user": { "login": "bob-dev", "id": 1, "type": "User", "site_admin": false },
+    "body": "LGTM",
+    "state": "APPROVED",
+    "html_url": "https://github.com/core829srl/recon/pull/12#pullrequestreview-80",
+    "pull_request_url": "https://api.github.com/repos/core829srl/recon/pulls/12",
+    "author_association": "MEMBER",
+    "submitted_at": "2026-10-22T09:00:00Z",
+    "commit_id": "1111111111111111111111111111111111111111"
+  },
+  {
+    "id": 81,
+    "node_id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3ODE=",
+    "user": { "login": "alice-compliance", "id": 2, "type": "User", "site_admin": false },
+    "body": "Migration reviewed, classification comments checked.",
+    "state": "APPROVED",
+    "html_url": "https://github.com/core829srl/recon/pull/12#pullrequestreview-81",
+    "pull_request_url": "https://api.github.com/repos/core829srl/recon/pulls/12",
+    "author_association": "MEMBER",
+    "submitted_at": "2026-10-22T11:30:00Z",
+    "commit_id": "2222222222222222222222222222222222222222"
+  }
+]

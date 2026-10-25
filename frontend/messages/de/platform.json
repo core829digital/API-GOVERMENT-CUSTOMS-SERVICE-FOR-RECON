@@ -1,0 +1,140 @@
+{
+  "platform": {
+    "metadata": {
+      "title": "Plattform",
+      "description": "Wie der Dienst Daten aus Ihren Büchern zu einer Abweichung führt: einlesen, normalisieren, abgleichen, projizieren und nachweisen, mit dem Status jedes Teils."
+    },
+    "status": {
+      "building": "Im Aufbau",
+      "planned": "Geplant",
+      "later": "Später",
+      "buildingHint": "Vorhanden und lauffähig. Nur synthetische Daten.",
+      "plannedHint": "Entworfen und dokumentiert. Noch nicht gebaut.",
+      "laterHint": "Bewusst nach den ersten Versionen."
+    },
+    "hero": {
+      "eyebrow": "Plattform",
+      "title": "So arbeitet der Dienst",
+      "lead": "Die Bücher gehen hinein. Eine deterministische Engine vergleicht sie mit der Kopie, die eine Behörde führt. Jede Unstimmigkeit kommt als Abweichung mit ihrer zitierten Regel und ihrem Nachweis heraus. Jeder Teil unten trägt seinen Status."
+    },
+    "flow": {
+      "eyebrow": "Datenfluss",
+      "title": "Von der Datei zur Abweichung in fünf Schritten",
+      "lead": "Jeder Schritt erledigt eine Aufgabe und übergibt an den nächsten. Nichts davon ist bisher mit echten Kundendaten gelaufen.",
+      "steps": {
+        "ingest": {
+          "name": "Einlesen",
+          "body": "Ein Client registriert eine hochgeladene Datei bei der API mit ihrem SHA-256, Quellentyp und Zeitraum. Die Registrierung und ein Protokollereignis werden in einer Transaktion geschrieben. Heute werden nur diese Metadaten angenommen; noch kein Adapter liest Dateiinhalte."
+        },
+        "normalise": {
+          "name": "Normalisieren",
+          "body": "Ein Worker bildet jede Quelle auf eine kanonische Datensatzform ab, damit Datensätze aus verschiedenen Systemen vergleichbar sind. Rechnungen werden auf ein gemeinsames Modell nach dem E-Rechnungsstandard EN 16931 abgebildet, mit einem Adapter je Land."
+        },
+        "reconcile": {
+          "name": "Abgleichen",
+          "body": "Die Engine liest die normalisierten Datensätze, wendet eine festgelegte Version des Regelpakets an und schreibt den Lauf und seine Abweichungen. Das Ergebnis hängt nur von den Eingabedatensätzen und dieser Version ab. Heute ist das Prüfung C1, mit synthetischen Daten."
+        },
+        "project": {
+          "name": "Projizieren",
+          "body": "Ein Projektor macht aus replizierten Abweichungen und Protokolleinträgen schnell lesbare Sichten und später einen Index über öffentliche Rechtstexte. Er schreibt nur in die Lesekopie."
+        },
+        "evidence": {
+          "name": "Nachweis",
+          "body": "Jede Änderung hinterlässt ein Ereignis in einem Ereignisprotokoll mit Hashkette. Der Kettenkopf soll von Zeit zu Zeit mit einem Zeitstempel versehen werden, und Nachweispakete sollen auf Anfrage erzeugt werden. Das Protokoll und ein Ketten-Verifizierer existieren; Zeitstempelung und Pakete sind geplant."
+        }
+      }
+    },
+    "stores": {
+      "eyebrow": "Speicher",
+      "title": "Zwei Datenbanken, eine Wahrheit",
+      "lead": "Kundendaten liegen in zwei PostgreSQL-Clustern mit getrennten Aufgaben. Der Code ist so typisiert, dass eine Abfrage die Schreibseite nicht erreichen und ein Befehl nicht aus der falschen Datenbank lesen kann.",
+      "w": {
+        "name": "W: der maßgebliche Speicher",
+        "body": "Hier schreiben nur Befehle: einen Stapel registrieren, einen Lauf starten, eine Abweichung erfassen. Jeder Befehl hängt in derselben Transaktion wie seine Änderung ein Protokollereignis an. W ist der einzige Ort, an dem ein Sachverhalt festgelegt wird."
+      },
+      "r": {
+        "name": "R: die Lesekopie",
+        "body": "Logische Replikation speist R aus W. Die API fragt ausschließlich R ab. R enthält außerdem abgeleitete Daten wie Projektionen, die W nie sieht. Ist R nicht verfügbar, erhält eine Abfrage einen Fehler; sie wird nie stillschweigend aus W beantwortet."
+      },
+      "ryw": {
+        "title": "Das gerade Geschriebene sehen",
+        "body": "Die Replikation braucht einen Moment, daher könnte ein Lesen direkt nach einem Schreiben es verfehlen. Ein Client, der gerade geschrieben hat, kann die API bitten zu warten, bis die Lesekopie aufgeholt hat. Jedes Schreiben liefert die dabei erzeugte Protokoll-Sequenznummer zurück, und diese Nummer beim nächsten Lesen mitzusenden ist der ganze Mechanismus. Holt die Lesekopie innerhalb der Zeitgrenze nicht auf, erhält der Client eine klare 503-Antwort, nie einen stillen Rückgriff auf die Schreibseite.",
+        "detail": "Nur auf einem lokalen Datenbankpaar erprobt. Es wurde kein Failover- oder Lasttest durchgeführt."
+      },
+      "diagram": {
+        "label": "Diagramm der Schreibseite W und der Lesekopie R",
+        "caption": "Veranschaulichendes Diagramm. Ihre Systeme rufen die API auf. Die API sendet Befehle an W und fragt R ab. W repliziert nach R. Die Engine liest R und schreibt W.",
+        "nodes": {
+          "clients": { "name": "Clients", "note": "Ihre Systeme" },
+          "api": { "name": "API", "note": "Einstiegspunkt" },
+          "w": { "name": "W", "note": "Maßgeblich" },
+          "r": { "name": "R", "note": "Lesekopie" },
+          "engine": { "name": "Engine", "note": "Regeln" }
+        },
+        "flows": {
+          "writes": "Schreiben",
+          "reads": "Lesen",
+          "replication": "Replikation"
+        }
+      }
+    },
+    "api": {
+      "eyebrow": "API",
+      "title": "API-Umfang",
+      "lead": "Fünf Endpunkte existieren heute. Der Rest des skizzierten Umfangs ist geplant und kann sich ändern.",
+      "side": {
+        "write": "Schreibt nach W",
+        "read": "Liest aus R",
+        "push": "Sendet an Sie"
+      },
+      "webhooksName": "Webhooks",
+      "items": {
+        "batchesCreate": "Eine hochgeladene Datei mit SHA-256, Quellentyp und Zeitraum registrieren. Idempotent. Liefert die Protokoll-Sequenznummer des Schreibvorgangs.",
+        "batchesGet": "Verarbeitungsstatus eines registrierten Stapels.",
+        "runsCreate": "Einen Abgleichslauf starten, festgelegt auf eine Version des Regelpakets. Asynchron.",
+        "runsGet": "Status eines Abgleichslaufs.",
+        "findingsList": "Die Abweichungen auflisten, die Läufe erfasst haben.",
+        "evidence": "Das Nachweispaket zu einer Abweichung, geliefert als signierter Link.",
+        "rulesSearch": "Das zitierte Rechtskorpus nach Stichwort und nach Bedeutung durchsuchen.",
+        "erasure": "Die Löschung personenbezogener Daten beantragen. Aufbewahrungsregeln können einen Antrag aufschieben; diese Entscheidung wird festgehalten.",
+        "export": "Personenbezogene Daten in einem maschinenlesbaren Format exportieren.",
+        "webhooks": "Signierte Rückrufe, wenn ein Lauf endet oder eine Abweichung erfasst wird."
+      },
+      "headers": "Jedes Schreiben erfordert einen <code>Idempotency-Key</code>-Header, sodass eine wiederholte Anfrage keinen zweiten Stapel und keinen zweiten Lauf erzeugen kann. Jedes Schreiben antwortet mit einem <code>X-Commit-Seq</code>-Header, der die dabei erzeugte Protokoll-Sequenznummer enthält. Jedes Lesen antwortet mit <code>X-Data-Watermark</code> und beachtet <code>X-Min-Seq</code>, das oben beschriebene Warten."
+    },
+    "evidence": {
+      "eyebrow": "Nachweis",
+      "title": "Nachweis, der offline prüfbar ist",
+      "lead": "Ziel ist, dass eine Abweichung einen Beleg mitbringt, den Sie prüfen können, ohne dem Dienst zu vertrauen. Teile davon existieren. Andere sind geplant, und jeder ist gekennzeichnet.",
+      "items": {
+        "ledger": {
+          "title": "Nur anfügbares Ereignisprotokoll mit Hashkette",
+          "body": "Jeder Befehl hängt ein Ereignis an das Protokoll seines Kunden an. Der Hash eines Ereignisses umfasst den Hash des vorherigen Ereignisses und eine kanonische Form seiner Nutzdaten, sodass eine Änderung der Historie jeden folgenden Hash bricht. Änderungen, Löschungen und Kürzungen sind durch Berechtigungen und Trigger gesperrt.",
+          "detail": "Auf einem lokalen Testpaar wurde eine privilegierte Änderung einer Zeile durch die Kettenprüfung erkannt."
+        },
+        "verifier": {
+          "title": "Offline-Ketten-Verifizierer",
+          "body": "Ein Kommandozeilenwerkzeug liest eine exportierte Kette und meldet, ob sie in sich konsistent ist. Es teilt keinen Code mit der Datenbank. Eine Hashkette kann nicht zeigen, dass ihre neuesten Ereignisse abgeschnitten wurden; deshalb kann dem Werkzeug zusätzlich der erwartete Kopf-Hash übergeben werden."
+        },
+        "token": {
+          "title": "Prüfung von Zeitstempeltoken",
+          "body": "Es existiert Code, der ein RFC-3161-Zeitstempeltoken gegen einen Kopf-Hash des Protokolls und eine Menge vertrauenswürdiger Zertifikate prüft."
+        },
+        "anchoring": {
+          "title": "Zeitstempelverankerung",
+          "body": "Ein geplanter Worker soll für den Protokollkopf jedes Kunden ein Zeitstempeltoken einholen. Ein qualifizierter Zeitstempeldienst ist noch nicht gewählt."
+        },
+        "pack": {
+          "title": "Nachweispaket",
+          "body": "Auf Anfrage ein Paket zu einer Abweichung: ein Manifest mit den Zitaten und Eingabe-Hashes, Auszüge der Quelldatensätze, das Kettensegment, die Zeitstempeltoken und ein Prüfskript."
+        }
+      },
+      "chain": {
+        "label": "Illustration einer Hashkette",
+        "caption": "Illustration, keine echten Daten. Jedes Ereignis speichert den Hash des vorherigen.",
+        "event": "Ereignis {n}",
+        "prev": "Vorg.-Hash"
+      }
+    }
+  }
+}

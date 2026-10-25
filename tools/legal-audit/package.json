@@ -1,0 +1,14 @@
+{
+  "name": "legal-audit",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Legal-audit evidence gates L1-L12 (Workflow.md section 4). Zero dependencies except `pg`, used by L4 only.",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "test": "node --test ."
+  },
+  "dependencies": {
+    "pg": "8.23.1"
+  }
+}
