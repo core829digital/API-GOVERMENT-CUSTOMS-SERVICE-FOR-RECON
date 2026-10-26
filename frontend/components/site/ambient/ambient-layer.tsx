@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useId, useRef } from "react";
-import { PatternWordmark } from "@/components/brand/pattern-wordmark";
 import { hatchTilePath } from "@/components/brand/wordmark-geometry";
 import { mountAmbient } from "@/components/site/ambient/ambient-controller";
 import {
@@ -10,8 +9,6 @@ import {
   HATCH_PERIOD,
   REST_PATH,
   REST_TILE,
-  SPECIMEN_PADDING,
-  SPECIMEN_PITCH,
   WORD_TILE,
 } from "@/components/site/ambient/ambient-tiles";
 
@@ -71,15 +68,6 @@ export function AmbientLayer() {
         </div>
       </div>
 
-      <div className="ambient__specimen" style={{ padding: `${SPECIMEN_PADDING.y}px ${SPECIMEN_PADDING.x}px` }}>
-        <PatternWordmark
-          className="ambient__specimen-art"
-          variant="registered"
-          pitch={SPECIMEN_PITCH}
-          hatchPeriod={HATCH_PERIOD}
-          mark
-        />
-      </div>
     </div>
   );
 }

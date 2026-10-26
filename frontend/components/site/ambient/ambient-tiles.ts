@@ -3,7 +3,6 @@ import {
   cellsPath,
   dotsPath,
   layoutWord,
-  wordmarkSize,
 } from "@/components/brand/wordmark-geometry";
 import type { ParallaxLayer } from "@/components/site/ambient/ambient-math";
 
@@ -40,16 +39,6 @@ export const DOTS_PATH = WORD_ORIGINS.map((o) => dotsPath(word, { pitch: WORD_PI
 export const HATCH_PATH = WORD_ORIGINS.map((o) => cellsPath(word, { pitch: WORD_PITCH, ...o })).join("");
 /** Horizontal distance between hatch lines. */
 export const HATCH_PERIOD = 3.2;
-
-/** The one clear instance beside the pointer: mark and word, the two sources in register. */
-export const SPECIMEN_PITCH = 4;
-export const SPECIMEN_PADDING = { x: 14, y: 11 } as const;
-const specimenArt = wordmarkSize(WORDMARK, SPECIMEN_PITCH, true);
-/** Outer size of the plate that holds it. */
-export const SPECIMEN_SIZE = {
-  width: specimenArt.width + SPECIMEN_PADDING.x * 2,
-  height: specimenArt.height + SPECIMEN_PADDING.y * 2,
-} as const;
 
 /** How far a pattern field overhangs the viewport on each side, so shifting it never shows an edge. */
 export const FIELD_OVERHANG = { x: 400, y: 240 } as const;

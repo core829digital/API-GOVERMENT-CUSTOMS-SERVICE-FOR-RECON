@@ -3,7 +3,6 @@ import {
   isSettled,
   layerOffset,
   scrollTour,
-  specimenPosition,
   type Point,
 } from "@/components/site/ambient/ambient-math";
 import {
@@ -11,7 +10,6 @@ import {
   HATCH_LAYER,
   NARROW_VIEWPORT,
   REVEAL_DIAMETER,
-  SPECIMEN_SIZE,
 } from "@/components/site/ambient/ambient-tiles";
 
 /** Time for the reveal to close 63 % of the distance to the pointer. */
@@ -85,9 +83,7 @@ export function mountAmbient(root: HTMLElement): () => void {
     setPixels("--ambient-dots-y", dots.y - ly);
     setPixels("--ambient-hatch-x", hatch.x - lx);
     setPixels("--ambient-hatch-y", hatch.y - ly);
-    const specimen = specimenPosition(current, viewport.width, viewport.height, SPECIMEN_SIZE);
-    setPixels("--ambient-specimen-x", specimen.x);
-    setPixels("--ambient-specimen-y", specimen.y);
+
   }
 
   function frame(now: number) {

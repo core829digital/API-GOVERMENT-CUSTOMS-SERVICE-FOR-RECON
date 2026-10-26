@@ -40,28 +40,6 @@ export function scrollTour(scrollY: number, viewportWidth: number, viewportHeigh
   };
 }
 
-/**
- * Where the small, clear instance of the wordmark sits relative to the reveal centre: to the lower right of the
- * pointer when it fits, otherwise flipped to the other side of the pointer, finally clamped into the viewport.
- */
-export function specimenPosition(
-  centre: Point,
-  viewportWidth: number,
-  viewportHeight: number,
-  size: { readonly width: number; readonly height: number },
-  offset = 24,
-  margin = 8,
-): Point {
-  let x = centre.x + offset;
-  if (x + size.width > viewportWidth - margin) x = centre.x - offset - size.width;
-  let y = centre.y + offset;
-  if (y + size.height > viewportHeight - margin) y = centre.y - offset - size.height;
-  return {
-    x: Math.round(clamp(x, margin, Math.max(margin, viewportWidth - size.width - margin))),
-    y: Math.round(clamp(y, margin, Math.max(margin, viewportHeight - size.height - margin))),
-  };
-}
-
 export type ParallaxLayer = {
   /** Pointer travel in pixels per pixel the pointer is away from the viewport centre. Negative moves against it. */
   readonly pointerX: number;

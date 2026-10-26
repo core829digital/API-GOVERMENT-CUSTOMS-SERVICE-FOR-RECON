@@ -5,7 +5,6 @@ import {
   isSettled,
   layerOffset,
   scrollTour,
-  specimenPosition,
   wrap,
   type ParallaxLayer,
 } from "@/components/site/ambient/ambient-math";
@@ -13,7 +12,6 @@ import {
   DOTS_LAYER,
   FIELD_OVERHANG,
   HATCH_LAYER,
-  SPECIMEN_SIZE,
 } from "@/components/site/ambient/ambient-tiles";
 
 describe("approach (pointer smoothing)", () => {
@@ -78,39 +76,6 @@ describe("scrollTour (touch screens)", () => {
       const a = scrollTour(y, 1280, 800);
       const b = scrollTour(y + 1, 1280, 800);
       expect(Math.hypot(a.x - b.x, a.y - b.y)).toBeLessThan(1.5);
-    }
-  });
-});
-
-describe("specimenPosition", () => {
-  const size = SPECIMEN_SIZE;
-
-  it("sits to the lower right of the pointer when there is room", () => {
-    const place = specimenPosition({ x: 300, y: 200 }, 1280, 800, size);
-    expect(place).toEqual({ x: 324, y: 224 });
-  });
-
-  it("flips to the other side near the right and bottom edges", () => {
-    const place = specimenPosition({ x: 1270, y: 790 }, 1280, 800, size);
-    expect(place.x + size.width).toBeLessThan(1270);
-    expect(place.y + size.height).toBeLessThan(790);
-  });
-
-  it("always lies fully inside the viewport, down to 360 px wide", () => {
-    for (const [width, height] of [
-      [360, 740],
-      [1280, 800],
-      [2560, 1440],
-    ] as const) {
-      for (let x = 0; x <= width; x += Math.ceil(width / 23)) {
-        for (let y = 0; y <= height; y += Math.ceil(height / 23)) {
-          const place = specimenPosition({ x, y }, width, height, size);
-          expect(place.x).toBeGreaterThanOrEqual(8);
-          expect(place.y).toBeGreaterThanOrEqual(8);
-          expect(place.x + size.width).toBeLessThanOrEqual(width - 8);
-          expect(place.y + size.height).toBeLessThanOrEqual(height - 8);
-        }
-      }
     }
   });
 });

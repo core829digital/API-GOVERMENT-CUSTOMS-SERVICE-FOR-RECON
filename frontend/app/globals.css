@@ -85,13 +85,12 @@
    * Ambient background layer (components/site/ambient). Peak ink of its pattern layers, tuned to a budget:
    * where rest, dots and hatch stack at full strength on one pixel, text in --muted-foreground (the faintest
    * colour used for reading) must still keep 4.5:1 against the darkened background. Alpha composited in sRGB,
-   * that allows 19.5 % cumulative ink on paper and 22.5 % on ink; these values use 17.9 % and 21.5 %. The
-   * specimen sits on an opaque plate that hides the others, so it alone may use the whole budget.
+   * that allows 19.5 % cumulative ink on paper and 22.5 % on ink; these values use 17.9 % and 21.5 %, and the
+   * layer carries no opaque plate: these fields are the only ink.
    */
   --ambient-rest: 0.03;
   --ambient-dots: 0.08;
   --ambient-hatch: 0.08;
-  --ambient-specimen: 0.18;
 }
 
 .dark {
@@ -130,7 +129,6 @@
   --ambient-rest: 0.02;
   --ambient-dots: 0.105;
   --ambient-hatch: 0.105;
-  --ambient-specimen: 0.2;
 }
 
 @layer base {
@@ -366,24 +364,11 @@
     opacity: calc(var(--ambient-hatch) * var(--ambient-gain));
     transform: translate3d(var(--ambient-hatch-x, 0px), var(--ambient-hatch-y, 0px), 0);
   }
-  .ambient__specimen {
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: var(--background);
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    transform: translate3d(var(--ambient-specimen-x, 0px), var(--ambient-specimen-y, 0px), 0);
-    will-change: transform;
-  }
-  .ambient__specimen-art {
-    opacity: calc(var(--ambient-specimen) * var(--ambient-gain));
-  }
-  .ambient[data-state="active"] :is(.ambient__reveal, .ambient__specimen) {
+  .ambient[data-state="active"] .ambient__reveal {
     opacity: 1;
   }
   /* Nothing is revealed where there is nothing to hover with and the visitor asked for no motion. */
-  .ambient[data-mode="off"] :is(.ambient__reveal, .ambient__specimen) {
+  .ambient[data-mode="off"] .ambient__reveal {
     display: none;
   }
   @media (prefers-contrast: more) {
@@ -467,8 +452,7 @@
   .plate::before,
   .plate::after,
   .link-sweep,
-  .ambient__reveal,
-  .ambient__specimen {
+  .ambient__reveal {
     transition: none;
   }
 }
